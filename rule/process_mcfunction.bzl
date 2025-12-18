@@ -14,6 +14,16 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_pkg//pkg:providers.bzl", "PackageFilesInfo")
 
+# Provider for data pack information
+DataPackInfo = provider(
+    doc = "Information about a data pack for cross-pack function resolution",
+    fields = [
+        "pack_id",          # The ID of the pack (namespace)
+        "data_root",        # Path to the data directory root (relative to workspace)
+        "pack_root",        # Path to the pack root directory (relative to workspace)
+    ],
+)
+
 def _owner(file):
     if file.owner == None:
         fail("File {} ({}) has no owner attribute; cannot continue".format(file, file.path))
@@ -36,6 +46,11 @@ def _process_mcfunction_impl(ctx):
     function_pattern = "data/%s/function" % ctx.attr.pack_id
     function_placement = "data/%s/functions" % ctx.attr.pack_id
 
+    # Get workspace root for passing to the processor
+    # In Bazel sandbox, this helps the processor find project root
+    # Use workspace_root if available, otherwise use workspace_name
+    workspace_root = getattr(ctx, "workspace_root", ctx.workspace_name)
+
     for src in ctx.files.srcs:
         if ctx.attr.keep_original_name:
             output_file = ctx.actions.declare_file(src.basename, sibling = src)
@@ -51,7 +66,8 @@ def _process_mcfunction_impl(ctx):
         args = ctx.actions.args()
         args.add(src)
         args.add(output_file)
-
+        # Pass workspace root as third argument to help processor find project root
+        args.add(workspace_root)
         args.add_all(ctx.files.deps)
 
         args.use_param_file("@%s", use_always = True)
@@ -69,12 +85,21 @@ def _process_mcfunction_impl(ctx):
             },
         )
 
+    # Create DataPackInfo for this pack
+    # This allows dependent packs to get information about this pack
+    pack_info = DataPackInfo(
+        pack_id = ctx.attr.pack_id,
+        data_root = "data",
+        pack_root = ctx.label.package,
+    )
+
     return [
         PackageFilesInfo(
             attributes = {},
             dest_src_map = dest_src_map,
         ),
         DefaultInfo(files = depset(output_files)),
+        pack_info,
     ]
 
 process_mcfunction = rule(

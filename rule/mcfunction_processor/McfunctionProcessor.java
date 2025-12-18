@@ -17,6 +17,7 @@ public class McfunctionProcessor extends Worker {
     private String currentPackId;
     private Path dataPackRoot;
     private List<Path> dependencyPaths = new ArrayList<>();
+    private Path workspaceRoot;
 
     public static void main(String[] args) throws Exception {
         new McfunctionProcessor().run();
@@ -26,20 +27,41 @@ public class McfunctionProcessor extends Worker {
     protected int handleRequest(WorkRequest request, PrintWriter out) {
         var args = request.arguments();
         if (args.size() < 2) {
-            out.println("Usage: McfunctionProcessor <input_file> <output_file> [dependency_files...]");
+            out.println("Usage: McfunctionProcessor <input_file> <output_file> [workspace_root] [dependency_files...]");
             return 1;
         }
 
         var inputFile = args.get(0);
         var outputFile = args.get(1);
 
+        // Optional workspace root argument (for Bazel sandbox environment)
+        Path workspaceRoot = null;
+        int depStartIndex = 2;
+
+        if (args.size() >= 3) {
+            String thirdArg = args.get(2);
+            // Check if the third argument looks like a path (not a dependency file)
+            // Simple heuristic: if it contains "workspace" or doesn't end with .mcfunction or similar
+            if (!thirdArg.endsWith(".mcfunction") && !thirdArg.endsWith(".json") && !thirdArg.endsWith(".zip")) {
+                workspaceRoot = Paths.get(thirdArg);
+                depStartIndex = 3;
+                out.println("Using workspace root: " + workspaceRoot);
+            }
+        }
+
         // 解析依赖文件路径
-        for (int i = 2; i < args.size(); i++) {
+        for (int i = depStartIndex; i < args.size(); i++) {
             Path depFilePath = Paths.get(args.get(i));
             Path depDataPackRoot = findDataPackRoot(depFilePath);
             if (depDataPackRoot != null) {
                 dependencyPaths.add(depDataPackRoot);
             }
+        }
+
+        // If workspace root is provided, use it as the project root
+        if (workspaceRoot != null) {
+            // Store workspace root for use in findProjectRoot
+            this.workspaceRoot = workspaceRoot;
         }
 
         try {
@@ -334,6 +356,11 @@ public class McfunctionProcessor extends Worker {
     }
 
     private Path findProjectRoot() {
+        // If workspace root is provided, use it as the project root
+        if (workspaceRoot != null) {
+            return workspaceRoot;
+        }
+
         if (dataPackRoot == null) {
             return null;
         }
