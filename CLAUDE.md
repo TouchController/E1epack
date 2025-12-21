@@ -20,6 +20,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `:datapack` - 构建数据包 ZIP 文件
 - `:server` - 启动开发服务器别名
 
+### 跨数据包函数调用
+
+构建系统支持跨数据包函数调用展开机制：
+
+- **自动展开**：当函数文件中包含 `function dfl:lib/xxx` 等跨数据包调用时，`process_mcfunction` 规则会自动展开为正确的目标数据包函数路径
+- **依赖感知**：展开机制基于数据包依赖关系，确保函数调用指向正确的目标数据包
+- **性能优化**：使用 Worker 协议进行高效处理，避免重复的构建开销
+
 ### 示例构建命令
 
 ```bash
@@ -60,12 +68,17 @@ bazelisk build //...
   - `minecraft/` - Minecraft 原生命名空间文件
 - `rule/` - Bazel 构建规则定义
   - `datapack.bzl` - 主要的数据包构建宏
-  - `process_mcfunction.bzl` - 函数文件处理规则
+  - `process_mcfunction.bzl` - 函数文件处理规则（支持跨数据包函数调用展开）
   - `process_json.bzl` - JSON 文件压缩规则
+  - `merge_json.bzl` - JSON 文件合并规则（用于本地化系统）
   - `upload_modrinth.bzl` - Modrinth 上传规则
 - `repo/` - 外部依赖配置
 - `third_party/` - 第三方库集成
 - `template/` - 数据包模板文件
+- `game/` - 游戏相关资源
+- `Localization-Resource-Pack/` - 本地化资源包源文件（详见本地化系统部分）
+- `translate/` - 自动翻译输出目录（由 CI 自动生成）
+- `private/` - 私有配置（包含敏感信息，已加入 .gitignore）
 
 ### 数据包组件
 
@@ -111,9 +124,14 @@ bazelisk build //...
 
 - `pack_id` - 数据包命名空间 ID
 - `pack_version` - 数据包版本（必须符合 SemVer）
-- `game_versions` - 支持的 Minecraft 版本范围
+- `target_name` - 主要目标名称（默认为当前包名称）
+- `game_versions` - 支持的 Minecraft 版本列表（默认为 `minecraft_versions_range("1.20")`，即从 1.20 到最新版本的所有版本）
 - `modrinth_project_id` - Modrinth 项目 ID（可选）
-- `deps` - 依赖列表
+- `changelog` - 更新日志文件路径（默认为 `"NEWS.md"`）
+- `version_type` - 版本类型：`"release"`、`"beta"`、`"alpha"`（默认为 `"release"`）
+- `modrinth_deps` - Modrinth 依赖字典列表（默认为空列表）
+- `include_localization_dependency` - 是否自动包含本地化资源包作为依赖（默认为 `True`）
+- `deps` - 传递给 `datapack` 规则的其他依赖参数（通过 `**kwargs`）
 
 ### minecraft_versions_range
 
@@ -162,7 +180,7 @@ bazelisk build //...
 
 - 所有数据包都使用 GPL 许可证
 - 项目包含本地化资源包依赖
-- 构建系统会自动处理 JSON 文件压缩和函数文件扩展
+- 构建系统会自动处理 JSON 文件压缩、函数文件扩展和跨数据包函数调用展开
 - 开发服务器配置为 4GB 内存，可在 `datapack.bzl` 中调整
 - **提交消息要求**：所有提交消息**必须**包含更改项目的名称标记
 - **本地化注意事项**：
