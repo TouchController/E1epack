@@ -6,13 +6,13 @@ This command helps you create well-formatted commits with conventional commit me
 
 To create a commit, just type:
 
-```
+```text
 /commit
 ```
 
 Or with options:
 
-```
+```text
 /commit --no-verify
 ```
 
@@ -28,6 +28,46 @@ Or with options:
 5. Analyzes the diff to determine if multiple distinct logical changes are present
 6. If multiple distinct changes are detected, suggests breaking the commit into multiple smaller commits
 7. For each commit (or the single commit if not split), creates a commit message using emoji conventional commit format
+
+## Monorepo Commit Format
+
+This is a monorepo project containing multiple datapacks. All commit messages **must** include the changed project's name tag in the format `[PROJECT_ABBR]` where the abbreviation is derived from the first letter of each word in the project name (uppercase).
+
+- **With project tag**: `[DFL] ✨ feat: add new library function`
+- **Without project tag** (for repository-wide changes): `♻️ refactor: update build system`
+
+### Project Abbreviation Rules
+
+1. **Abbreviation derivation**: Take the first letter of each word in the project name, convert to uppercase
+   - Example: "datapack function library" → "DFL"
+   - Example: "stone disappearance" → "SD"
+   - Example: "auto lucky block" → "ALB"
+
+2. **When to use project tags**:
+   - Changes specific to a single datapack project
+   - Modifications within a project's directory
+   - Updates to project-specific configuration
+
+3. **When to omit project tags**:
+   - Repository-wide changes (e.g., root `.github/`, `rule/`, `template/`)
+   - Build system updates affecting all projects
+   - Documentation changes covering multiple projects
+   - CI/CD configuration changes
+
+### Commit Message Format
+
+The complete commit message format for this monorepo is:
+
+```text
+[PROJECT_ABBR] <emoji> <type>: <description>
+```
+
+Where:
+
+- `[PROJECT_ABBR]` - Optional project abbreviation tag (omit for repository-wide changes)
+- `<emoji>` - Appropriate emoji for the commit type (see below)
+- `<type>` - Conventional commit type (feat, fix, docs, etc.)
+- `<description>` - Concise description in imperative mood
 
 ## Best Practices for Commits
 
@@ -124,33 +164,49 @@ When analyzing the diff, consider splitting commits based on these criteria:
 
 Good commit messages:
 
-- ✨ feat: add user authentication system
-- 🐛 fix: resolve memory leak in rendering process
-- 📝 docs: update API documentation with new endpoints
-- ♻️ refactor: simplify error handling logic in parser
-- 🚨 fix: resolve linter warnings in component files
-- 🧑‍💻 chore: improve developer tooling setup process
-- 👔 feat: implement business logic for transaction validation
-- 🩹 fix: address minor styling inconsistency in header
-- 🚑️ fix: patch critical security vulnerability in auth flow
-- 🎨 style: reorganize component structure for better readability
-- 🔥 fix: remove deprecated legacy code
-- 🦺 feat: add input validation for user registration form
-- 💚 fix: resolve failing CI pipeline tests
-- 📈 feat: implement analytics tracking for user engagement
-- 🔒️ fix: strengthen authentication password requirements
-- ♿️ feat: improve form accessibility for screen readers
+### Project-specific changes (with project abbreviation)
 
-Example of splitting commits:
+- [DFL] ✨ feat: add new library function for item manipulation
+- [SD] 🐛 fix: resolve stone disappearance timing issue
+- [ALB] 📝 docs: update auto lucky block configuration guide
+- [DFL] ♻️ refactor: simplify function error handling logic
+- [SD] 🚨 fix: resolve linter warnings in tick function
+- [ALB] 🧑‍💻 chore: improve developer tooling setup process
+- [DFL] 👔 feat: implement business logic for item validation
+- [SD] 🩹 fix: address minor timing inconsistency in animation
 
-- First commit: ✨ feat: add new solc version type definitions
-- Second commit: 📝 docs: update documentation for new solc versions
-- Third commit: 🔧 chore: update package.json dependencies
-- Fourth commit: 🏷️ feat: add type definitions for new API endpoints
-- Fifth commit: 🧵 feat: improve concurrency handling in worker threads
-- Sixth commit: 🚨 fix: resolve linting issues in new code
-- Seventh commit: ✅ test: add unit tests for new solc version features
-- Eighth commit: 🔒️ fix: update dependencies with security vulnerabilities
+### Repository-wide changes (without project abbreviation)
+
+- ♻️ refactor: update build system configuration for all datapacks
+- 📝 docs: update repository README with new project structure
+- 🔧 chore: add new CI workflow for automated testing
+- 🚨 fix: resolve linter configuration issues affecting all projects
+- 🧑‍💻 chore: improve developer documentation for monorepo setup
+- ✅ test: add integration tests for cross-datapack function calls
+
+### Example of splitting commits for a datapack project
+
+Suppose you're making changes to the "datapack function library" project. Instead of one large commit, you could split it into:
+
+- First commit: [DFL] ✨ feat: add new function for item manipulation
+- Second commit: [DFL] 📝 docs: update function documentation with usage examples
+- Third commit: [DFL] 🔧 chore: update dependency configuration
+- Fourth commit: [DFL] 🏷️ feat: add type annotations for function parameters
+- Fifth commit: [DFL] 🧵 feat: improve performance with concurrent processing
+- Sixth commit: [DFL] 🚨 fix: resolve linter warnings in new code
+- Seventh commit: [DFL] ✅ test: add unit tests for new functions
+- Eighth commit: [DFL] 🔒️ fix: update dependencies with security patches
+
+### Example of splitting repository-wide changes
+
+For repository-wide changes affecting multiple projects:
+
+- First commit: ♻️ refactor: update build system for all datapacks
+- Second commit: 📝 docs: update repository documentation with new guidelines
+- Third commit: 🔧 chore: add shared CI workflow configuration
+- Fourth commit: ✅ test: add integration tests for cross-project compatibility
+- Fifth commit: 🚨 fix: resolve shared configuration issues
+- Sixth commit: 🧑‍💻 chore: improve developer setup documentation
 
 ## Command Options
 
