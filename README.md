@@ -57,3 +57,13 @@ This datapack continuously generates TNT beneath players' feet.
 This datapack provides a powerful API that can replace blocks in the world with high performance in a completely vanilla way after world generation.
 
 [Modrinth](https://modrinth.com/project/lr0gX2RY) | [MCMOD](https://www.mcmod.cn/class/23411.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/ReplaceBlock)
+
+---
+
+**[AF]铁砧掉落 (Anvil Falling)**
+
+这个数据包可以在玩家头上不断生成铁砧。
+
+This datapack continuously generates anvils above players' heads.
+
+[Modrinth](https://modrinth.com/project/oTDMd7L2) | [MCMOD](https://www.mcmod.cn/class/17552.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/anvil-falling)
