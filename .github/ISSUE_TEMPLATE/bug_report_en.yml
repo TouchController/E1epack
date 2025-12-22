@@ -1,0 +1,57 @@
+name: 🐛 | Bug Report
+description: 🎤 | Submit a bug found in the datapack
+title: "[BUG]: "
+labels: [ "bug" ]
+body:
+- type: markdown
+  attributes:
+    value: "# 🎁 | Welcome to submit bug feedback for the datapack!"
+- type: checkboxes
+  id: BUG_Prefeedback
+  attributes:
+    label: Checklist
+    description: "Before submitting, please confirm the following:"
+    options:
+      - label: This bug has not been reported before
+        required: true
+      - label: The fix for this bug is not in a PR
+        required: true
+      - label: I have updated the datapack to the latest version
+        required: true
+- type: input
+  id: Name
+  attributes:
+    label: Name
+    description: The name of the datapack you are using
+    placeholder: "Name: xxx"
+  validations:
+    required: true
+- type: input
+  id: Version
+  attributes:
+    label: Version
+    description: Datapack version and Minecraft version when you found this bug
+    placeholder: "Datapack version: vx.x.x; Minecraft version: x.x.x"
+  validations:
+    required: true
+- type: textarea
+  id: BUGInMSS3_Retry
+  attributes:
+    label: Reproduction Steps
+    description: Please briefly describe how to trigger this bug
+    placeholder: |
+      1. xxx
+      2. xxx
+      3. xxx
+  validations:
+    required: true
+- type: textarea
+  id: UploadLog
+  attributes:
+    label: Logs
+    description: "In-game, enter `/function unif.logger:private/logs/read/read_all` and `/function unif.logger:private/logs/read/read_debug`, then submit the output here"
+  validations:
+    required: false
+- type: markdown
+  attributes:
+    value: "### 🎉 | Thank you for your support of this datapack!"

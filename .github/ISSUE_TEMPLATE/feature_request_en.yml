@@ -1,0 +1,45 @@
+name: 📖 | Feature Request
+description: 📎 | Write down your suggestions for adding new features
+title: "[Feature]: "
+labels: [ "enhancement" ]
+body:
+- type: markdown
+  attributes:
+    value: "# 🎁 | You are submitting a feature suggestion for the datapack!"
+- type: checkboxes
+  id: Prefeedback
+  attributes:
+    label: Checklist
+    description: "Before submitting, please confirm the following:"
+    options:
+      - label: This feature has not been proposed before
+        required: true
+      - label: This feature is not in a PR
+        required: true
+      - label: The latest version of the datapack does not include this feature
+        required: true
+- type: input
+  id: Name
+  attributes:
+    label: Name
+    description: The name of the datapack you are requesting to add a new feature to
+    placeholder: "Name: xxx"
+  validations:
+    required: true
+- type: input
+  id: FeatureRequest_Summary
+  attributes:
+    label: Summary
+    description: Please briefly describe the new feature you wish to add
+    placeholder: |
+      <Brief description of this feature>
+- type: textarea
+  id: FeatureRequest_Steps
+  attributes:
+    label: Detailed Content
+    description: Please describe the content of the new feature in detail, and the reason why you need this feature
+    placeholder: |
+      <Detailed content of this feature>
+- type: markdown
+  attributes:
+    value: "### 🎉 | Thank you for your support of this datapack!"

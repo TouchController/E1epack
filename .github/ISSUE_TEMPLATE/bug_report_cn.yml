@@ -27,7 +27,7 @@ body:
   validations:
     required: true
 - type: input
-  id: Verison
+  id: Version
   attributes:
     label: 版本
     description: 您发现此 BUG 使用的数据包版本、Minecraft 版本
