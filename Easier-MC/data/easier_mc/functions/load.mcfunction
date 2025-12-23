@@ -1,6 +1,7 @@
-tellraw @a "--------------------"
-tellraw @a "| Easier MC 加载成功"
-tellraw @a [{"text": "| "},{"text":"by white_elephant_","color":"blue","underlined":true,"italic":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1836643444"}}]
-tellraw @a "| "
-tellraw @a [{"text": "| "},{"text": "本数据包使用 ","bold": true},{"text":"GNU GPL","color":"blue","underlined":true,"italic":true,"clickEvent":{"action":"open_url","value":"https://www.gnu.org/licenses/gpl-3.0.txt"}},{"text": " 协议开源","bold": true}]
-tellraw @a "--------------------"
+function dfl:lib/datapack_banner {\
+    name:"Easier MC",\
+    author:"white_elephant_",\
+    author_url:"https://modrinth.com/user/white_elephant",\
+    license_name:"GNU GPL",\
+    license_url:"https://www.gnu.org/licenses/gpl-3.0.txt",\
+    official_url:"https://github.com/WhiteElephant-abc/E1epack/tree/main/Easier-MC"}
