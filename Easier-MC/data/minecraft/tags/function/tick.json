@@ -1,1 +1,6 @@
-{"replace": false,"values": ["easier_mc:things"]}
+{
+    "replace": false,
+    "values": [
+        "easier_mc:tick"
+    ]
+}
