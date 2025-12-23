@@ -302,7 +302,10 @@ def datapack_functions(pack_id):
         包含基础函数和扩展函数的配置字典
     """
     return {
-        "functions_include": ["data/%s/function/**/*.mcfunction" % pack_id],
+        "functions_include": [
+            "data/%s/function/**/*.mcfunction" % pack_id,
+            "data/%s/functions/**/*.mcfunction" % pack_id,
+        ],
         "functions_exclude": [],
         "functions_expand_pattern": [],
     }
@@ -580,6 +583,7 @@ def complete_datapack_config(
         functions = native.glob(
             include = func_config["functions_include"],
             exclude = func_config["functions_exclude"],
+            allow_empty = True,
         ),
         namespace_json = native.glob(["data/%s/**/*.json" % pack_id], allow_empty = True),
         minecraft_json = native.glob(["data/minecraft/**/*.json"], allow_empty = True),

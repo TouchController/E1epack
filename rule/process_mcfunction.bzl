@@ -51,6 +51,15 @@ def _process_mcfunction_impl(ctx):
     # Use workspace_root if available, otherwise use workspace_name
     workspace_root = getattr(ctx, "workspace_root", ctx.workspace_name)
 
+    # 检测是否有文件来自functions目录
+    has_functions_dir = False
+    functions_dir_pattern = "data/%s/functions/" % ctx.attr.pack_id
+    for src in ctx.files.srcs:
+        src_path = _path_relative_to_package(src)
+        if src_path.startswith(functions_dir_pattern):
+            has_functions_dir = True
+            break
+
     for src in ctx.files.srcs:
         if ctx.attr.keep_original_name:
             output_file = ctx.actions.declare_file(src.basename, sibling = src)
@@ -60,7 +69,8 @@ def _process_mcfunction_impl(ctx):
 
         src_path = _path_relative_to_package(src)
         dest_src_map[src_path] = output_file
-        if function_pattern in src_path:
+        # 只有在没有functions目录的情况下，才创建从function到functions的映射
+        if function_pattern in src_path and not has_functions_dir:
             dest_src_map[src_path.replace(function_pattern, function_placement)] = output_file
 
         args = ctx.actions.args()
