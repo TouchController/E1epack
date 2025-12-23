@@ -45,7 +45,6 @@ public class McfunctionProcessor extends Worker {
             if (!thirdArg.endsWith(".mcfunction") && !thirdArg.endsWith(".json") && !thirdArg.endsWith(".zip")) {
                 workspaceRoot = Paths.get(thirdArg);
                 depStartIndex = 3;
-                out.println("Using workspace root: " + workspaceRoot);
             }
         }
 
