@@ -6,7 +6,7 @@
 
 This datapack replaces stones in the world with other blocks. It has minimum compatibility with Minecraft 1.20.3, but only Minecraft 1.21.6 and above can experience the full functionality.
 
-[Modrinth](https://modrinth.com/project/WD7HqNGg) | [MCMOD](https://www.mcmod.cn/class/17176.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/stone-disappearance)
+[Modrinth](https://modrinth.com/project/WD7HqNGg) | [MCMOD](https://www.mcmod.cn/class/17176.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/stone-disappearance)
 
 ---
 
@@ -16,7 +16,7 @@ This datapack replaces stones in the world with other blocks. It has minimum com
 
 This data pack can activate a lucky block for all players every 30 seconds (by default).
 
-[Modrinth](https://modrinth.com/project/iLfrlAo2) | [MCMOD](https://www.mcmod.cn/class/17203.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/auto-lucky-block)
+[Modrinth](https://modrinth.com/project/iLfrlAo2) | [MCMOD](https://www.mcmod.cn/class/17203.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/auto-lucky-block)
 
 ---
 
@@ -26,7 +26,7 @@ This data pack can activate a lucky block for all players every 30 seconds (by d
 
 This data pack will continuously generate lucky blocks at 0 0 0. If the data pack is loaded before world generation, it will also modify the Overworld's generation settings.
 
-[Modrinth](https://modrinth.com/project/sAahwfYo) | [MCMOD](https://www.mcmod.cn/class/17215.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/Lucky-Block-Island)
+[Modrinth](https://modrinth.com/project/sAahwfYo) | [MCMOD](https://www.mcmod.cn/class/17215.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/Lucky-Block-Island)
 
 ---
 
@@ -36,7 +36,7 @@ This data pack will continuously generate lucky blocks at 0 0 0. If the data pac
 
 This datapack provides developers with some practical functions (and some dialogs), compatible with all versions of Minecraft (except for versions that cannot install datapacks).
 
-[Modrinth](https://modrinth.com/project/xfcXTP3W) | [MCMOD](https://www.mcmod.cn/class/17244.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/datapack-function-library)
+[Modrinth](https://modrinth.com/project/xfcXTP3W) | [MCMOD](https://www.mcmod.cn/class/17244.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/datapack-function-library)
 
 ---
 
@@ -46,7 +46,7 @@ This datapack provides developers with some practical functions (and some dialog
 
 This datapack continuously generates TNT beneath players' feet.
 
-[Modrinth](https://modrinth.com/project/x9cTWnQD) | [MCMOD](https://www.mcmod.cn/class/17429.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/SetBlock-TNT)
+[Modrinth](https://modrinth.com/project/x9cTWnQD) | [MCMOD](https://www.mcmod.cn/class/17429.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/SetBlock-TNT)
 
 ---
 
@@ -56,7 +56,7 @@ This datapack continuously generates TNT beneath players' feet.
 
 This datapack provides a powerful API that can replace blocks in the world with high performance in a completely vanilla way after world generation.
 
-[Modrinth](https://modrinth.com/project/lr0gX2RY) | [MCMOD](https://www.mcmod.cn/class/23411.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/ReplaceBlock)
+[Modrinth](https://modrinth.com/project/lr0gX2RY) | [MCMOD](https://www.mcmod.cn/class/23411.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/ReplaceBlock)
 
 ---
 
@@ -66,4 +66,14 @@ This datapack provides a powerful API that can replace blocks in the world with 
 
 This datapack continuously generates anvils above players' heads.
 
-[Modrinth](https://modrinth.com/project/oTDMd7L2) | [MCMOD](https://www.mcmod.cn/class/17552.html) | [GitHub](https://github.com/WhiteElephant-abc/E1epack/tree/main/anvil-falling)
+[Modrinth](https://modrinth.com/project/oTDMd7L2) | [MCMOD](https://www.mcmod.cn/class/17552.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/anvil-falling)
+
+---
+
+**[EMC]更简单的MC (Easier-MC)**
+
+这是一个极其轻量的模组，可以让您的 Minecraft 体验更好。
+
+This is an extremely lightweight mod that can make your Minecraft experience better.
+
+[Modrinth](https://modrinth.com/project/oCEqFYg8) | [MCMOD](https://www.mcmod.cn/class/17462.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/Easier-MC)
