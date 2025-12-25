@@ -1,10 +1,10 @@
-**这是一个极其轻量的模组，可以让您的 Minecraft 体验更好**
+# [EMC]更简单的MC (Easier-MC)
 
-如果遇到任何问题，请点击 [这里](https://github.com/WhiteElephant-abc/Easier-MC/issues/new/choose) 反馈
+**The English description is below.**
 
-如果无法访问，可点击 [这里](https://steampp.net/) 下载加速器
+## 简介
 
-此模组的核心其实是一个数据包，如果模组版本出现任何问题，请使用数据包版本（缺点只有一个，就是不能自动在所有存档中启用）
+这是一个极其轻量的模组，可以让您的 Minecraft 体验更好。
 
 ## 模组功能
 
@@ -15,3 +15,19 @@
 - 为玩家提供无限夜视、发光
 - 清除玩家的黑暗效果（需要 Minecraft 1.21 或以上版本）
 - 为监守者提供发光（需要 Minecraft 1.21 或以上版本）
+
+---
+
+## Introduction
+
+This is an extremely lightweight mod that can make your Minecraft experience better.
+
+## Mod Features
+
+- Lock time to daytime
+- Lock weather to clear
+- Enable infinite lava (requires Minecraft 1.21 or above)
+- Enable keep inventory on death
+- Provide players with infinite night vision and glowing effect
+- Clear players' darkness effect (requires Minecraft 1.21 or above)
+- Provide glowing effect for Wardens (requires Minecraft 1.21 or above)
