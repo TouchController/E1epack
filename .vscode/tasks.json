@@ -12,17 +12,8 @@
         {
             "label": "Bazel Build",
             "type": "shell",
-            "command": "bazelisk build //Localization-Resource-Pack && bazelisk build //${input:projectName} & if exist .bazel\\datapack rmdir /s /q .bazel\\datapack",
-            "args": [],
-            "options": {
-                "shell": {
-                    "executable": "cmd.exe",
-                    "args": [
-                        "/d",
-                        "/c"
-                    ]
-                }
-            },
+            "command": "bash",
+            "args": ["-c", "bazel build //${input:projectName}"],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -35,17 +26,8 @@
         {
             "label": "Bazel Run Server",
             "type": "shell",
-            "command": "bazelisk build //Localization-Resource-Pack && bazelisk run //${input:projectName}:server & if exist .bazel\\datapack rmdir /s /q .bazel\\datapack",
-            "args": [],
-            "options": {
-                "shell": {
-                    "executable": "cmd.exe",
-                    "args": [
-                        "/d",
-                        "/c"
-                    ]
-                }
-            },
+            "command": "bash",
+            "args": ["-c", "bazel run //${input:projectName}:server"],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -61,17 +43,8 @@
         {
             "label": "Bazel Upload Modrinth",
             "type": "shell",
-            "command": "bazelisk build //Localization-Resource-Pack && bazelisk run //${input:projectName}:upload_modrinth & if exist .bazel\\datapack rmdir /s /q .bazel\\datapack",
-            "args": [],
-            "options": {
-                "shell": {
-                    "executable": "cmd.exe",
-                    "args": [
-                        "/d",
-                        "/c"
-                    ]
-                }
-            },
+            "command": "bash",
+            "args": ["-c", "bazel run //${input:projectName}:upload_modrinth"],
             "group": "none",
             "presentation": {
                 "echo": true,
