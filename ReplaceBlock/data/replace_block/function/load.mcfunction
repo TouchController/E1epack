@@ -4,7 +4,7 @@ function dfl:lib/datapack_banner {\
     author_url:"https://modrinth.com/user/white_elephant",\
     license_name:"GNU GPL",\
     license_url:"https://www.gnu.org/licenses/gpl-3.0.txt",\
-    official_url:"https://github.com/WhiteElephant-abc/E1epack/tree/main/ReplaceBlock"}
+    official_url:"https://github.com/TouchController/E1epack/tree/main/ReplaceBlock"}
 
 gamerule commandModificationBlockLimit 2147483647
 

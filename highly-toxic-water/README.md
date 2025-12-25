@@ -9,4 +9,4 @@
 
 由于 Minecraft 特性，中毒并不会致死，但会将玩家血量扣至 1 点。
 
-如果遇到任何问题，[点击这里](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) 反馈。
+如果遇到任何问题，[点击这里](https://github.com/TouchController/E1epack/issues/new/choose) 反馈。

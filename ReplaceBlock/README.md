@@ -16,7 +16,7 @@
 
 ## 配置
 
-以下为完整的配置列表，另可查看 [reset_settings.mcfunction](https://github.com/WhiteElephant-abc/E1epack/blob/main/ReplaceBlock/data/replace_block/function/api/reset_settings.mcfunction) 中的示例。
+以下为完整的配置列表，另可查看 [reset_settings.mcfunction](https://github.com/TouchController/E1epack/blob/main/ReplaceBlock/data/replace_block/function/api/reset_settings.mcfunction) 中的示例。
 
 - 目标选择器：
   - 路径：`{}.replace_block.selector`
@@ -69,7 +69,7 @@ To use the API, first store the API configuration in your command storage at `{}
 
 ## Configuration
 
-Below is the complete configuration list. You can also view the example in [reset_settings.mcfunction](https://github.com/WhiteElephant-abc/E1epack/blob/main/ReplaceBlock/data/replace_block/function/api/reset_settings.mcfunction).
+Below is the complete configuration list. You can also view the example in [reset_settings.mcfunction](https://github.com/TouchController/E1epack/blob/main/ReplaceBlock/data/replace_block/function/api/reset_settings.mcfunction).
 
 - Target Selector:
   - Path: `{}.replace_block.selector`

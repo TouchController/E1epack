@@ -2,7 +2,7 @@
 
 **The English description is below.**
 
-**如果遇到任何问题，请点击 [这里](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) 反馈**
+**如果遇到任何问题，请点击 [这里](https://github.com/TouchController/E1epack/issues/new/choose) 反馈**
 
 ## 简介
 
@@ -27,7 +27,7 @@
 
 ---
 
-**If you encounter any issues, please click [here](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) to report**
+**If you encounter any issues, please click [here](https://github.com/TouchController/E1epack/issues/new/choose) to report**
 
 ## Introduction
 

@@ -47,7 +47,7 @@
 
 - 请**务必**在创建世界时添加数据包，并保持世界类型为默认，否则数据包将无法运行。
 - 较低版本（1.18 以下）主世界最低建筑高度限制为 Y=0 而非 1.18 更新后的 Y=-64，幸运方块模组的某些特殊结构（如许愿井）则无法完整生成。
-- 如果遇到任何问题，请点击 [这里](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) 反馈。
+- 如果遇到任何问题，请点击 [这里](https://github.com/TouchController/E1epack/issues/new/choose) 反馈。
 
 ---
 
@@ -94,4 +94,4 @@ This data pack depends on Lucky Block ([CurseForge](https://www.curseforge.com/m
 
 - Please **make sure** to add the data pack when creating the world and keep the world type as default, otherwise the data pack will not run.
 - In lower versions (below 1.18), the minimum building height of the Overworld is limited to Y=0 instead of Y=-64 updated in 1.18, and some special structures of the lucky block mod (such as wishing wells) cannot be fully generated.
-- If you encounter any problems, please click [here](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) to report them.
+- If you encounter any problems, please click [here](https://github.com/TouchController/E1epack/issues/new/choose) to report them.

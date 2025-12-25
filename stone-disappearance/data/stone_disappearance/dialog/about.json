@@ -17,11 +17,11 @@
             "bold": true,
             "click_event": {
               "action": "open_url",
-              "url": "https://github.com/WhiteElephant-abc/E1epack"
+              "url": "https://github.com/TouchController/E1epack"
             },
             "hover_event": {
               "action": "show_text",
-              "value": "https://github.com/WhiteElephant-abc/E1epack"
+              "value": "https://github.com/TouchController/E1epack"
             }
           }
         ],

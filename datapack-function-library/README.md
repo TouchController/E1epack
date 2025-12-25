@@ -1,4 +1,4 @@
-**Click [here](https://github.com/WhiteElephant-abc/E1epack/blob/main/datapack-function-library/README-en_us.md) to view the English version.**
+**Click [here](https://github.com/TouchController/E1epack/blob/main/datapack-function-library/README-en_us.md) to view the English version.**
 
 # 前言
 
@@ -32,7 +32,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 **有些函数用法后带有 {xx:"xx"} 这些函数为[宏函数](https://zh.minecraft.wiki/w/Java%E7%89%88%E5%87%BD%E6%95%B0#%E5%AE%8F)，在使用时需通过 {<参数名>:"<内容>"} 传入参数（用法中的参数为作者开发时测试过的推荐参数，或作者测试使用的参数），参数名（如 num）在正文中表现为：{num}。参数格式可参考函数用法，特殊格式会说明。**
 
-如果遇到任何问题，请点击 [这里](https://github.com/WhiteElephant-abc/E1epack/issues/new/choose) 反馈。
+如果遇到任何问题，请点击 [这里](https://github.com/TouchController/E1epack/issues/new/choose) 反馈。
 
 # 函数说明
 

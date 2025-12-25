@@ -7,4 +7,4 @@ function dfl:lib/datapack_banner {\
     author_url:"https://modrinth.com/user/white_elephant",\
     license_name:"GNU LGPL",\
     license_url:"https://www.gnu.org/licenses/lgpl-3.0.txt",\
-    official_url:"https://github.com/WhiteElephant-abc/E1epack/tree/main/datapack-function-library"}
+    official_url:"https://github.com/TouchController/E1epack/tree/main/datapack-function-library"}

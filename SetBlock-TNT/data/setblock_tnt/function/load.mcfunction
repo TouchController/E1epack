@@ -4,7 +4,7 @@ function dfl:lib/datapack_banner {\
     author_url:"https://modrinth.com/user/white_elephant",\
     license_name:"GNU GPL",\
     license_url:"https://www.gnu.org/licenses/gpl-3.0.txt",\
-    official_url:"https://github.com/WhiteElephant-abc/E1epack/tree/main/SetBlock-TNT"}
+    official_url:"https://github.com/TouchController/E1epack/tree/main/SetBlock-TNT"}
 
 function dfl:start/show/display_health_in_tab
 function dfl:start/show/enable_death_scoreboard
