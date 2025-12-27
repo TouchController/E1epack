@@ -1,4 +1,4 @@
-# [EMC]更简单的MC (Easier-MC)
+# [EMC]更简单的MC (Easier MC)
 
 **The English description is below.**
 
