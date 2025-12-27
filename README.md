@@ -70,10 +70,20 @@ This datapack continuously generates anvils above players' heads.
 
 ---
 
-**[EMC]更简单的MC (Easier-MC)**
+**[EMC]更简单的MC (Easier MC)**
 
 这是一个极其轻量的模组，可以让您的 Minecraft 体验更好。
 
 This is an extremely lightweight mod that can make your Minecraft experience better.
 
 [Modrinth](https://modrinth.com/project/oCEqFYg8) | [MCMOD](https://www.mcmod.cn/class/17462.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/Easier-MC)
+
+---
+
+**[AS]自动冶炼 (Auto Smelt)**
+
+这个数据包可以自动消耗您背包中的煤矿烧炼物品。
+
+This datapack automatically consumes coal from your inventory to smelt items.
+
+[Modrinth](https://modrinth.com/project/R1C09Xvb) | [MCMOD](https://www.mcmod.cn/class/17557.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/auto-smelt)
