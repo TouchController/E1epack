@@ -33,8 +33,49 @@ Or with options:
 
 This is a monorepo project containing multiple datapacks. All commit messages **must** include the changed project's name tag in the format `[PROJECT_ABBR]` where the abbreviation is derived from the first letter of each word in the project name (uppercase).
 
-- **With project tag**: `[DFL] ✨ feat: add new library function`
-- **Without project tag** (for repository-wide changes): `♻️ refactor: update build system`
+### Complete Commit Message Format
+
+The complete commit message format for this monorepo is:
+
+```text
+[PROJECT_ABBR] <emoji> <type>: <description>
+
+<detailed_description>
+
+<footers>
+```
+
+Where:
+
+- **Line 1 (Required)**: `[PROJECT_ABBR] <emoji> <type>: <description>`
+- **Line 2 (Required)**: Empty line separator
+- **Lines 3+ (Optional)**: Detailed description explaining the "why" and context
+- **Final Lines (Optional)**: Footer metadata like issue references
+
+### Format Requirements
+
+1. **Title Line (First Line)**:
+   - **Length**: Maximum 72 characters (preferably under 50)
+   - **Format**: `[PROJECT_ABBR] <emoji> <type>: <description>`
+   - **Mood**: Imperative present tense (e.g., "add feature" not "added feature")
+   - **Content**: Concise summary of what changes
+
+2. **Body (Optional but Recommended)**:
+   - **Separation**: Must be separated from title by a single blank line
+   - **Purpose**: Explain the **reasoning** behind the change, not just what changed
+   - **Content**:
+     - What problem does this solve?
+     - What context is important for future developers?
+     - Any technical details that aren't obvious from the code?
+   - **Format**: Each line should be wrapped at 72 characters
+
+3. **Footers (Optional)**:
+   - **Separation**: Must be separated from body by a single blank line
+   - **Content**:
+     - Issue references: `Fixes #123`, `Closes #456`
+     - Breaking changes: `BREAKING CHANGE: <description>`
+     - Co-authors: `Co-authored-by: Name <email>`
+   - **Format**: Each footer on its own line
 
 ### Project Abbreviation Rules
 
@@ -54,22 +95,9 @@ This is a monorepo project containing multiple datapacks. All commit messages **
    - Documentation changes covering multiple projects
    - CI/CD configuration changes
 
-### Commit Message Format
-
-The complete commit message format for this monorepo is:
-
-```text
-[PROJECT_ABBR] <emoji> <type>: <description>
-```
-
-Where:
-
-- `[PROJECT_ABBR]` - Optional project abbreviation tag (omit for repository-wide changes)
-- `<emoji>` - Appropriate emoji for the commit type (see below)
-- `<type>` - Conventional commit type (feat, fix, docs, etc.)
-- `<description>` - Concise description in imperative mood
-
 ## Best Practices for Commits
+
+### Core Principles
 
 - **Verify before committing**: Ensure code is linted, builds correctly, and documentation is updated
 - **Atomic commits**: Each commit should contain related changes that serve a single purpose
@@ -85,70 +113,113 @@ Where:
   - `chore`: Changes to the build process, tools, etc.
 - **Present tense, imperative mood**: Write commit messages as commands (e.g., "add feature" not "added feature")
 - **Concise first line**: Keep the first line under 72 characters
-- **Emoji**: Each commit type is paired with an appropriate emoji:
-  - ✨ `feat`: New feature
-  - 🐛 `fix`: Bug fix
-  - 📝 `docs`: Documentation
-  - 💄 `style`: Formatting/style
-  - ♻️ `refactor`: Code refactoring
-  - ⚡️ `perf`: Performance improvements
-  - ✅ `test`: Tests
-  - 🔧 `chore`: Tooling, configuration
-  - 🚀 `ci`: CI/CD improvements
-  - 🗑️ `revert`: Reverting changes
-  - 🧪 `test`: Add a failing test
-  - 🚨 `fix`: Fix compiler/linter warnings
-  - 🔒️ `fix`: Fix security issues
-  - 👥 `chore`: Add or update contributors
-  - 🚚 `refactor`: Move or rename resources
-  - 🏗️ `refactor`: Make architectural changes
-  - 🔀 `chore`: Merge branches
-  - 📦️ `chore`: Add or update compiled files or packages
-  - ➕ `chore`: Add a dependency
-  - ➖ `chore`: Remove a dependency
-  - 🌱 `chore`: Add or update seed files
-  - 🧑‍💻 `chore`: Improve developer experience
-  - 🧵 `feat`: Add or update code related to multithreading or concurrency
-  - 🔍️ `feat`: Improve SEO
-  - 🏷️ `feat`: Add or update types
-  - 💬 `feat`: Add or update text and literals
-  - 🌐 `feat`: Internationalization and localization
-  - 👔 `feat`: Add or update business logic
-  - 📱 `feat`: Work on responsive design
-  - 🚸 `feat`: Improve user experience / usability
-  - 🩹 `fix`: Simple fix for a non-critical issue
-  - 🥅 `fix`: Catch errors
-  - 👽️ `fix`: Update code due to external API changes
-  - 🔥 `fix`: Remove code or files
-  - 🎨 `style`: Improve structure/format of the code
-  - 🚑️ `fix`: Critical hotfix
-  - 🎉 `chore`: Begin a project
-  - 🔖 `chore`: Release/Version tags
-  - 🚧 `wip`: Work in progress
-  - 💚 `fix`: Fix CI build
-  - 📌 `chore`: Pin dependencies to specific versions
-  - 👷 `ci`: Add or update CI build system
-  - 📈 `feat`: Add or update analytics or tracking code
-  - ✏️ `fix`: Fix typos
-  - ⏪️ `revert`: Revert changes
-  - 📄 `chore`: Add or update license
-  - 💥 `feat`: Introduce breaking changes
-  - 🍱 `assets`: Add or update assets
-  - ♿️ `feat`: Improve accessibility
-  - 💡 `docs`: Add or update comments in source code
-  - 🗃️ `db`: Perform database related changes
-  - 🔊 `feat`: Add or update logs
-  - 🔇 `fix`: Remove logs
-  - 🤡 `test`: Mock things
-  - 🥚 `feat`: Add or update an easter egg
-  - 🙈 `chore`: Add or update .gitignore file
-  - 📸 `test`: Add or update snapshots
-  - ⚗️ `experiment`: Perform experiments
-  - 🚩 `feat`: Add, update, or remove feature flags
-  - 💫 `ui`: Add or update animations and transitions
-  - ⚰️ `refactor`: Remove dead code
-  - 🦺 `feat`: Add or update code related to validation
-  - ✈️ `feat`: Improve offline support
+- **Emoji**: Each commit type is paired with an appropriate emoji (see list below)
+
+### Multi-line Commit Message Guidelines
+
+**When to use multi-line messages:**
+
+- Complex changes that need explanation
+- Bug fixes with important context
+- Features that require usage documentation
+- Changes with potential side effects
+- Refactoring that changes behavior
+
+**When single-line is acceptable:**
+
+- Trivial changes (typo fixes, simple renames)
+- Obvious changes that are self-explanatory
+- Automated tooling changes
+
+**Body content best practices:**
+
+- Explain the **why**, not the **what** (code shows what changed)
+- Provide context for future maintainers
+- Include relevant technical details
+- Mention any trade-offs or alternative approaches considered
+- Reference related commits or issues
+
+**Example structure:**
+
+```text
+[DFL] ✨ feat: add item validation function
+
+Adds a new validation function to check item properties before
+processing. This prevents crashes when handling malformed items
+and improves error messages for debugging.
+
+The validation is performed before any transformations to ensure
+data integrity throughout the pipeline. This addresses issue #123
+where invalid items caused silent failures.
+
+Fixes #123
+```
+
+## Conventional Commit Types with Emoji
+
+- ✨ `feat`: New feature
+- 🐛 `fix`: Bug fix
+- 📝 `docs`: Documentation
+- 💄 `style`: Formatting/style
+- ♻️ `refactor`: Code refactoring
+- ⚡️ `perf`: Performance improvements
+- ✅ `test`: Tests
+- 🔧 `chore`: Tooling, configuration
+- 🚀 `ci`: CI/CD improvements
+- 🗑️ `revert`: Reverting changes
+- 🧪 `test`: Add a failing test
+- 🚨 `fix`: Fix compiler/linter warnings
+- 🔒️ `fix`: Fix security issues
+- 👥 `chore`: Add or update contributors
+- 🚚 `refactor`: Move or rename resources
+- 🏗️ `refactor`: Make architectural changes
+- 🔀 `chore`: Merge branches
+- 📦️ `chore`: Add or update compiled files or packages
+- ➕ `chore`: Add a dependency
+- ➖ `chore`: Remove a dependency
+- 🌱 `chore`: Add or update seed files
+- 🧑‍💻 `chore`: Improve developer experience
+- 🧵 `feat`: Add or update code related to multithreading or concurrency
+- 🔍️ `feat`: Improve SEO
+- 🏷️ `feat`: Add or update types
+- 💬 `feat`: Add or update text and literals
+- 🌐 `feat`: Internationalization and localization
+- 👔 `feat`: Add or update business logic
+- 📱 `feat`: Work on responsive design
+- 🚸 `feat`: Improve user experience / usability
+- 🩹 `fix`: Simple fix for a non-critical issue
+- 🥅 `fix`: Catch errors
+- 👽️ `fix`: Update code due to external API changes
+- 🔥 `fix`: Remove code or files
+- 🎨 `style`: Improve structure/format of the code
+- 🚑️ `fix`: Critical hotfix
+- 🎉 `chore`: Begin a project
+- 🔖 `chore`: Release/Version tags
+- 🚧 `wip`: Work in progress
+- 💚 `fix`: Fix CI build
+- 📌 `chore`: Pin dependencies to specific versions
+- 👷 `ci`: Add or update CI build system
+- 📈 `feat`: Add or update analytics or tracking code
+- ✏️ `fix`: Fix typos
+- ⏪️ `revert`: Revert changes
+- 📄 `chore`: Add or update license
+- 💥 `feat`: Introduce breaking changes
+- 🍱 `assets`: Add or update assets
+- ♿️ `feat`: Improve accessibility
+- 💡 `docs`: Add or update comments in source code
+- 🗃️ `db`: Perform database related changes
+- 🔊 `feat`: Add or update logs
+- 🔇 `fix`: Remove logs
+- 🤡 `test`: Mock things
+- 🥚 `feat`: Add or update an easter egg
+- 🙈 `chore`: Add or update .gitignore file
+- 📸 `test`: Add or update snapshots
+- ⚗️ `experiment`: Perform experiments
+- 🚩 `feat`: Add, update, or remove feature flags
+- 💫 `ui`: Add or update animations and transitions
+- ⚰️ `refactor`: Remove dead code
+- 🦺 `feat`: Add or update code related to validation
+- ✈️ `feat`: Improve offline support
 
 ## Guidelines for Splitting Commits
 
@@ -162,51 +233,105 @@ When analyzing the diff, consider splitting commits based on these criteria:
 
 ## Examples
 
-Good commit messages:
+### Single-line Examples
 
-### Project-specific changes (with project abbreviation)
+**Project-specific changes (with project abbreviation):**
 
-- [DFL] ✨ feat: add new library function for item manipulation
-- [SD] 🐛 fix: resolve stone disappearance timing issue
-- [ALB] 📝 docs: update auto lucky block configuration guide
-- [DFL] ♻️ refactor: simplify function error handling logic
-- [SD] 🚨 fix: resolve linter warnings in tick function
-- [ALB] 🧑‍💻 chore: improve developer tooling setup process
-- [DFL] 👔 feat: implement business logic for item validation
-- [SD] 🩹 fix: address minor timing inconsistency in animation
+- `[DFL] ✨ feat: add new library function for item manipulation`
+- `[SD] 🐛 fix: resolve stone disappearance timing issue`
+- `[ALB] 📝 docs: update auto lucky block configuration guide`
+- `[DFL] ♻️ refactor: simplify function error handling logic`
 
-### Repository-wide changes (without project abbreviation)
+**Repository-wide changes (without project abbreviation):**
 
-- ♻️ refactor: update build system configuration for all datapacks
-- 📝 docs: update repository README with new project structure
-- 🔧 chore: add new CI workflow for automated testing
-- 🚨 fix: resolve linter configuration issues affecting all projects
-- 🧑‍💻 chore: improve developer documentation for monorepo setup
-- ✅ test: add integration tests for cross-datapack function calls
+- `♻️ refactor: update build system configuration for all datapacks`
+- `📝 docs: update repository README with new project structure`
+- `🔧 chore: add new CI workflow for automated testing`
 
-### Example of splitting commits for a datapack project
+### Multi-line Examples
 
-Suppose you're making changes to the "datapack function library" project. Instead of one large commit, you could split it into:
+**Project-specific feature with context:**
 
-- First commit: [DFL] ✨ feat: add new function for item manipulation
-- Second commit: [DFL] 📝 docs: update function documentation with usage examples
-- Third commit: [DFL] 🔧 chore: update dependency configuration
-- Fourth commit: [DFL] 🏷️ feat: add type annotations for function parameters
-- Fifth commit: [DFL] 🧵 feat: improve performance with concurrent processing
-- Sixth commit: [DFL] 🚨 fix: resolve linter warnings in new code
-- Seventh commit: [DFL] ✅ test: add unit tests for new functions
-- Eighth commit: [DFL] 🔒️ fix: update dependencies with security patches
+```text
+[DFL] ✨ feat: add item validation function
 
-### Example of splitting repository-wide changes
+Adds a new `validateItem()` function to check item properties before
+processing. This prevents crashes when handling malformed items and
+provides clear error messages for debugging.
 
-For repository-wide changes affecting multiple projects:
+Key improvements:
+- Validates item ID format and metadata structure
+- Checks for required NBT tags
+- Returns detailed error objects instead of boolean
+- Includes unit tests for edge cases
 
-- First commit: ♻️ refactor: update build system for all datapacks
-- Second commit: 📝 docs: update repository documentation with new guidelines
-- Third commit: 🔧 chore: add shared CI workflow configuration
-- Fourth commit: ✅ test: add integration tests for cross-project compatibility
-- Fifth commit: 🚨 fix: resolve shared configuration issues
-- Sixth commit: 🧑‍💻 chore: improve developer setup documentation
+This addresses the silent failures reported in issue #123.
+```
+
+**Bug fix with technical details:**
+
+```text
+[SD] 🐛 fix: resolve stone disappearance timing issue
+
+Fixes a race condition where stones would disappear before their
+animation completed. The issue occurred because the cleanup function
+was called too early in the tick cycle.
+
+Changes:
+- Moved cleanup logic to run after animation check
+- Added 2-tick delay before removal
+- Updated state management to track animation progress
+
+Fixes #456
+```
+
+**Refactoring with breaking changes:**
+
+```text
+[ALB] ♻️ refactor: restructure lucky block configuration
+
+BREAKING CHANGE: Configuration file format has changed
+
+The old flat structure has been replaced with a nested format for
+better organization and future extensibility.
+
+Old format:
+{
+  "drop_chance": 0.1,
+  "reward_count": 3
+}
+
+New format:
+{
+  "rewards": {
+    "drop_chance": 0.1,
+    "count": 3
+  }
+}
+
+Migration guide: See MIGRATION.md for detailed upgrade instructions.
+
+```
+
+**Repository-wide change:**
+
+```text
+♻️ refactor: migrate from webpack to vite for all datapacks
+
+Improves build performance and developer experience by switching
+to Vite as the build tool.
+
+Benefits:
+- 10x faster hot reload
+- Simpler configuration
+- Better TypeScript support
+- Reduced dependency count
+
+All projects now use a unified build configuration located in
+the root `build/` directory.
+
+Co-authored-by: Developer Name <dev@example.com>
+```
 
 ## Command Options
 
@@ -215,10 +340,11 @@ For repository-wide changes affecting multiple projects:
 ## Important Notes
 
 - By default, pre-commit checks (`pnpm lint`, `pnpm build`, `pnpm generate:docs`) will run to ensure code quality
-- If these checks fail, you'll be asked if you want to proceed with the commit anyway or fix the issues first
+- If these checks fail, you'll be asked if you want to proceed with the commit or fix the issues first
 - If specific files are already staged, the command will only commit those files
 - If no files are staged, it will automatically stage all modified and new files
 - The commit message will be constructed based on the changes detected
 - Before committing, the command will review the diff to identify if multiple commits would be more appropriate
 - If suggesting multiple commits, it will help you stage and commit the changes separately
-- Always reviews the commit diff to ensure the message matches the changes
+- Always review the commit diff to ensure the message matches the changes
+- **For multi-line messages**: The command will prompt for additional body content and footers when complex changes are detected
