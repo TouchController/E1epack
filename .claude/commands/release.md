@@ -5,4 +5,4 @@
 - 检查 `/$ARGUMENTS/README.md` ，如果有陈旧描述，更新它
 - 提供一个总结报告
 - 询问用户是否满意，获得意见后进行改进
-- 如果用户表示满意，添加一个包含此次更改的commit，等待用户最终发布新版本。请**务必**阅读 `/.claude/commands/commit.md` 以了解commit规范
+- 如果用户表示满意，添加一个包含此次更改的commit，等待用户最终发布新版本。请**务必**阅读 `.claude/commands/commit.md` 以了解commit规范
