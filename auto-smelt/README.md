@@ -4,7 +4,7 @@
 
 ## 简介
 
-这个数据包可以自动消耗您背包中的煤矿烧炼物品
+这个数据包可以自动消耗您背包中的煤矿烧炼物品。
 
 - 可以使用的燃料有：[煤炭](https://zh.minecraft.wiki/w/%E7%85%A4%E7%82%AD)、[木炭](https://zh.minecraft.wiki/w/%E6%9C%A8%E7%82%AD)、[煤炭块](https://zh.minecraft.wiki/w/%E7%85%A4%E7%82%AD%E5%9D%97)
 - 可以烧炼的物品有：[矿石](https://zh.minecraft.wiki/w/%E7%83%A7%E7%82%BC#%E7%9F%BF%E7%9F%B3)、[食物](https://zh.minecraft.wiki/w/%E7%83%A7%E7%82%BC#%E9%A3%9F%E7%89%A9)
@@ -20,7 +20,7 @@
 
 ## Introduction
 
-This datapack automatically consumes coal from your inventory to smelt items
+This datapack automatically consumes coal from your inventory to smelt items.
 
 - Supported fuels: [Coal](https://minecraft.wiki/w/Coal), [Charcoal](https://minecraft.wiki/w/Charcoal), [Block of Coal](https://minecraft.wiki/w/Block_of_Coal)
 - Smeltable items: [Ores](https://minecraft.wiki/w/Smelting#Ores), [Food](https://minecraft.wiki/w/Smelting#Food)
