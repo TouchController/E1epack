@@ -2,7 +2,7 @@
 name: release
 description: 生成发布信息和更新版本号
 argument-hint: 输入要发布的项目名称
-tools: []
+tools: ['execute', 'read', 'edit', 'search', 'web', 'todo']
 ---
 
 运行`git tag --list ${selection}_*" | grep -E "${selection}_v[0-9]+\\.[0-9]+\\.[0-9]+$" | sort -V | tail -1`获取最新标签，比对`/${selection}`目录从最新标签到最新commit之间的差异，总结然后执行以下步骤：
