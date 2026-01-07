@@ -1,0 +1,23 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "description": [
+      {
+        "text": "by - ",
+        "color": "red"
+      },
+      {
+        "text": "Modrinth\n",
+        "color": "green"
+      },
+      {
+        "text": "white_elephant",
+        "color": "blue"
+      }
+    ],
+    "supported_formats": [
+      1,
+      1024
+    ]
+  }
+}
