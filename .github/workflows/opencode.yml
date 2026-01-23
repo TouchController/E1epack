@@ -38,17 +38,17 @@ jobs:
       issues: read
 
     steps:
-      # 1️⃣ Checkout
+      # 1️⃣ Checkout 仓库
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           persist-credentials: false
 
-      # 2️⃣ 解析 /oc branch=xxx（安全版，不会被 suggestion 炸）
+      # 2️⃣ 安全解析 /oc branch=xxx（不会被 suggestion 代码块炸）
       - name: Parse branch override
         id: parse_branch
         run: |
-          BODY="${{ github.event.comment.body }}"
+          BODY=$(jq -r '.comment.body' <<< '${{ toJson(github.event) }}')
           BRANCH=""
 
           if echo "$BODY" | grep -q "branch="; then
@@ -115,7 +115,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 9️⃣ 如果是普通 PR，修正 base
+      # 9️⃣ 普通 PR：修正 base
       - name: Fix PR base
         if: >
           steps.find_pr.outputs.pr_number != '' &&
