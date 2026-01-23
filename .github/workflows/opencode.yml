@@ -44,11 +44,10 @@ jobs:
         with:
           persist-credentials: false
 
-      # 2️⃣ 安全解析 /oc branch=xxx（不会被 suggestion 代码块炸）
       - name: Parse branch override
         id: parse_branch
         run: |
-          BODY=$(jq -r '.comment.body' <<< '${{ toJson(github.event) }}')
+          BODY="${{ github.event.comment.body }}"
           BRANCH=""
 
           if echo "$BODY" | grep -q "branch="; then
@@ -57,7 +56,6 @@ jobs:
           fi
 
           echo "override_branch=$BRANCH" >> $GITHUB_OUTPUT
-
       # 3️⃣ 确定源分支（旧分支）
       - name: Determine source branch
         id: src
