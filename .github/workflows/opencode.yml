@@ -8,7 +8,6 @@ on:
 
 jobs:
   opencode:
-    # 只允许 /oc 或 /opencode 触发
     if: >
       (
         github.event_name == 'issue_comment' &&
@@ -38,89 +37,32 @@ jobs:
       issues: read
 
     steps:
-      # 1️⃣ Checkout 仓库
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           persist-credentials: false
 
-      - name: Parse branch override
-        id: parse_branch
-        run: |
-          echo "override_branch=${{
-            contains(github.event.comment.body, 'branch=') &&
-            fromJSON(format('{{\"b\":\"{0}\"}}', github.event.comment.body)).b
-              | replace('branch=', '')
-              | replace('\n', ' ')
-              | replace('\r', ' ')
-              | replace('\t', ' ')
-              | replace('```', ' ')
-              | replace(' ', ' ')
-              | replace('\"', '')
-              | replace(\"'\", '')
-              | replace('(', '')
-              | replace(')', '')
-              | replace('{', '')
-              | replace('}', '')
-              | replace('[', '')
-              | replace(']', '')
-              | replace(',', '')
-              | replace(':', '')
-              | replace(';', '')
-              | replace('|', '')
-              | replace('/', '/')
-              | replace('\\', '')
-              | replace('*', '')
-              | replace('`', '')
-              | replace('>', '')
-              | replace('<', '')
-              | replace('=', '')
-              | replace('?', '')
-              | replace('!', '')
-              | replace('@', '')
-              | replace('#', '')
-              | replace('$', '')
-              | replace('%', '')
-              | replace('^', '')
-              | replace('&', '')
-              | replace('+', '')
-              | replace('~', '')
-              | replace('branch', '')
-              | replace('=', '')
-              | trim()
-            || ''
-          }}" >> $GITHUB_OUTPUT
-
-      # 3️⃣ 确定源分支（旧分支）
+      # 1️⃣ 自动确定源分支（不再支持 branch=xxx）
       - name: Determine source branch
         id: src
         run: |
-          if [ "${{ steps.parse_branch.outputs.override_branch }}" != "" ]; then
-            echo "source_branch=${{ steps.parse_branch.outputs.override_branch }}" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
           if [ "${{ github.event.issue.pull_request.url }}" != "" ]; then
             echo "source_branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_OUTPUT
-            exit 0
+          else
+            echo "source_branch=${{ github.event.repository.default_branch }}" >> $GITHUB_OUTPUT
           fi
 
-          echo "source_branch=${{ github.event.repository.default_branch }}" >> $GITHUB_OUTPUT
-
-      # 4️⃣ Checkout 源分支
       - name: Checkout source branch
         uses: actions/checkout@v6
         with:
           ref: ${{ steps.src.outputs.source_branch }}
           persist-credentials: false
 
-      # 5️⃣ 记录旧分支名
       - name: Record source branch
         id: src_branch
         run: |
           echo "source_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
 
-      # 6️⃣ Run opencode（OC 本体）
       - name: Run opencode
         uses: anomalyco/opencode/github@latest
         env:
@@ -128,13 +70,11 @@ jobs:
         with:
           model: deepseek/deepseek-reasoner
 
-      # 7️⃣ 记录新分支名（OC 创建的）
       - name: Detect opencode branch
         id: oc_branch
         run: |
           echo "oc_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
 
-      # 8️⃣ 查找新 PR（OC 创建的）
       - name: Find PR created by opencode
         id: find_pr
         run: |
@@ -148,7 +88,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 9️⃣ 普通 PR：修正 base
       - name: Fix PR base
         if: >
           steps.find_pr.outputs.pr_number != '' &&
@@ -159,7 +98,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 🔟 opencode → opencode：fast-forward 合并 + 删除新 PR + 转发描述
       - name: Fast-forward merge new opencode branch into previous opencode branch
         if: >
           steps.find_pr.outputs.pr_number != '' &&
@@ -169,7 +107,6 @@ jobs:
           NEW_BRANCH=${{ steps.oc_branch.outputs.oc_branch }}
           OLD_BRANCH=${{ steps.src_branch.outputs.source_branch }}
 
-          # 获取旧 PR 号
           OLD_PR="${{ github.event.issue.number }}"
           if [ -z "$OLD_PR" ]; then
             OLD_PR="${{ github.event.pull_request.number }}"
@@ -178,11 +115,9 @@ jobs:
           git fetch origin "$OLD_BRANCH" "$NEW_BRANCH"
           git checkout "$OLD_BRANCH"
 
-          echo "Attempting fast-forward merge..."
           if git merge --ff-only "origin/$NEW_BRANCH"; then
             git push origin "$OLD_BRANCH"
           else
-            echo "Fast-forward merge failed, skipping cleanup."
             exit 0
           fi
 
