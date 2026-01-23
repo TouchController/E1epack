@@ -8,7 +8,7 @@ import sys
 from typing import Dict, List, Tuple
 from pathlib import Path
 
-from .config import get_all_target_languages
+from .config import get_all_target_languages, BATCH_SIZE, MAX_CONTEXT, MIN_KEYS_FOR_CONTEXT
 from .logging import log_progress, log_section, log_section_end, ProgressTracker, flush_logs
 from .translator import DeepSeekTranslator
 from .git_changes import get_git_changes
@@ -331,7 +331,7 @@ def continue_full_translation(translator, progress_tracker, namespaces):
         target_languages = [(task['lang_code'], task['lang_name'])]
 
         # 创建翻译请求
-        requests = translator.prepare_translation_requests(prepared_texts, target_languages, batch_size=40, namespace=task['namespace'])
+        requests = translator.prepare_translation_requests(prepared_texts, target_languages, batch_size=BATCH_SIZE, namespace=task['namespace'])
 
         # 为每个请求添加任务信息
         for request in requests:
@@ -453,8 +453,8 @@ def run_smart_translation(translator):
             continue
 
         # 上下文策略：若少于10条则补齐上下文到10条；否则仅目标键
-        if len(keys_to_translate) < 10:
-            context_dict = get_context_for_keys(source_dict, keys_to_translate, max_context=10, force_context=False)
+        if len(keys_to_translate) < MIN_KEYS_FOR_CONTEXT:
+            context_dict = get_context_for_keys(source_dict, keys_to_translate, max_context=MAX_CONTEXT, force_context=False)
             log_progress(f"差异翻译上下文补充：{len(keys_to_translate)} 个目标键 + {len(context_dict) - len(keys_to_translate)} 个上下文键 = {len(context_dict)} 个键值对")
         else:
             context_dict = {k: source_dict[k] for k in keys_to_translate if k in source_dict}
@@ -495,7 +495,7 @@ def run_smart_translation(translator):
     for task in all_translation_tasks:
         prepared_context = translator.prepare_texts_for_translation(task['context_dict'])
         target_languages_list = [(task['lang_code'], task['lang_name'])]
-        requests = translator.prepare_translation_requests(prepared_context, target_languages_list, batch_size=40, silent=True)
+        requests = translator.prepare_translation_requests(prepared_context, target_languages_list, batch_size=BATCH_SIZE, silent=True)
         for request in requests:
             request.namespace = task['namespace']
             request.keys_to_translate = task['keys_to_translate']

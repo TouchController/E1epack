@@ -91,3 +91,14 @@ TARGET_LANGUAGES = load_target_languages()
 def get_all_target_languages() -> dict:
     """获取所有目标语言（从文件或默认值）"""
     return TARGET_LANGUAGES
+
+
+# 翻译配置常量
+BATCH_SIZE = 40
+MAX_CONTEXT = 10
+MAX_INDIVIDUAL_RETRIES = 10
+CONTEXT_SIZE = 4
+DEFAULT_TEMPERATURE = 1.3
+TEMPERATURE_ADJUSTMENTS = [1.3, 1.3, 1.2, 1.0, 0.7]
+API_TIMEOUT = 60
+MIN_KEYS_FOR_CONTEXT = 10

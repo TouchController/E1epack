@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
-from translator.config import ASSETS_DIR, TRANSLATE_DIR
+from translator.config import ASSETS_DIR, TRANSLATE_DIR, MAX_CONTEXT
 from translator.logging import log_progress
 
 
@@ -197,7 +197,7 @@ def find_existing_translations(lang_code: str) -> Dict[str, str]:
     return existing_translations
 
 
-def get_context_for_keys(source_dict: Dict[str, str], target_keys: List[str], max_context: int = 10, force_context: bool = False) -> Dict[str, any]:
+def get_context_for_keys(source_dict: Dict[str, str], target_keys: List[str], max_context: int = MAX_CONTEXT, force_context: bool = False) -> Dict[str, any]:
     """为目标键获取上下文键值对，并统一使用核心键标记
 
     两步模型对齐：

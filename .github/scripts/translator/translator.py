@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 import concurrent.futures
 
-from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE
+from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_CONTEXT, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, TEMPERATURE_ADJUSTMENTS, API_TIMEOUT
 from translator.logging import log_progress, flush_logs
 
 
@@ -264,7 +264,7 @@ class DeepSeekTranslator:
 
         return prepared_texts
 
-    def translate_batch(self, texts: Dict[str, str], target_lang: str, target_lang_name: str, namespace: str = "unknown", attempt: int = 1, temperature: float = 1.3) -> Dict[str, str]:
+    def translate_batch(self, texts: Dict[str, str], target_lang: str, target_lang_name: str, namespace: str = "unknown", attempt: int = 1, temperature: float = DEFAULT_TEMPERATURE) -> Dict[str, str]:
         """
         翻译一批文本，单次执行（重试机制由上层函数处理）
         """
@@ -280,8 +280,8 @@ class DeepSeekTranslator:
         source_text = json.dumps(texts_to_translate, ensure_ascii=False, indent=2)
 
         try:
-                # 使用提示词模板或回退到默认提示词
-                if self.system_prompt:
+            # 使用提示词模板或回退到默认提示词
+            if self.system_prompt:
                     system_prompt = self._format_prompt(
                         self.system_prompt,
                         target_language=target_lang_name
@@ -345,7 +345,7 @@ class DeepSeekTranslator:
 
                 # 调用API
                 start_time = time.time()
-                response = requests.post(DEEPSEEK_API_URL, headers=self.headers, json=payload, timeout=60)
+                response = requests.post(DEEPSEEK_API_URL, headers=self.headers, json=payload, timeout=API_TIMEOUT)
                 api_time = time.time() - start_time
 
                 response.raise_for_status()
@@ -432,10 +432,10 @@ class DeepSeekTranslator:
         namespace: str = "unknown"
         batch_id: int = 1
         total_batches: int = 1
-        batch_size: int = 40
+        batch_size: int = BATCH_SIZE
 
     def prepare_translation_requests(self, all_texts: Dict[str, str], target_languages: List[Tuple[str, str]],
-                                   batch_size: int = 40, silent: bool = False, namespace: str = None) -> List['DeepSeekTranslator.TranslationRequest']:
+                                   batch_size: int = BATCH_SIZE, silent: bool = False, namespace: str = None) -> List['DeepSeekTranslator.TranslationRequest']:
         """
         预处理所有翻译请求，将文本按语言和批次分割
 
@@ -458,7 +458,7 @@ class DeepSeekTranslator:
             # 如果需要分段（超过batch_size），使用强制上下文模式
             if total_texts > batch_size:
                 # 分段翻译：强制添加上下文
-                batches = self.split_texts_with_context_guarantee(all_texts, batch_size, context_size=4)
+                batches = self.split_texts_with_context_guarantee(all_texts, batch_size, context_size=CONTEXT_SIZE)
                 total_batches = len(batches)
 
                 for batch_index, batch_texts in enumerate(batches, 1):
@@ -510,7 +510,7 @@ class DeepSeekTranslator:
         Returns:
             (request_id, target_lang, target_lang_name, translation_result)
         """
-        max_individual_retries = 10  # 每种失败类型的最大重试次数
+        max_individual_retries = MAX_INDIVIDUAL_RETRIES  # 每种失败类型的最大重试次数
         api_failure_count = 0  # API请求失败计数
         validation_failure_count = 0  # 模型输出验证失败计数
         total_attempts = 0  # 总尝试次数（仅用于日志记录）
@@ -519,12 +519,12 @@ class DeepSeekTranslator:
         def get_temperature_and_mode(validation_attempt: int):
             if validation_attempt <= 5:
                 # 前5次：调整温度
-                temperatures = [1.3, 1.3, 1.2, 1.0, 0.7]
+                temperatures = TEMPERATURE_ADJUSTMENTS
                 return temperatures[validation_attempt - 1], self.non_thinking_mode
             else:
                 # 第6次开始：切换思考模式，重新开始温度循环
                 cycle_pos = (validation_attempt - 6) % 5
-                temperatures = [1.3, 1.3, 1.2, 1.0, 0.7]
+                temperatures = TEMPERATURE_ADJUSTMENTS
                 return temperatures[cycle_pos], not self.non_thinking_mode
 
         batch_info = f"批次{request.batch_id}/{request.total_batches} " if request.total_batches > 1 else ""
@@ -558,7 +558,7 @@ class DeepSeekTranslator:
                         log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}-> {request.target_lang_name} -> 翻译结果为空，重试中... (等待1秒)", "warning")
                         time.sleep(1)  # 验证失败等待1秒
                         continue
-                    else:
+            else:
                         log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}{len(request.texts)}个文本 -> {request.target_lang_name} -> 失败: 翻译结果为空 (达到验证失败上限)", "error")
                         return (request.request_id, request.target_lang, request.target_lang_name, {})
 
@@ -663,7 +663,7 @@ class DeepSeekTranslator:
 
         return results_by_namespace_and_language
 
-    def split_texts_for_concurrent_translation(self, texts: Dict[str, str], batch_size: int = 40) -> List[Dict[str, str]]:
+    def split_texts_for_concurrent_translation(self, texts: Dict[str, str], batch_size: int = BATCH_SIZE) -> List[Dict[str, str]]:
         """
         将文本字典分割为适合并发翻译的批次
 
@@ -688,7 +688,7 @@ class DeepSeekTranslator:
         log_progress(f"    将 {len(texts)} 个文本分割为 {len(batches)} 个批次 (每批次 {batch_size} 个)")
         return batches
 
-    def split_texts_with_context_guarantee(self, texts: Dict[str, str], batch_size: int = 40, context_size: int = 4) -> List[Dict[str, str]]:
+    def split_texts_with_context_guarantee(self, texts: Dict[str, str], batch_size: int = BATCH_SIZE, context_size: int = CONTEXT_SIZE) -> List[Dict[str, str]]:
         """
         将文本字典分割为适合并发翻译的批次，并为每个批次添加上下文保证
 
