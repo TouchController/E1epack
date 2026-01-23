@@ -8,3 +8,13 @@ bazel-*
 translation.log
 .github/scripts/logs/
 .claude/settings.local.json
+.bash_profile
+.bashrc
+.profile
+.ripgreprc
+.zshrc
+.zprofile
+.claude/settings.json
+.gitconfig
+.gitmodules
+.mcp.json
