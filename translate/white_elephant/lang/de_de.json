@@ -1,21 +1,21 @@
 {
   "banner.white.elephant.enabled": "%s Datenpaket erfolgreich geladen",
   "banner.white.elephant.author": "Autor: %s",
-  "banner.white.elephant.license": "Dieses Datenpaket ist unter der %s Lizenz Open-Source",
-  "banner.white.elephant.official": "Offizielle Datenpaket-Website",
+  "banner.white.elephant.license": "Dieses Datenpaket ist unter der %s Lizenz Open-Source.",
+  "banner.white.elephant.official": "Offizielle Website des Datenpakets",
   "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
-  "need.dfl.white.elephant.no": "Voraussetzung fehlt",
-  "need.dfl.white.elephant.please.install": "Bitte installiere das Datenpaket: ",
+  "need.dfl.white.elephant.no": "Fehlende Voraussetzung",
+  "need.dfl.white.elephant.please.install": "Bitte installieren Sie das Datenpaket: ",
   "dialog.white.elephant.new_player.line1": "%s Datenpaket wurde in diese Welt geladen!",
   "dialog.white.elephant.new_player.author": "Autor:",
-  "dialog.white.elephant.new_player.tech_support": "Technischer Support:",
-  "dialog.white.elephant.new_player.license": "Dieses Datenpaket verwendet die %s Open-Source-Lizenz",
+  "dialog.white.elephant.new_player.tech_support": "Technische Unterstützung:",
+  "dialog.white.elephant.new_player.license": "Dieses Datenpaket verwendet die %s Open-Source-Lizenz.",
   "dialog.white.elephant.new_player.view_license": "Open-Source-Lizenz anzeigen",
   "dialog.white.elephant.options.admin_only": "Nur Administratoren können Einstellungen ändern!",
   "dialog.white.elephant.common.cancel": "Abbrechen",
   "dialog.white.elephant.common.save_and_exit": "Speichern und beenden",
   "dialog.white.elephant.common.cancel_tooltip": "Aktuelle Änderungen verwerfen",
   "dialog.white.elephant.common.save_tooltip": "Aktuelle Einstellungen speichern",
-  "dialog.white.elephant.common.technical_limitation": "Aufgrund technischer Einschränkungen werden hier nur Standardeinstellungen angezeigt"
+  "dialog.white.elephant.common.technical_limitation": "Aufgrund technischer Einschränkungen sind hier die Standardeinstellungen angezeigt."
 }

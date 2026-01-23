@@ -1,21 +1,21 @@
 {
   "banner.white.elephant.enabled": "Pacote de dados %s carregado com sucesso",
   "banner.white.elephant.author": "Autor: %s",
-  "banner.white.elephant.license": "Este pacote de dados é open source sob a licença %s",
+  "banner.white.elephant.license": "Este pacote de dados usa a licença aberta %s",
   "banner.white.elephant.official": "Site oficial do pacote de dados",
   "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
-  "need.dfl.white.elephant.no": "Pré-requisito ausente",
+  "need.dfl.white.elephant.no": "Faltando pré-requisito",
   "need.dfl.white.elephant.please.install": "Por favor, instale o pacote de dados: ",
   "dialog.white.elephant.new_player.line1": "O pacote de dados %s foi carregado neste mundo!",
   "dialog.white.elephant.new_player.author": "Autor:",
   "dialog.white.elephant.new_player.tech_support": "Suporte técnico:",
-  "dialog.white.elephant.new_player.license": "Este pacote de dados usa a licença open source %s",
-  "dialog.white.elephant.new_player.view_license": "Ver licença open source",
+  "dialog.white.elephant.new_player.license": "Este pacote de dados usa a licença aberta %s",
+  "dialog.white.elephant.new_player.view_license": "Ver licença aberta",
   "dialog.white.elephant.options.admin_only": "Apenas administradores podem modificar as configurações!",
   "dialog.white.elephant.common.cancel": "Cancelar",
   "dialog.white.elephant.common.save_and_exit": "Salvar e sair",
   "dialog.white.elephant.common.cancel_tooltip": "Descartar alterações atuais",
   "dialog.white.elephant.common.save_tooltip": "Salvar configurações atuais",
-  "dialog.white.elephant.common.technical_limitation": "Devido a limitações técnicas, as configurações exibidas aqui são os valores padrão"
+  "dialog.white.elephant.common.technical_limitation": "Devido a limitações técnicas, as configurações mostradas aqui são os valores padrão"
 }
