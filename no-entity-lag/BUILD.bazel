@@ -1,0 +1,16 @@
+load("@//rule:datapack.bzl", "complete_datapack_config", "minecraft_versions_range")
+
+pack_version = "1.0.0"
+
+complete_datapack_config(
+    game_versions = minecraft_versions_range("1.20"),
+    modrinth_project_id = "HydPXwHs",
+    pack_id = "no_entity_lag",
+    pack_version = pack_version,
+    deps = [
+        "README.md",
+        "pack.png",
+        "//:license_gpl",
+        "//datapack-function-library:dfl",
+    ],
+)
