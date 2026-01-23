@@ -47,15 +47,7 @@ jobs:
       - name: Parse branch override
         id: parse_branch
         run: |
-          BODY="${{ github.event.comment.body }}"
-          BRANCH=""
-
-          if echo "$BODY" | grep -q "branch="; then
-            AFTER=${BODY#*branch=}
-            BRANCH=${AFTER%%[!A-Za-z0-9._/-]*}
-          fi
-
-          echo "override_branch=$BRANCH" >> $GITHUB_OUTPUT
+          echo "override_branch=${{ github.event.comment.body != null && contains(github.event.comment.body, 'branch=') && split(split(github.event.comment.body, 'branch=')[1], ' ')[0] || '' }}" >> $GITHUB_OUTPUT
       # 3️⃣ 确定源分支（旧分支）
       - name: Determine source branch
         id: src
