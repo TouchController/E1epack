@@ -87,3 +87,13 @@ This is an extremely lightweight mod that can make your Minecraft experience bet
 This datapack automatically consumes coal from your inventory to smelt items.
 
 [Modrinth](https://modrinth.com/project/R1C09Xvb) | [MCMOD](https://www.mcmod.cn/class/17557.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/auto-smelt)
+
+---
+
+**[NEL]实体卡顿优化 (No Entity Lag)**
+
+让您告别实体过多造成的卡顿和掉帧
+
+Say goodbye to lag and frame drops caused by too many entities.
+
+[Modrinth](https://modrinth.com/project/HydPXwHs) | [MCMOD](https://www.mcmod.cn/class/) | [GitHub](https://github.com/TouchController/E1epack/tree/main/no-entity-lag)
