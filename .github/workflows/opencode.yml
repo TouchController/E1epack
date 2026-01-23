@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
+      contents: write
       pull-requests: write
       issues: read
 
@@ -99,11 +99,57 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 8️⃣ 修正 PR base → 回到“原分支”
+      # 8️⃣ 修正 PR base（如果是普通 PR）
       - name: Fix PR base
-        if: steps.find_pr.outputs.pr_number != ''
+        if: steps.find_pr.outputs.pr_number != '' &&
+            !startsWith(steps.src_branch.outputs.source_branch, 'opencode/')
         run: |
           gh pr edit ${{ steps.find_pr.outputs.pr_number }} \
             --base "${{ steps.src_branch.outputs.source_branch }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 9️⃣ opencode → opencode：fast‑forward 合并 + 删除新 PR + 转发描述
+      - name: Fast-forward merge new opencode branch into previous opencode branch
+        if: >
+          steps.find_pr.outputs.pr_number != '' &&
+          startsWith(steps.src_branch.outputs.source_branch, 'opencode/')
+        run: |
+          NEW_PR=${{ steps.find_pr.outputs.pr_number }}
+          NEW_BRANCH=${{ steps.oc_branch.outputs.oc_branch }}
+          OLD_BRANCH=${{ steps.src_branch.outputs.source_branch }}
+
+          # 获取旧 PR 号（issue_comment 和 review 事件字段不同）
+          OLD_PR="${{ github.event.issue.number }}"
+          if [ -z "$OLD_PR" ]; then
+            OLD_PR="${{ github.event.pull_request.number }}"
+          fi
+
+          echo "Old PR: #$OLD_PR (branch: $OLD_BRANCH)"
+          echo "New PR: #$NEW_PR (branch: $NEW_BRANCH)"
+
+          git fetch origin "$OLD_BRANCH" "$NEW_BRANCH"
+
+          git checkout "$OLD_BRANCH"
+
+          echo "Attempting fast-forward merge..."
+          if git merge --ff-only "origin/$NEW_BRANCH"; then
+            echo "Fast-forward merge succeeded, pushing..."
+            git push origin "$OLD_BRANCH"
+          else
+            echo "Fast-forward merge failed, skipping cleanup."
+            exit 0
+          fi
+
+          echo "Fetching new PR body..."
+          BODY=$(gh pr view "$NEW_PR" --json body --jq .body)
+
+          if [ -n "$BODY" ]; then
+            echo "Posting new PR body to old PR #$OLD_PR"
+            gh pr comment "$OLD_PR" --body "$BODY"
+          fi
+
+          echo "Closing new PR and deleting branch..."
+          gh pr close "$NEW_PR" --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
