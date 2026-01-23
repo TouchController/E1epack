@@ -46,7 +46,7 @@ bazelisk build ...
 在 bash 环境中，使用 Bazel 构建命令时**不需要**在目标前添加 `//` 前缀：
 
 - ✅ 正确：`bazelisk build datapack-function-library`
-- ❌ 错误：`bazelisk build //datapack-function-library`
+- ❌ 错误：`bazelisk build //subprojects/datapack-function-library`
 
 这是因为在 Windows bash 环境中，`//` 前缀会被错误解析为路径分隔符，导致构建失败。所有构建目标都应该直接使用目录名称，无需 `//` 前缀。
 
@@ -76,7 +76,7 @@ bazelisk build //...
 - `third_party/` - 第三方库集成
 - `template/` - 数据包模板文件
 - `game/` - 游戏相关资源
-- `Localization-Resource-Pack/` - 本地化资源包源文件（详见本地化系统部分）
+- `subprojects/Localization-Resource-Pack/` - 本地化资源包源文件（详见本地化系统部分）
 - `translate/` - 自动翻译输出目录（由 CI 自动生成）
 - `private/` - 私有配置（包含敏感信息，已加入 .gitignore）
 
@@ -90,7 +90,7 @@ bazelisk build //...
 
 ### 依赖管理
 
-- **内部依赖**：数据包可以依赖其他数据包（如 `//datapack-function-library:dfl`）
+- **内部依赖**：数据包可以依赖其他数据包（如 `//subprojects/datapack-function-library:dfl`）
 - **外部依赖**：通过 `@unif-logger//:unif-logger` 等引用第三方库
 - **Minecraft 版本**：使用 `minecraft_versions_range()` 函数指定支持的版本范围
 
@@ -146,7 +146,7 @@ bazelisk build //...
 
 项目采用自动翻译和手动维护相结合的本地化方案：
 
-- **本地化资源包**：`Localization-Resource-Pack/` - 包含资源包和本地化源文件
+- **本地化资源包**：`subprojects/Localization-Resource-Pack/` - 包含资源包和本地化源文件
   - `assets/` - 资源包资产文件
   - `languages.json` - 支持的语言配置
   - `system_prompt.md` - 翻译系统提示
@@ -158,9 +158,9 @@ bazelisk build //...
 
 ### 翻译工作流
 
-- **自动翻译触发**：当 `Localization-Resource-Pack/assets/**` 发生变更时，GitHub Action `/.github/workflows/translate.yml` 自动触发
+- **自动翻译触发**：当 `subprojects/Localization-Resource-Pack/assets/**` 发生变更时，GitHub Action `/.github/workflows/translate.yml` 自动触发
 - **翻译脚本**：`.github/scripts/translate.py` 驱动自动翻译
-  - 源文件：`Localization-Resource-Pack/assets/` 中的所有本地化文件
+  - 源文件：`subprojects/Localization-Resource-Pack/assets/` 中的所有本地化文件
   - 输出：`translate/` 目录
   - 环境变量：`DEEPSEEK_API_KEY`（必需）、`FORCE_TRANSLATE`、`NON_THINKING_MODE`、`TRANSLATION_DEBUG`
 
@@ -172,7 +172,7 @@ bazelisk build //...
 
 ### 添加新语言支持
 
-1. 编辑 `Localization-Resource-Pack/languages.json` 添加语言代码和名称
+1. 编辑 `subprojects/Localization-Resource-Pack/languages.json` 添加语言代码和名称
 2. 自动翻译会在 CI 中触发生成对应语言文件
 3. 构建系统自动处理合并到最终资源包
 
