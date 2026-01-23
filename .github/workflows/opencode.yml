@@ -47,7 +47,50 @@ jobs:
       - name: Parse branch override
         id: parse_branch
         run: |
-          echo "override_branch=${{ github.event.comment.body != null && contains(github.event.comment.body, 'branch=') && split(split(github.event.comment.body, 'branch=')[1], ' ')[0] || '' }}" >> $GITHUB_OUTPUT
+          echo "override_branch=${{
+            contains(github.event.comment.body, 'branch=') &&
+            fromJSON(format('{{\"b\":\"{0}\"}}', github.event.comment.body)).b
+              | replace('branch=', '')
+              | replace('\n', ' ')
+              | replace('\r', ' ')
+              | replace('\t', ' ')
+              | replace('```', ' ')
+              | replace(' ', ' ')
+              | replace('\"', '')
+              | replace(\"'\", '')
+              | replace('(', '')
+              | replace(')', '')
+              | replace('{', '')
+              | replace('}', '')
+              | replace('[', '')
+              | replace(']', '')
+              | replace(',', '')
+              | replace(':', '')
+              | replace(';', '')
+              | replace('|', '')
+              | replace('/', '/')
+              | replace('\\', '')
+              | replace('*', '')
+              | replace('`', '')
+              | replace('>', '')
+              | replace('<', '')
+              | replace('=', '')
+              | replace('?', '')
+              | replace('!', '')
+              | replace('@', '')
+              | replace('#', '')
+              | replace('$', '')
+              | replace('%', '')
+              | replace('^', '')
+              | replace('&', '')
+              | replace('+', '')
+              | replace('~', '')
+              | replace('branch', '')
+              | replace('=', '')
+              | trim()
+            || ''
+          }}" >> $GITHUB_OUTPUT
+
       # 3️⃣ 确定源分支（旧分支）
       - name: Determine source branch
         id: src
