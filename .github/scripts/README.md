@@ -15,8 +15,8 @@
 
 ### 🌍 多语言支持
 
-- 目标语言从 `Localization-Resource-Pack/languages.json` 动态加载。默认包含 19 种语言（含 `zh_cn`）。
-- 如需增删语言，请编辑 `Localization-Resource-Pack/languages.json` 并提交 PR；本地运行直接修改该文件即可。
+- 目标语言从 `subprojects/Localization-Resource-Pack/languages.json` 动态加载。默认包含 19 种语言（含 `zh_cn`）。
+- 如需增删语言，请编辑 `subprojects/Localization-Resource-Pack/languages.json` 并提交 PR；本地运行直接修改该文件即可。
 
 当前默认语言：
 
@@ -93,7 +93,7 @@ translate/                     # 翻译输出目录
         ├── en_us.json
         └── ...
 
-Localization-Resource-Pack/
+subprojects/Localization-Resource-Pack/
 └── assets/
     ├── localization_resource_pack/
     │   └── lang/
@@ -107,7 +107,7 @@ Localization-Resource-Pack/
 
 ### 自动触发
 
-1. 修改 `Localization-Resource-Pack/assets/` 目录中的源文件
+1. 修改 `subprojects/Localization-Resource-Pack/assets/` 目录中的源文件
 2. 推送到GitHub仓库
 3. 工作流自动执行翻译
 

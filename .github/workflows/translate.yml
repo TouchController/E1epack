@@ -3,7 +3,7 @@ name: Auto Translate
 on:
   push:
     paths:
-      - 'Localization-Resource-Pack/assets/**'
+       - 'subprojects/Localization-Resource-Pack/assets/**'
   workflow_dispatch:
     inputs:
       force_translate:

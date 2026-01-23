@@ -139,11 +139,11 @@ class ProgressTracker:
 
 # 配置
 DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
-ASSETS_DIR = "Localization-Resource-Pack/assets"
+ASSETS_DIR = "subprojects/Localization-Resource-Pack/assets"
 TRANSLATE_DIR = "translate"
-SYSTEM_PROMPT_FILE = "Localization-Resource-Pack/assets/system_prompt.md"
-USER_PROMPT_FILE = "Localization-Resource-Pack/assets/user_prompt.md"
-LANGUAGES_FILE = "Localization-Resource-Pack/languages.json"
+SYSTEM_PROMPT_FILE = "subprojects/Localization-Resource-Pack/assets/system_prompt.md"
+USER_PROMPT_FILE = "subprojects/Localization-Resource-Pack/assets/user_prompt.md"
+LANGUAGES_FILE = "subprojects/Localization-Resource-Pack/languages.json"
 
 # 默认目标语言列表（当外部文件不存在或无效时使用）
 DEFAULT_TARGET_LANGUAGES = {
