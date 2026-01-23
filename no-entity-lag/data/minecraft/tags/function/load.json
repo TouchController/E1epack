@@ -1,1 +1,6 @@
-{"replace": false,"values": ["no_entity_lag:start"]}
+{
+    "replace": false,
+    "values": [
+        "no_entity_lag:load"
+    ]
+}
