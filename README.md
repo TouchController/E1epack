@@ -96,4 +96,4 @@ This datapack automatically consumes coal from your inventory to smelt items.
 
 Say goodbye to lag and frame drops caused by too many entities.
 
-[Modrinth](https://modrinth.com/project/HydPXwHs) | [MCMOD](https://www.mcmod.cn/class/) | [GitHub](https://github.com/TouchController/E1epack/tree/main/no-entity-lag)
+[Modrinth](https://modrinth.com/project/HydPXwHs) | [MCMOD](https://www.mcmod.cn/class/17576.html) | [GitHub](https://github.com/TouchController/E1epack/tree/main/no-entity-lag)
