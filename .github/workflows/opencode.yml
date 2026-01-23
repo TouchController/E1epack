@@ -10,20 +10,16 @@ on:
 
 jobs:
   opencode:
-    if: |
+    if: >
       contains(github.event.comment.body, ' /oc') ||
       startsWith(github.event.comment.body, '/oc') ||
       contains(github.event.comment.body, ' /opencode') ||
       startsWith(github.event.comment.body, '/opencode') ||
-      (
-        github.event_name == 'pull_request_review_comment' &&
-        startsWith(github.event.pull_request.head.ref, 'opencode/')
-      ) ||
-      (
-        github.event_name == 'pull_request_review' &&
-        github.event.review.state == 'changes_requested' &&
-        startsWith(github.event.pull_request.head.ref, 'opencode/')
-      )
+      (github.event_name == 'pull_request_review_comment' &&
+       startsWith(github.event.pull_request.head.ref, 'opencode/')) ||
+      (github.event_name == 'pull_request_review' &&
+       github.event.review.state == 'changes_requested' &&
+       startsWith(github.event.pull_request.head.ref, 'opencode/'))
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -32,14 +28,15 @@ jobs:
       issues: read
 
     steps:
-      # 1️⃣ 解析 /oc branch=xxx（如果有）
+      # 1️⃣ 解析 /oc branch=xxx
       - name: Parse branch override
         id: parse_branch
         run: |
           BODY="${{ github.event.comment.body }}"
           BRANCH=""
-          if [[ "$BODY" =~ branch=([A-Za-z0-9._/-]+) ]]; then
-            BRANCH="${BASH_REMATCH[1]}"
+          PART=$(echo "$BODY" | sed -n 's/.*branch=\([^[:space:]]*\).*/\1/p')
+          if [ -n "$PART" ]; then
+            BRANCH="$PART"
           fi
           echo "override_branch=$BRANCH" >> $GITHUB_OUTPUT
 
@@ -94,17 +91,6 @@ jobs:
         run: |
           BRANCH="${{ steps.oc_branch.outputs.oc_branch }}"
           PR=$(gh pr list \
-            --head "$BRANCH" \
-            --state open \
-            --json number \
-            --jq.oc_branch.outputs.oc_branch }}"
-          '.[0].number')
-          echo "pr_number=$PR" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 8️⃣ 修正 PR PR=$(gh pr list base → 回到“原分支”
- \
             --head "$BRANCH" \
             --state open \
             --json number \
