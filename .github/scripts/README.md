@@ -1,12 +1,12 @@
 # 自动翻译系统
 
-基于DeepSeek-V3.2-Exp API的多语言自动翻译系统，支持18种目标语言的高质量游戏本地化翻译。
+基于DeepSeek-V3.2 API的多语言自动翻译系统，支持18种目标语言的高质量游戏本地化翻译。
 
 ## 🌟 功能特性
 
 ### 🤖 智能翻译引擎
 
-- **DeepSeek-V3.2-Exp API** - 最新的AI模型，同时兼具思考与非思考能力
+- **DeepSeek-V3.2 API** - 最新的AI模型，同时兼具思考与非思考能力
 - **双模式支持**：
   - **思考模式**（默认）：深度推理，翻译质量更高
   - **非思考模式**：快速响应，适合测试和快速验证
@@ -64,7 +64,7 @@
 ## 📁 系统架构
 
 ```text
-源文件 (zh_cn.json) → DeepSeek-V3.2-Exp API → translate/ 目录 → 自动提交
+源文件 (zh_cn.json) → DeepSeek-V3.2 API → translate/ 目录 → 自动提交
 ```
 
 ### 核心组件
@@ -149,7 +149,7 @@ python .github/scripts/translate.py
 
 ### API参数
 
-- **模型**: DeepSeek-V3.2-Exp（同时兼具思考与非思考能力）
+- **模型**: DeepSeek-V3.2（同时兼具思考与非思考能力）
 - **温度**: 1.3（提高翻译的创造性和自然度）
 - **批处理**: 每次最多翻译40个键值对
 
@@ -179,7 +179,7 @@ python .github/scripts/translate.py
 ## 📈 更新历史
 
 - **v1.4** - 添加质量保证功能：占位符验证、JSON完整性检查、重试机制
-- **v1.5** - 支持DeepSeek-V3.2-Exp双模式，添加非思考模式选项
+- **v1.5** - 支持DeepSeek-V3.2双模式，添加非思考模式选项
 - **v1.6** - 优化工作流，移除冗余步骤，完善日志系统
 - **v1.7** - 优化重试机制（独立计数、智能调整）、完善日志记录（模型、温度、命名空间、目标语言）、优化提示词。
 - **v1.8** - 新增环境变量（`TRANSLATION_DEBUG`、改进 `FORCE_TRANSLATE` 行为）、完善并发批处理与自适应重试（API/验证各自最多10次），目标语言包含 `zh_cn`，缺失/清理逻辑以 `translate/` 为准并在构建时与 `assets/` 合并。
@@ -195,4 +195,4 @@ python .github/scripts/translate.py
 
 ---
 
-本翻译系统使用DeepSeek-V3.2-Exp API自动完成多语言翻译任务，为Minecraft数据包提供高质量的本地化支持。
+本翻译系统使用DeepSeek-V3.2 API自动完成多语言翻译任务，为Minecraft数据包提供高质量的本地化支持。

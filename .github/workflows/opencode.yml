@@ -17,17 +17,94 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      pull-requests: read
+      pull-requests: write
       issues: read
+
     steps:
+      # 1️⃣ 解析 /oc branch=xxx（如果有）
+      - name: Parse branch override
+        id: parse_branch
+        run: |
+          BODY="${{ github.event.comment.body }}"
+
+          # 默认值：空（表示未指定）
+          BRANCH=""
+
+          # 匹配 branch=xxx
+          if [[ "$BODY" =~ branch=([A-Za-z0-9._/-]+) ]]; then
+            BRANCH="${BASH_REMATCH[1]}"
+          fi
+
+          echo "override_branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      # 2️⃣ 决定最终 checkout 的分支
+      - name: Determine source branch
+        id: src
+        run: |
+          # 如果用户指定了 branch=xxx，则直接使用
+          if [ "${{ steps.parse_branch.outputs.override_branch }}" != "" ]; then
+            echo "source_branch=${{ steps.parse_branch.outputs.override_branch }}" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # 如果是 PR 评论，则使用 PR 的 head 分支
+          if [ "${{ github.event.issue.pull_request.url }}" != "" ]; then
+            echo "source_branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # 否则是 Issue 评论 → 使用默认分支
+          echo "source_branch=${{ github.event.repository.default_branch }}" >> $GITHUB_OUTPUT
+
+      # 3️⃣ Checkout 源分支（支持 branch=xxx）
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
+          ref: ${{ steps.src.outputs.source_branch }}
           persist-credentials: false
 
+      # 4️⃣ 记录“原分支”（用于修正 PR base）
+      - name: Record source branch
+        id: src_branch
+        run: |
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "source_branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      # 5️⃣ Run opencode（原样保留）
       - name: Run opencode
         uses: anomalyco/opencode/github@latest
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         with:
           model: deepseek/deepseek-reasoner
+
+      # 6️⃣ 记录 OC 创建的新分支
+      - name: Detect opencode branch
+        id: oc_branch
+        run: |
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "oc_branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      # 7️⃣ 查找由 OC 创建的 PR
+      - name: Find PR created by opencode
+        id: find_pr
+        run: |
+          BRANCH="${{ steps.oc_branch.outputs.oc_branch }}"
+          PR=$(gh pr list \
+            --head "$BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number')
+
+          echo "pr_number=$PR" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 8️⃣ 修正 PR base → 回到“原分支”
+      - name: Fix PR base
+        if: steps.find_pr.outputs.pr_number != ''
+        run: |
+          gh pr edit ${{ steps.find_pr.outputs.pr_number }} \
+            --base "${{ steps.src_branch.outputs.source_branch }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
