@@ -32,20 +32,20 @@ def _rename_files_impl(ctx):
         
         # 跨平台复制文件并重命名
         if is_windows:
-            # Windows 使用 cmd copy 命令
+            # Windows 使用 cmd copy /y 命令，/y 选项避免覆盖提示
             ctx.actions.run_shell(
                 inputs = [src],
                 outputs = [output_file],
-                command = "copy \"{}\" \"{}\"".format(src.path.replace("/", "\\"), output_file.path.replace("/", "\\")),
+                command = "copy /y \"{}\" \"{}\"".format(src.path.replace("/", "\\"), output_file.path.replace("/", "\\")),
                 mnemonic = "RenameFile",
                 progress_message = "Renaming %s to %s" % (src.basename, output_name),
             )
         else:
-            # Unix-like 系统使用 cp 命令
+            # Unix-like 系统使用 cp -f 命令，-f 选项强制覆盖
             ctx.actions.run_shell(
                 inputs = [src],
                 outputs = [output_file],
-                command = "cp \"{}\" \"{}\"".format(src.path, output_file.path),
+                command = "cp -f \"{}\" \"{}\"".format(src.path, output_file.path),
                 mnemonic = "RenameFile",
                 progress_message = "Renaming %s to %s" % (src.basename, output_name),
             )
