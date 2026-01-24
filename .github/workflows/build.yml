@@ -22,7 +22,13 @@ jobs:
         run: |
           mkdir -p release_artifacts
           BIN_PATH=$(bazel info bazel-bin)
-          find "$BIN_PATH" -name "*.zip" -exec cp {} release_artifacts/ \;
+          for dir in "$BIN_PATH/subprojects"/*/ ; do
+            dir_name=$(basename "$dir")
+            zip_file="$dir/${dir_name}.zip"
+            if [ -f "$zip_file" ]; then
+              cp "$zip_file" release_artifacts/
+            fi
+          done
       - name: capture build artifacts
         if: success()
         uses: actions/upload-artifact@v4
