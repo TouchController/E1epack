@@ -20,6 +20,7 @@ load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
+load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS")
 
 def _is_valid_semver(version):
     """验证版本号是否符合语义化版本控制（SemVer）规范。
@@ -271,54 +272,7 @@ def validate_pack_id(pack_id, context = "pack_id"):
              "  - dfl\n" +
              "  - unif.logger")
 
-# 完整的 Minecraft 版本列表（按发布顺序排列）
-_ALL_MINECRAFT_VERSIONS = [
-    "1.13",
-    "1.13.1",
-    "1.13.2",
-    "1.14",
-    "1.14.1",
-    "1.14.2",
-    "1.14.3",
-    "1.14.4",
-    "1.15",
-    "1.15.1",
-    "1.15.2",
-    "1.16",
-    "1.16.1",
-    "1.16.2",
-    "1.16.3",
-    "1.16.4",
-    "1.16.5",
-    "1.17",
-    "1.17.1",
-    "1.18",
-    "1.18.1",
-    "1.18.2",
-    "1.19",
-    "1.19.1",
-    "1.19.2",
-    "1.19.3",
-    "1.19.4",
-    "1.20",
-    "1.20.1",
-    "1.20.2",
-    "1.20.3",
-    "1.20.4",
-    "1.20.5",
-    "1.20.6",
-    "1.21",
-    "1.21.1",
-    "1.21.2",
-    "1.21.3",
-    "1.21.4",
-    "1.21.5",
-    "1.21.6",
-    "1.21.7",
-    "1.21.8",
-    "1.21.9",
-    "1.21.10",
-]
+
 
 def minecraft_versions_range(start_version, end_version = None):
     """根据起始和结束版本获取版本列表。
@@ -337,24 +291,24 @@ def minecraft_versions_range(start_version, end_version = None):
         minecraft_versions_range("1.20.3")
         # 返回从 1.20.3 到最新版本的所有版本
     """
-    if start_version not in _ALL_MINECRAFT_VERSIONS:
+    if start_version not in ALL_MINECRAFT_VERSIONS:
         fail("起始版本 '%s' 不在支持的版本列表中" % start_version)
 
-    start_index = _ALL_MINECRAFT_VERSIONS.index(start_version)
+    start_index = ALL_MINECRAFT_VERSIONS.index(start_version)
 
     if end_version == None:
         # 如果没有指定结束版本，则取到最新版本
-        return _ALL_MINECRAFT_VERSIONS[start_index:]
+        return ALL_MINECRAFT_VERSIONS[start_index:]
 
-    if end_version not in _ALL_MINECRAFT_VERSIONS:
+    if end_version not in ALL_MINECRAFT_VERSIONS:
         fail("结束版本 '%s' 不在支持的版本列表中" % end_version)
 
-    end_index = _ALL_MINECRAFT_VERSIONS.index(end_version)
+    end_index = ALL_MINECRAFT_VERSIONS.index(end_version)
 
     if start_index > end_index:
         fail("起始版本 '%s' 不能晚于结束版本 '%s'" % (start_version, end_version))
 
-    return _ALL_MINECRAFT_VERSIONS[start_index:end_index + 1]
+    return ALL_MINECRAFT_VERSIONS[start_index:end_index + 1]
 
 def datapack_functions(pack_id):
     """生成数据包函数文件的 glob 模式。
@@ -398,7 +352,7 @@ def _datapack_impl(
         minecraft_json):
     # 默认使用版本列表中的最新版本
     if not minecraft_version:
-        minecraft_version = _ALL_MINECRAFT_VERSIONS[-1]
+        minecraft_version = ALL_MINECRAFT_VERSIONS[-1]
 
 
     process_mcfunction(
