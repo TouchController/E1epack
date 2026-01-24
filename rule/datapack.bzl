@@ -205,7 +205,71 @@ def validate_semver(version, context = "版本号"):
              "  - 1.0.0-0.3.7\n" +
              "  - 1.0.0+20130313144700\n" +
              "  - 1.0.0-beta+exp.sha.5114f85\n" +
-             "请参考项目根目录的 SemVer.md 文档了解详细规范。")
+              "请参考项目根目录的 SemVer.md 文档了解详细规范。")
+
+def _is_valid_pack_id(pack_id):
+    """验证 pack_id 是否符合 Minecraft 命名空间 ID 规范。
+    
+    根据 Minecraft 命名空间 ID 规范验证 pack_id 格式：
+    - 只能包含小写字母、数字、下划线、连字符和点
+    - 不能以点、连字符或下划线开头或结尾
+    - 不能包含连续的点
+    - 长度在 1 到 255 个字符之间
+    
+    Args:
+        pack_id: 要验证的命名空间 ID 字符串
+        
+    Returns:
+        如果 pack_id 有效则返回 True，否则返回 False
+    """
+    if not pack_id or type(pack_id) != "string":
+        return False
+    
+    # 检查长度
+    if len(pack_id) < 1 or len(pack_id) > 255:
+        return False
+    
+    # 检查首尾字符
+    first_char = pack_id[0]
+    last_char = pack_id[-1]
+    if first_char in "._-" or last_char in "._-":
+        return False
+    
+    # 检查是否只包含允许的字符
+    for i in range(len(pack_id)):
+        char = pack_id[i]
+        if not ((char >= "a" and char <= "z") or 
+                (char >= "0" and char <= "9") or 
+                char == "_" or char == "-" or char == "."):
+            return False
+    
+    # 检查连续的点
+    if ".." in pack_id:
+        return False
+    
+    return True
+
+def validate_pack_id(pack_id, context = "pack_id"):
+    """验证并确保 pack_id 符合 Minecraft 命名空间 ID 规范。
+    
+    如果 pack_id 不符合规范，会调用 fail() 终止构建。
+    
+    Args:
+        pack_id: 要验证的命名空间 ID 字符串
+        context: 上下文描述，用于错误消息
+    """
+    if not _is_valid_pack_id(pack_id):
+        fail("%s '%s' 不符合 Minecraft 命名空间 ID 规范。\n" % (context, pack_id) +
+             "有效的命名空间 ID 格式要求：\n" +
+             "  - 只能包含小写字母、数字、下划线、连字符和点\n" +
+             "  - 不能以点、连字符或下划线开头或结尾\n" +
+             "  - 不能包含连续的点\n" +
+             "  - 长度在 1 到 255 个字符之间\n" +
+             "有效的 pack_id 示例：\n" +
+             "  - stone_disappearance\n" +
+             "  - auto_lucky_block\n" +
+             "  - dfl\n" +
+             "  - unif.logger")
 
 # 完整的 Minecraft 版本列表（按发布顺序排列）
 _ALL_MINECRAFT_VERSIONS = [
@@ -553,6 +617,37 @@ def complete_datapack_config(
 
     # 验证版本号是否符合 SemVer 规范
     validate_semver(pack_version, "数据包版本号")
+    
+    # 验证 pack_id 是否符合 Minecraft 命名空间 ID 规范
+    validate_pack_id(pack_id, "pack_id")
+    
+    # 验证 version_type 是否有效
+    if version_type not in ["release", "beta", "alpha"]:
+        fail("version_type 必须是 'release', 'beta' 或 'alpha'，但提供了 '%s'" % version_type)
+    
+    # 验证 target_name（如果提供）
+    if target_name != None:
+        if not target_name or type(target_name) != "string":
+            fail("target_name 必须是非空字符串")
+        # 简单的目标名称验证：只允许字母、数字、下划线、连字符和点
+        for i in range(len(target_name)):
+            char = target_name[i]
+            if not ((char >= "a" and char <= "z") or 
+                    (char >= "A" and char <= "Z") or 
+                    (char >= "0" and char <= "9") or 
+                    char == "_" or char == "-" or char == "."):
+                fail("target_name 包含无效字符 '%s'，只能包含字母、数字、下划线、连字符和点" % char)
+    
+    # 验证 game_versions（如果提供）
+    if game_versions != None:
+        if type(game_versions) != "list":
+            fail("game_versions 必须是列表")
+        if len(game_versions) == 0:
+            fail("game_versions 不能为空列表")
+        # 检查每个版本是否在支持的版本列表中
+        for version in game_versions:
+            if version not in _ALL_MINECRAFT_VERSIONS:
+                fail("游戏版本 '%s' 不在支持的版本列表中" % version)
 
     # 确定目标名称，默认使用当前包名称
     if target_name == None:
@@ -561,6 +656,22 @@ def complete_datapack_config(
     # 设置默认游戏版本
     if game_versions == None:
         game_versions = minecraft_versions_range("1.20")
+    
+    # 验证 modrinth_project_id（如果提供）
+    if modrinth_project_id != None:
+        if not modrinth_project_id or type(modrinth_project_id) != "string":
+            fail("modrinth_project_id 必须是非空字符串")
+        # 检查长度
+        if len(modrinth_project_id) < 1 or len(modrinth_project_id) > 64:
+            fail("modrinth_project_id 长度必须在 1 到 64 个字符之间")
+        # 检查是否只包含允许的字符：字母、数字、下划线、连字符
+        for i in range(len(modrinth_project_id)):
+            char = modrinth_project_id[i]
+            if not ((char >= "a" and char <= "z") or 
+                    (char >= "A" and char <= "Z") or 
+                    (char >= "0" and char <= "9") or 
+                    char == "_" or char == "-"):
+                fail("modrinth_project_id 包含无效字符 '%s'，只能包含字母、数字、下划线和连字符" % char)
 
     # 获取函数文件配置
     func_config = datapack_functions(pack_id)
