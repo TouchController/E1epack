@@ -23,6 +23,8 @@ jobs:
 
        - name: Run OpenCode
          uses: anomalyco/opencode/github@latest
+         with:
+           agent: github-headless
          env:
            DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
          with:
