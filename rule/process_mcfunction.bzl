@@ -21,6 +21,7 @@ DataPackInfo = provider(
         "pack_id",          # The ID of the pack (namespace)
         "data_root",        # Path to the data directory root (relative to workspace)
         "pack_root",        # Path to the pack root directory (relative to workspace)
+        "transitive_pack_ids",  # Set of all pack IDs in the transitive dependency closure
     ],
 )
 
@@ -95,12 +96,39 @@ def _process_mcfunction_impl(ctx):
             },
         )
 
-    # Create DataPackInfo for this pack
+    # Collect transitive pack IDs from dependencies and detect cycles
+    transitive_pack_ids = {}
+    for dep in ctx.attr.deps:
+        if DataPackInfo in dep:
+            dep_info = dep[DataPackInfo]
+            # Handle backward compatibility: old providers may not have transitive_pack_ids field
+            dep_transitive_pack_ids = []
+            if hasattr(dep_info, "transitive_pack_ids"):
+                dep_transitive_pack_ids = dep_info.transitive_pack_ids
+            # Check if this pack_id already appears in dep's transitive closure (direct cycle)
+            if ctx.attr.pack_id in dep_transitive_pack_ids:
+                fail("Circular dependency detected: pack '%s' depends on pack '%s' which already depends on '%s' through transitive dependencies" % (
+                    ctx.attr.pack_id, dep_info.pack_id, ctx.attr.pack_id
+                ))
+            # Add dep's pack_id and its transitive pack_ids
+            transitive_pack_ids[dep_info.pack_id] = True
+            for pid in dep_transitive_pack_ids:
+                transitive_pack_ids[pid] = True
+    
+    # Check for direct self-dependency (should be caught by Bazel but just in case)
+    if ctx.attr.pack_id in transitive_pack_ids:
+        fail("Circular dependency detected: pack '%s' depends on itself through transitive dependencies" % ctx.attr.pack_id)
+    
+    # Include own pack_id in transitive closure (reflexive)
+    transitive_pack_ids[ctx.attr.pack_id] = True
+    
+    # Create DataPackInfo for this pack with transitive closure
     # This allows dependent packs to get information about this pack
     pack_info = DataPackInfo(
         pack_id = ctx.attr.pack_id,
         data_root = "data",
         pack_root = ctx.label.package,
+        transitive_pack_ids = list(transitive_pack_ids.keys()),
     )
 
     return [
