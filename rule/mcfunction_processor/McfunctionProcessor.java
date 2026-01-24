@@ -587,7 +587,7 @@ public class McfunctionProcessor extends Worker {
             String cycleKey = String.join("->", path);
             if (!detectedCycles.contains(cycleKey)) {
                 detectedCycles.add(cycleKey);
-                throw new RuntimeException("检测到函数调用循环: " + cycleKey);
+                throw new RuntimeException("Detected function call cycle: " + cycleKey);
             }
         }
     }
