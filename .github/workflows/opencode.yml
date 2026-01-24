@@ -8,24 +8,18 @@ on:
 
 jobs:
   opencode:
-    # 关键修复：只在人类用户评论且包含触发词时运行，排除 opencode-agent[bot] 自己的评论（避免自触发循环）
     if: |
-      (contains(github.event.comment.body, '/oc') ||
-       contains(github.event.comment.body, '/opencode')) &&
-      github.event.comment.user.login != 'opencode-agent[bot]'
+      contains(github.event.comment.body, '/oc') ||
+      contains(github.event.comment.body, '/opencode')
     runs-on: ubuntu-latest
     permissions:
-      contents: write      # 必须：允许 commit/push
-      pull-requests: write # 必须：允许创建/批准 PR
-      issues: write        # 必须：允许评论
       id-token: write
-
     steps:
        - name: Checkout repository
-         uses: actions/checkout@v4
+         uses: actions/checkout@v6
          with:
-           fetch-depth: 0
-           persist-credentials: true  # 确保 GITHUB_TOKEN 可用
+           fetch-depth: 1
+           persist-credentials: false
 
        - name: Run OpenCode
          uses: anomalyco/opencode/github@latest
