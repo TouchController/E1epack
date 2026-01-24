@@ -51,3 +51,38 @@ ALL_MINECRAFT_VERSIONS = [
     "1.21.9",
     "1.21.10",
 ]
+
+def _parse_version(version_str):
+    """将版本字符串解析为整数列表以便比较。"""
+    parts = version_str.split(".")
+    result = []
+    for part in parts:
+        result.append(int(part))
+    return result
+
+def _compare_versions(v1, v2):
+    """比较两个版本字符串，返回负数如果 v1 < v2，0 如果相等，正数如果 v1 > v2。"""
+    parts1 = _parse_version(v1)
+    parts2 = _parse_version(v2)
+    # 使两个列表长度相同，用0填充较短的部分
+    max_len = max(len(parts1), len(parts2))
+    parts1.extend([0] * (max_len - len(parts1)))
+    parts2.extend([0] * (max_len - len(parts2)))
+    for i in range(max_len):
+        if parts1[i] != parts2[i]:
+            return parts1[i] - parts2[i]
+    return 0
+
+def _validate_versions():
+    """验证版本列表是否按正确顺序排列。"""
+    for i in range(len(ALL_MINECRAFT_VERSIONS) - 1):
+        current = ALL_MINECRAFT_VERSIONS[i]
+        next_version = ALL_MINECRAFT_VERSIONS[i + 1]
+        if _compare_versions(current, next_version) >= 0:
+            fail("版本列表未按正确顺序排列：'%s' 在 '%s' 之后" % (current, next_version))
+
+_validate_versions()
+
+def latest_minecraft_version():
+    """获取最新的 Minecraft 版本。"""
+    return ALL_MINECRAFT_VERSIONS[-1]
