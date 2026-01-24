@@ -9,8 +9,81 @@
 - 通用的数据包配置模式
 - Modrinth 上传配置的简化
 - SemVer 版本号验证
+- 错误消息国际化支持（中英文）
 
 主要提供 datapack 宏，用于定义完整的数据包构建流程。
+
+错误消息语言设置：
+  默认情况下，所有错误消息使用中文显示。要切换到英文错误消息，
+  可以在 BUILD 文件中设置 ERROR_MESSAGE_LANGUAGE 变量：
+  
+      load("@//rule:datapack.bzl", "ERROR_MESSAGE_LANGUAGE")
+      ERROR_MESSAGE_LANGUAGE = "en"
+  
+  支持的语言代码："zh"（中文）、"en"（英文）。
+
+使用示例：
+
+1. 基本数据包配置：
+   
+   ```python
+   # BUILD.bazel
+   load("@//rule:datapack.bzl", "complete_datapack_config")
+   
+   complete_datapack_config(
+       pack_id = "my_datapack",
+       pack_version = "1.0.0",
+       modrinth_project_id = "my-project-id",
+   )
+   ```
+   
+2. 自定义游戏版本范围：
+   
+   ```python
+   complete_datapack_config(
+       pack_id = "my_datapack",
+       pack_version = "1.0.0",
+       game_versions = minecraft_versions_range("1.20.3", "1.21.5"),
+   )
+   ```
+   
+3. 使用英文错误消息：
+   
+   ```python
+   load("@//rule:datapack.bzl", "ERROR_MESSAGE_LANGUAGE")
+   ERROR_MESSAGE_LANGUAGE = "en"
+   
+   complete_datapack_config(
+       pack_id = "my_datapack",
+       pack_version = "1.0.0",
+   )
+   ```
+   
+4. 添加 Modrinth 依赖：
+   
+   ```python
+   complete_datapack_config(
+       pack_id = "my_datapack",
+       pack_version = "1.0.0",
+       modrinth_deps = [
+           {
+               "name": "library_pack",
+               "dependency_type": "required",
+               "project_id": "library-project-id",
+           },
+       ],
+   )
+   ```
+   
+5. 排除本地化资源包依赖：
+   
+   ```python
+   complete_datapack_config(
+       pack_id = "my_datapack",
+       pack_version = "1.0.0",
+       include_localization_dependency = False,
+   )
+   ```
 """
 
 
@@ -21,6 +94,40 @@ load("@//rule:minecraft_versions.bzl", "get_all_minecraft_versions", "get_latest
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
+
+# 错误消息国际化支持
+ERROR_MESSAGE_LANGUAGE = "zh"  # 默认语言：中文 ("zh")，可设置为 "en" 使用英文错误消息
+
+def _get_error_language():
+    """获取错误消息的语言设置。
+    
+    支持的语言：
+    - "zh": 中文（默认）
+    - "en": 英文
+    
+    通过 ERROR_MESSAGE_LANGUAGE 全局变量设置语言。
+    用户可以在 BUILD 文件中覆盖此变量：
+    
+        load("@//rule:datapack.bzl", "ERROR_MESSAGE_LANGUAGE")
+        ERROR_MESSAGE_LANGUAGE = "en"
+    
+    Returns:
+        语言代码字符串 ("zh" 或 "en")
+    """
+    return ERROR_MESSAGE_LANGUAGE
+
+def _localized_fail(lang, zh_message, en_message):
+    """根据语言显示本地化的错误消息。
+    
+    Args:
+        lang: 语言代码 ("zh" 或 "en")
+        zh_message: 中文错误消息
+        en_message: 英文错误消息
+    """
+    if lang == "en":
+        fail(en_message)
+    else:
+        fail(zh_message)
 
 def _is_valid_semver(version):
     """验证版本号是否符合语义化版本控制（SemVer）规范。
@@ -197,16 +304,28 @@ def validate_semver(version, context = "版本号"):
         context: 上下文描述，用于错误消息
     """
     if not _is_valid_semver(version):
-        fail("%s '%s' 不符合语义化版本控制（SemVer 2.0.0）规范。\n" % (context, version) +
-             "有效的版本号格式示例：\n" +
-             "  - 1.0.0\n" +
-             "  - 2.1.3\n" +
-             "  - 1.0.0-alpha\n" +
-             "  - 1.0.0-alpha.1\n" +
-             "  - 1.0.0-0.3.7\n" +
-             "  - 1.0.0+20130313144700\n" +
-             "  - 1.0.0-beta+exp.sha.5114f85\n" +
-             "请参考项目根目录的 SemVer.md 文档了解详细规范。")
+        lang = _get_error_language()
+        zh_message = ("%s '%s' 不符合语义化版本控制（SemVer 2.0.0）规范。\n" % (context, version) +
+                     "有效的版本号格式示例：\n" +
+                     "  - 1.0.0\n" +
+                     "  - 2.1.3\n" +
+                     "  - 1.0.0-alpha\n" +
+                     "  - 1.0.0-alpha.1\n" +
+                     "  - 1.0.0-0.3.7\n" +
+                     "  - 1.0.0+20130313144700\n" +
+                     "  - 1.0.0-beta+exp.sha.5114f85\n" +
+                     "请参考项目根目录的 SemVer.md 文档了解详细规范。")
+        en_message = ("%s '%s' does not conform to Semantic Versioning (SemVer 2.0.0) specification.\n" % (context, version) +
+                     "Valid version format examples:\n" +
+                     "  - 1.0.0\n" +
+                     "  - 2.1.3\n" +
+                     "  - 1.0.0-alpha\n" +
+                     "  - 1.0.0-alpha.1\n" +
+                     "  - 1.0.0-0.3.7\n" +
+                     "  - 1.0.0+20130313144700\n" +
+                     "  - 1.0.0-beta+exp.sha.5114f85\n" +
+                     "Please refer to the SemVer.md document in the project root for detailed specifications.")
+        _localized_fail(lang, zh_message, en_message)
 
 def validate_pack_id(pack_id, context = "数据包 ID"):
     """验证并确保数据包 ID 符合 Minecraft 命名空间规范。
@@ -217,8 +336,20 @@ def validate_pack_id(pack_id, context = "数据包 ID"):
         pack_id: 要验证的数据包 ID 字符串
         context: 上下文描述，用于错误消息
     """
+    lang = _get_error_language()
+    
+    def local_fail(zh_msg, en_msg):
+        """根据语言显示本地化的错误消息。"""
+        if lang == "en":
+            fail(en_msg)
+        else:
+            fail(zh_msg)
+    
     if not pack_id or type(pack_id) != "string":
-        fail("%s '%s' 必须是有效的字符串" % (context, pack_id))
+        local_fail(
+            "%s '%s' 必须是有效的字符串" % (context, pack_id),
+            "%s '%s' must be a valid string" % (context, pack_id)
+        )
     
     # Minecraft 命名空间规则：
     # - 只能包含小写字母、数字、下划线、连字符
@@ -228,10 +359,16 @@ def validate_pack_id(pack_id, context = "数据包 ID"):
     # - 长度在 1-255 个字符之间（实际限制更宽松，但设置合理上限）
     
     if len(pack_id) < 1:
-        fail("%s '%s' 不能为空" % (context, pack_id))
+        local_fail(
+            "%s '%s' 不能为空" % (context, pack_id),
+            "%s '%s' cannot be empty" % (context, pack_id)
+        )
     
     if len(pack_id) > 255:
-        fail("%s '%s' 长度不能超过 255 个字符" % (context, pack_id))
+        local_fail(
+            "%s '%s' 长度不能超过 255 个字符" % (context, pack_id),
+            "%s '%s' length cannot exceed 255 characters" % (context, pack_id)
+        )
     
     # 检查是否只包含允许的字符
     for i in range(len(pack_id)):
@@ -239,22 +376,35 @@ def validate_pack_id(pack_id, context = "数据包 ID"):
         if not ((char >= 'a' and char <= 'z') or 
                 (char >= '0' and char <= '9') or 
                 char == '_' or char == '-'):
-            fail("%s '%s' 包含无效字符 '%s'。只能包含小写字母、数字、下划线(_)和连字符(-)" % 
-                 (context, pack_id, char))
+            local_fail(
+                "%s '%s' 包含无效字符 '%s'。只能包含小写字母、数字、下划线(_)和连字符(-)" % 
+                (context, pack_id, char),
+                "%s '%s' contains invalid character '%s'. Only lowercase letters, numbers, underscore(_), and hyphen(-) are allowed" % 
+                (context, pack_id, char)
+            )
     
     # 检查开头字符
     first_char = pack_id[0]
     if not ((first_char >= 'a' and first_char <= 'z') or (first_char >= '0' and first_char <= '9')):
-        fail("%s '%s' 必须以小写字母或数字开头，不能以 '%s' 开头" % (context, pack_id, first_char))
+        local_fail(
+            "%s '%s' 必须以小写字母或数字开头，不能以 '%s' 开头" % (context, pack_id, first_char),
+            "%s '%s' must start with a lowercase letter or digit, not '%s'" % (context, pack_id, first_char)
+        )
     
     # 检查结尾字符
     last_char = pack_id[-1]
     if last_char == '-' or last_char == '_':
-        fail("%s '%s' 不能以 '%s' 结尾" % (context, pack_id, last_char))
+        local_fail(
+            "%s '%s' 不能以 '%s' 结尾" % (context, pack_id, last_char),
+            "%s '%s' cannot end with '%s'" % (context, pack_id, last_char)
+        )
     
     # 检查连续的特殊字符
     if '__' in pack_id or '--' in pack_id or '-_' in pack_id or '_-' in pack_id:
-        fail("%s '%s' 不能包含连续的特殊字符（__、--、-_、_-）" % (context, pack_id))
+        local_fail(
+            "%s '%s' 不能包含连续的特殊字符（__、--、-_、_-）" % (context, pack_id),
+            "%s '%s' cannot contain consecutive special characters (__, --, -_, _-)" % (context, pack_id)
+        )
 
 # Minecraft 版本列表已移至 minecraft_versions.bzl 模块
 # 使用 get_all_minecraft_versions() 获取版本列表
@@ -279,7 +429,11 @@ def minecraft_versions_range(start_version, end_version = None):
     all_versions = get_all_minecraft_versions()
     
     if start_version not in all_versions:
-        fail("起始版本 '%s' 不在支持的版本列表中" % start_version)
+        _localized_fail(
+            _get_error_language(),
+            "起始版本 '%s' 不在支持的版本列表中" % start_version,
+            "Start version '%s' is not in the supported version list" % start_version
+        )
 
     start_index = all_versions.index(start_version)
 
@@ -288,12 +442,20 @@ def minecraft_versions_range(start_version, end_version = None):
         return all_versions[start_index:]
 
     if end_version not in all_versions:
-        fail("结束版本 '%s' 不在支持的版本列表中" % end_version)
+        _localized_fail(
+            _get_error_language(),
+            "结束版本 '%s' 不在支持的版本列表中" % end_version,
+            "End version '%s' is not in the supported version list" % end_version
+        )
 
     end_index = all_versions.index(end_version)
 
     if start_index > end_index:
-        fail("起始版本 '%s' 不能晚于结束版本 '%s'" % (start_version, end_version))
+        _localized_fail(
+            _get_error_language(),
+            "起始版本 '%s' 不能晚于结束版本 '%s'" % (start_version, end_version),
+            "Start version '%s' cannot be later than end version '%s'" % (start_version, end_version)
+        )
 
     return all_versions[start_index:end_index + 1]
 
