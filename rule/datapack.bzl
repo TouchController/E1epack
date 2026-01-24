@@ -604,7 +604,7 @@ def complete_datapack_config(
             fail("game_versions 不能为空列表")
         # 检查每个版本是否在支持的版本列表中
         for version in game_versions:
-            if version not in _ALL_MINECRAFT_VERSIONS:
+            if version not in ALL_MINECRAFT_VERSIONS:
                 fail("游戏版本 '%s' 不在支持的版本列表中" % version)
 
     # 确定目标名称，默认使用当前包名称
