@@ -17,6 +17,7 @@
 load("@//rule:process_json.bzl", "process_json")
 load("@//rule:process_mcfunction.bzl", "process_mcfunction")
 load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
+load("@//rule:minecraft_versions.bzl", "get_all_minecraft_versions", "get_latest_minecraft_version", "is_version_supported")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
@@ -207,54 +208,56 @@ def validate_semver(version, context = "版本号"):
              "  - 1.0.0-beta+exp.sha.5114f85\n" +
              "请参考项目根目录的 SemVer.md 文档了解详细规范。")
 
-# 完整的 Minecraft 版本列表（按发布顺序排列）
-_ALL_MINECRAFT_VERSIONS = [
-    "1.13",
-    "1.13.1",
-    "1.13.2",
-    "1.14",
-    "1.14.1",
-    "1.14.2",
-    "1.14.3",
-    "1.14.4",
-    "1.15",
-    "1.15.1",
-    "1.15.2",
-    "1.16",
-    "1.16.1",
-    "1.16.2",
-    "1.16.3",
-    "1.16.4",
-    "1.16.5",
-    "1.17",
-    "1.17.1",
-    "1.18",
-    "1.18.1",
-    "1.18.2",
-    "1.19",
-    "1.19.1",
-    "1.19.2",
-    "1.19.3",
-    "1.19.4",
-    "1.20",
-    "1.20.1",
-    "1.20.2",
-    "1.20.3",
-    "1.20.4",
-    "1.20.5",
-    "1.20.6",
-    "1.21",
-    "1.21.1",
-    "1.21.2",
-    "1.21.3",
-    "1.21.4",
-    "1.21.5",
-    "1.21.6",
-    "1.21.7",
-    "1.21.8",
-    "1.21.9",
-    "1.21.10",
-]
+def validate_pack_id(pack_id, context = "数据包 ID"):
+    """验证并确保数据包 ID 符合 Minecraft 命名空间规范。
+    
+    如果数据包 ID 不符合规范，会调用 fail() 终止构建。
+    
+    Args:
+        pack_id: 要验证的数据包 ID 字符串
+        context: 上下文描述，用于错误消息
+    """
+    if not pack_id or type(pack_id) != "string":
+        fail("%s '%s' 必须是有效的字符串" % (context, pack_id))
+    
+    # Minecraft 命名空间规则：
+    # - 只能包含小写字母、数字、下划线、连字符
+    # - 必须以小写字母或数字开头
+    # - 不能以连字符开头或结尾
+    # - 不能包含连续的下划线或连字符
+    # - 长度在 1-255 个字符之间（实际限制更宽松，但设置合理上限）
+    
+    if len(pack_id) < 1:
+        fail("%s '%s' 不能为空" % (context, pack_id))
+    
+    if len(pack_id) > 255:
+        fail("%s '%s' 长度不能超过 255 个字符" % (context, pack_id))
+    
+    # 检查是否只包含允许的字符
+    for i in range(len(pack_id)):
+        char = pack_id[i]
+        if not ((char >= 'a' and char <= 'z') or 
+                (char >= '0' and char <= '9') or 
+                char == '_' or char == '-'):
+            fail("%s '%s' 包含无效字符 '%s'。只能包含小写字母、数字、下划线(_)和连字符(-)" % 
+                 (context, pack_id, char))
+    
+    # 检查开头字符
+    first_char = pack_id[0]
+    if not ((first_char >= 'a' and first_char <= 'z') or (first_char >= '0' and first_char <= '9')):
+        fail("%s '%s' 必须以小写字母或数字开头，不能以 '%s' 开头" % (context, pack_id, first_char))
+    
+    # 检查结尾字符
+    last_char = pack_id[-1]
+    if last_char == '-' or last_char == '_':
+        fail("%s '%s' 不能以 '%s' 结尾" % (context, pack_id, last_char))
+    
+    # 检查连续的特殊字符
+    if '__' in pack_id or '--' in pack_id or '-_' in pack_id or '_-' in pack_id:
+        fail("%s '%s' 不能包含连续的特殊字符（__、--、-_、_-）" % (context, pack_id))
+
+# Minecraft 版本列表已移至 minecraft_versions.bzl 模块
+# 使用 get_all_minecraft_versions() 获取版本列表
 
 def minecraft_versions_range(start_version, end_version = None):
     """根据起始和结束版本获取版本列表。
@@ -273,24 +276,26 @@ def minecraft_versions_range(start_version, end_version = None):
         minecraft_versions_range("1.20.3")
         # 返回从 1.20.3 到最新版本的所有版本
     """
-    if start_version not in _ALL_MINECRAFT_VERSIONS:
+    all_versions = get_all_minecraft_versions()
+    
+    if start_version not in all_versions:
         fail("起始版本 '%s' 不在支持的版本列表中" % start_version)
 
-    start_index = _ALL_MINECRAFT_VERSIONS.index(start_version)
+    start_index = all_versions.index(start_version)
 
     if end_version == None:
         # 如果没有指定结束版本，则取到最新版本
-        return _ALL_MINECRAFT_VERSIONS[start_index:]
+        return all_versions[start_index:]
 
-    if end_version not in _ALL_MINECRAFT_VERSIONS:
+    if end_version not in all_versions:
         fail("结束版本 '%s' 不在支持的版本列表中" % end_version)
 
-    end_index = _ALL_MINECRAFT_VERSIONS.index(end_version)
+    end_index = all_versions.index(end_version)
 
     if start_index > end_index:
         fail("起始版本 '%s' 不能晚于结束版本 '%s'" % (start_version, end_version))
 
-    return _ALL_MINECRAFT_VERSIONS[start_index:end_index + 1]
+    return all_versions[start_index:end_index + 1]
 
 def datapack_functions(pack_id):
     """生成数据包函数文件的 glob 模式。
@@ -334,7 +339,7 @@ def _datapack_impl(
         minecraft_json):
     # 默认使用版本列表中的最新版本
     if not minecraft_version:
-        minecraft_version = _ALL_MINECRAFT_VERSIONS[-1]
+        minecraft_version = get_latest_minecraft_version()
 
 
     process_mcfunction(
@@ -553,6 +558,9 @@ def complete_datapack_config(
 
     # 验证版本号是否符合 SemVer 规范
     validate_semver(pack_version, "数据包版本号")
+    
+    # 验证数据包 ID 是否符合 Minecraft 命名空间规范
+    validate_pack_id(pack_id, "数据包 ID")
 
     # 确定目标名称，默认使用当前包名称
     if target_name == None:

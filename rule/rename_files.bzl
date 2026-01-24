@@ -27,12 +27,12 @@ def _rename_files_impl(ctx):
         output_file = ctx.actions.declare_file(output_name, sibling = src)
         output_files.append(output_file)
         
-        # 复制文件并重命名
-        ctx.actions.run(
+        # 复制文件并重命名（跨平台实现）
+        ctx.actions.run_shell(
             inputs = [src],
             outputs = [output_file],
-            executable = "cmd",
-            arguments = ["/c", "copy", src.path.replace("/", "\\"), output_file.path.replace("/", "\\")],
+            command = "cp \"$1\" \"$2\"",
+            arguments = [src.path, output_file.path],
             mnemonic = "RenameFile",
             progress_message = "Renaming %s to %s" % (src.basename, output_name),
         )
