@@ -18,6 +18,8 @@ public class McfunctionProcessor extends Worker {
     private Path dataPackRoot;
     private List<Path> dependencyPaths = new ArrayList<>();
     private Path workspaceRoot;
+    private Map<String, Set<String>> functionCallGraph = new HashMap<>();
+    private Set<String> detectedCycles = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
         new McfunctionProcessor().run();
@@ -65,7 +67,7 @@ public class McfunctionProcessor extends Worker {
 
         try {
             processFile(inputFile, outputFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             out.println("Error processing file: " + e.getMessage());
             e.printStackTrace(out);
             return 1;
@@ -317,6 +319,8 @@ public class McfunctionProcessor extends Worker {
                     // 对加载的函数内容进行基础处理（注释去除和反斜杠拼接）
                     List<String> processedContent = processBasicLines(content);
                     functionCache.put(functionName, processedContent);
+                    // 解析该函数调用的其他函数，构建调用图
+                    parseFunctionCalls(functionName, processedContent);
                     return processedContent;
                 } catch (IOException e) {
                     // 继续尝试下一个路径
@@ -549,6 +553,69 @@ public class McfunctionProcessor extends Worker {
         }
 
         return pairs;
+    }
+
+    private void parseFunctionCalls(String functionName, List<String> functionContent) {
+        Set<String> calls = new HashSet<>();
+        for (String line : functionContent) {
+            String trimmed = line.trim();
+            Matcher matcher = FUNCTION_CALL_PATTERN.matcher(trimmed);
+            if (matcher.matches()) {
+                String calledFunction = matcher.group(1);
+                // 验证命名空间ID格式
+                if (!NAMESPACE_ID_PATTERN.matcher(calledFunction).matches()) {
+                    continue;
+                }
+                // 跳过以#开头的函数名
+                if (calledFunction.startsWith("#")) {
+                    continue;
+                }
+                calls.add(calledFunction);
+            }
+        }
+        functionCallGraph.put(functionName, calls);
+        // 检测调用图中是否有环
+        detectCycles(functionName);
+    }
+
+    private void detectCycles(String startFunction) {
+        Set<String> visited = new HashSet<>();
+        Set<String> stack = new HashSet<>();
+        List<String> path = new ArrayList<>();
+        if (hasCycle(startFunction, visited, stack, path)) {
+            // 避免重复报告同一个环
+            String cycleKey = String.join("->", path);
+            if (!detectedCycles.contains(cycleKey)) {
+                detectedCycles.add(cycleKey);
+                throw new RuntimeException("检测到函数调用循环: " + cycleKey);
+            }
+        }
+    }
+
+    private boolean hasCycle(String function, Set<String> visited, Set<String> stack, List<String> path) {
+        if (stack.contains(function)) {
+            path.add(function);
+            return true;
+        }
+        if (visited.contains(function)) {
+            return false;
+        }
+        visited.add(function);
+        stack.add(function);
+        path.add(function);
+        
+        Set<String> calls = functionCallGraph.get(function);
+        if (calls != null) {
+            for (String callee : calls) {
+                if (hasCycle(callee, visited, stack, path)) {
+                    return true;
+                }
+            }
+        }
+        
+        stack.remove(function);
+        path.remove(path.size() - 1);
+        return false;
     }
 
     private String processSNBTValue(String value) {
