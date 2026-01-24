@@ -15,6 +15,9 @@ def _rename_files_impl(ctx):
     """Implementation of the rename_files rule."""
     output_files = []
     
+    # 检测当前平台是否为 Windows
+    is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
+    
     for src in ctx.files.srcs:
         # 创建重命名后的输出文件
         if "_processed.mcfunction" in src.basename:
@@ -27,15 +30,25 @@ def _rename_files_impl(ctx):
         output_file = ctx.actions.declare_file(output_name, sibling = src)
         output_files.append(output_file)
         
-        # 复制文件并重命名
-        ctx.actions.run(
-            inputs = [src],
-            outputs = [output_file],
-            executable = "cmd",
-            arguments = ["/c", "copy", src.path.replace("/", "\\"), output_file.path.replace("/", "\\")],
-            mnemonic = "RenameFile",
-            progress_message = "Renaming %s to %s" % (src.basename, output_name),
-        )
+        # 跨平台复制文件并重命名
+        if is_windows:
+            # Windows 使用 cmd copy 命令
+            ctx.actions.run_shell(
+                inputs = [src],
+                outputs = [output_file],
+                command = "copy \"{}\" \"{}\"".format(src.path.replace("/", "\\"), output_file.path.replace("/", "\\")),
+                mnemonic = "RenameFile",
+                progress_message = "Renaming %s to %s" % (src.basename, output_name),
+            )
+        else:
+            # Unix-like 系统使用 cp 命令
+            ctx.actions.run_shell(
+                inputs = [src],
+                outputs = [output_file],
+                command = "cp \"{}\" \"{}\"".format(src.path, output_file.path),
+                mnemonic = "RenameFile",
+                progress_message = "Renaming %s to %s" % (src.basename, output_name),
+            )
     
     return [DefaultInfo(files = depset(output_files))]
 
@@ -45,6 +58,9 @@ rename_files = rule(
         "srcs": attr.label_list(
             allow_empty = True,
             allow_files = [".mcfunction", ".raw.mcfunction"],
+        ),
+        "_windows_constraint": attr.label(
+            default = "@platforms//os:windows",
         ),
     },
 )
