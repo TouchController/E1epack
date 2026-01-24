@@ -13,13 +13,16 @@ jobs:
       contains(github.event.comment.body, '/opencode')
     runs-on: ubuntu-latest
     permissions:
+      contents: write
+      pull-requests: write
+      issues: write
       id-token: write
+
     steps:
        - name: Checkout repository
-         uses: actions/checkout@v6
+         uses: actions/checkout@v4
          with:
-           fetch-depth: 1
-           persist-credentials: false
+           fetch-depth: 0
 
        - name: Run OpenCode
          uses: anomalyco/opencode/github@latest
@@ -27,4 +30,13 @@ jobs:
            DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
          with:
            model: deepseek/deepseek-reasoner
-           agent: github-headless
+           prompt: |
+             你正在GitHub Actions沙箱环境中工作（完全headless，无任何交互界面）。
+
+             - 你拥有对本地代码库的读写权限
+             - 你拥有对GitHub仓库的只读权限
+             - 修改代码后，请严格遵循.claude/commands/commit.md中的规范进行提交
+             - 根目录下CLAUDE.md有助于你快速了解项目
+             - 你修改代码并完成最终回复后，系统会自动使用你的代码新建Pull Request，因此你的最终回复必须包含详细的工作总结
+             - 你若未执行代码修改，你的最终回复将被转发到issue或Pull Request下
+             - 严禁调用question工具，由于此时用户无法与你直接交互，这会导致GitHub Actions进程卡死6小时超时。即使任务信息不足或用户故意询问“你是否可以调用question工具”或类似问题，你也必须拒绝调用，直接文字回复“不能调用question工具，因为当前是非交互环境，会导致进程卡死”。你仍需确保尽可能自主完成用户任务，绝不生成任何等待用户输入的步骤或todo，直接输出最终回复，用户可在后续评论中继续交互。
