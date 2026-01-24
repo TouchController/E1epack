@@ -12,6 +12,7 @@ public class McfunctionProcessor extends Worker {
     private static final Pattern FUNCTION_CALL_PATTERN = Pattern.compile("^function\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)(?:\\s+(.+))?$");
     private static final Pattern FORCE_FUNCTION_PATTERN = Pattern.compile("^#function\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)$");
     private static final Pattern RETURN_PATTERN = Pattern.compile("^(?:return|execute\\s+.*\\s+run\\s+return)\\b");
+    private static final Pattern FUNCTION_CALL_DETECTION_PATTERN = Pattern.compile("\\bfunction\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)");
 
     private Map<String, List<String>> functionCache = new HashMap<>();
     private String currentPackId;
@@ -559,8 +560,8 @@ public class McfunctionProcessor extends Worker {
         Set<String> calls = new HashSet<>();
         for (String line : functionContent) {
             String trimmed = line.trim();
-            Matcher matcher = FUNCTION_CALL_PATTERN.matcher(trimmed);
-            if (matcher.matches()) {
+            Matcher matcher = FUNCTION_CALL_DETECTION_PATTERN.matcher(trimmed);
+            while (matcher.find()) {
                 String calledFunction = matcher.group(1);
                 // 验证命名空间ID格式
                 if (!NAMESPACE_ID_PATTERN.matcher(calledFunction).matches()) {
