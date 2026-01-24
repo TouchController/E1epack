@@ -394,12 +394,16 @@ def _datapack_impl(
         srcs = function_tags,
     )
 
+    # 定义 Minecraft 标签路径常量
+    _MINECRAFT_TAGS_FUNCTIONS_PREFIX = "data/minecraft/tags/functions"
+    _MINECRAFT_TAGS_FUNCTION_STRIP_PREFIX = "data/minecraft/tags/function"
+
     pkg_files(
         name = name + "_function_tag_legacy",
         visibility = visibility,
         srcs = [":%s_function_tag_legacy_compress" % name],
-        prefix = "data/minecraft/tags/functions",
-        strip_prefix = "data/minecraft/tags/function",
+        prefix = _MINECRAFT_TAGS_FUNCTIONS_PREFIX,
+        strip_prefix = _MINECRAFT_TAGS_FUNCTION_STRIP_PREFIX,
     )
 
     pkg_filegroup(
