@@ -12,8 +12,8 @@
         {
             "label": "Bazel Build",
             "type": "shell",
-            "command": "bash",
-            "args": ["-c", "bazel build //${input:projectName}"],
+            "command": "bazelisk",
+            "args": ["build", "//subprojects/${input:projectName}:${input:projectName}"],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -26,8 +26,8 @@
         {
             "label": "Bazel Run Server",
             "type": "shell",
-            "command": "bash",
-            "args": ["-c", "bazel run //${input:projectName}:server"],
+            "command": "bazelisk",
+            "args": ["run", "//subprojects/${input:projectName}:server"],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -43,8 +43,8 @@
         {
             "label": "Bazel Upload Modrinth",
             "type": "shell",
-            "command": "bash",
-            "args": ["-c", "bazel run //${input:projectName}:upload_modrinth"],
+            "command": "bazelisk",
+            "args": ["run", "//subprojects/${input:projectName}:upload_modrinth"],
             "group": "none",
             "presentation": {
                 "echo": true,
