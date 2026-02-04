@@ -1,3 +1,8 @@
+---
+name: commit
+description: 创建符合规范的提交信息，支持常规提交格式和emoji。使用 /commit 来创建提交。
+---
+
 # Claude Command: Commit
 
 This command helps you create well-formatted commits with conventional commit messages and emoji.
