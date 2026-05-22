@@ -4,9 +4,9 @@ bazel-*
 .vscode/settings.json
 .bazel
 .temp
-/.github/scripts/__pycache__
+**/__pycache__/
 translation.log
-.github/scripts/logs/
+.github/scripts/**/logs/
 .claude/settings.local.json
 .bash_profile
 .bashrc
