@@ -27,7 +27,7 @@ execute unless biome 0 10 0 minecraft:the_void run \
 function lucky_block_island:redstone
 # 重置出生点
 setworldspawn 0 1 0
-gamerule spawnRadius 0
+gamerule minecraft:respawn_radius 0
 # 添加记分板
 scoreboard objectives add minecraft.is.too.hard trigger
 scoreboard objectives add no.friendly.fire.and.collision trigger

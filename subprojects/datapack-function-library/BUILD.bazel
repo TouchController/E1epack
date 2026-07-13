@@ -28,3 +28,13 @@ pkg_filegroup(
     ],
     visibility = ["//visibility:public"],
 )
+
+# 旧版 gamerule 名版本，供依赖包的旧版 zip 使用
+pkg_filegroup(
+    name = "dfl_legacy",
+    srcs = [
+        ":datapack-function-library_pack_function_legacy",
+        ":datapack-function-library_pack_namespace_json",
+    ],
+    visibility = ["//visibility:public"],
+)

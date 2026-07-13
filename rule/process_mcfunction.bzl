@@ -47,10 +47,6 @@ def _process_mcfunction_impl(ctx):
     function_pattern = "data/%s/function" % ctx.attr.pack_id
     function_placement = "data/%s/functions" % ctx.attr.pack_id
 
-    # Get workspace root for passing to the processor
-    # In Bazel sandbox, this helps the processor find project root
-    # Use workspace_root if available, otherwise use workspace_name
-    workspace_root = getattr(ctx, "workspace_root", ctx.workspace_name)
 
     # 检测是否有文件来自functions目录
     has_functions_dir = False
@@ -77,8 +73,6 @@ def _process_mcfunction_impl(ctx):
         args = ctx.actions.args()
         args.add(src)
         args.add(output_file)
-        # Pass workspace root as third argument to help processor find project root
-        args.add(workspace_root)
         args.add_all(ctx.files.deps)
 
         args.use_param_file("@%s", use_always = True)

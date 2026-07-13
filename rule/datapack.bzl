@@ -14,6 +14,7 @@
 """
 
 
+load("@//rule:gamerule_replacer.bzl", "gamerule_replacer")
 load("@//rule:process_json.bzl", "process_json")
 load("@//rule:process_mcfunction.bzl", "process_mcfunction")
 load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
@@ -310,6 +311,22 @@ def minecraft_versions_range(start_version, end_version = None):
 
     return ALL_MINECRAFT_VERSIONS[start_index:end_index + 1]
 
+GAMERULE_RENAME_VERSION = "1.21.11"
+
+def split_game_versions(game_versions):
+    """按 gamerule 重命名分界线拆分版本列表。
+
+    Returns:
+        (legacy_versions, modern_versions) 其中 legacy 为 ≤1.21.10，
+        modern 为 ≥1.21.11
+    """
+    if GAMERULE_RENAME_VERSION not in ALL_MINECRAFT_VERSIONS:
+        return game_versions, []
+    cutoff = ALL_MINECRAFT_VERSIONS.index(GAMERULE_RENAME_VERSION)
+    legacy = [v for v in game_versions if ALL_MINECRAFT_VERSIONS.index(v) < cutoff]
+    modern = [v for v in game_versions if ALL_MINECRAFT_VERSIONS.index(v) >= cutoff]
+    return legacy, modern
+
 def datapack_functions(pack_id):
     """生成数据包函数文件的 glob 模式。
 
@@ -340,6 +357,19 @@ def standard_localization_dependency():
         "project_id": "3S0b1XES",
     }
 
+# 依赖包的标准版 → 旧版 gamerule 映射
+_LEGACY_DEP_MAP = {
+    "//subprojects/datapack-function-library:dfl": "//subprojects/datapack-function-library:dfl_legacy",
+    "@unif-logger//:unif-logger": "@unif-logger//:unif-logger_legacy",
+}
+
+def _to_legacy_deps(deps):
+    result = []
+    for d in deps:
+        s = str(d)
+        result.append(_LEGACY_DEP_MAP.get(s, s))
+    return result
+
 def _datapack_impl(
         name,
         visibility,
@@ -347,6 +377,7 @@ def _datapack_impl(
         functions,
         function_tags,
         deps,
+        legacy_deps,
         minecraft_version,
         namespace_json,
         minecraft_json):
@@ -361,6 +392,12 @@ def _datapack_impl(
         pack_id = pack_id,
         srcs = functions,
         deps = deps,
+    )
+
+    gamerule_replacer(
+        name = name + "_pack_function_legacy",
+        visibility = visibility,
+        src = ":" + name + "_pack_function",
     )
 
     process_json(
@@ -426,6 +463,26 @@ def _datapack_impl(
         ] + deps,
     )
 
+    pkg_filegroup(
+        name = name + "_legacy_components",
+        visibility = visibility,
+        srcs = [
+            ":%s_pack_function_legacy" % name,
+            ":%s_pack_namespace_json" % name,
+            ":%s_pack_minecraft_json" % name,
+            ":%s_function_tag_legacy" % name,
+        ],
+    )
+
+    pkg_zip(
+        name = name + "_legacy",
+        visibility = visibility,
+        srcs = [
+            ":%s_legacy_components" % name,
+            "//template:mcmeta",
+        ] + legacy_deps,
+    )
+
     java_binary(
         name = name + "_server",
         visibility = visibility,
@@ -460,6 +517,7 @@ datapack = macro(
         "namespace_json": attr.label_list(default = []),
         "minecraft_json": attr.label_list(default = []),
         "deps": attr.label_list(default = []),
+        "legacy_deps": attr.label_list(default = []),
         # 留空则在实现中自动选取最新版本
         "minecraft_version": attr.string(configurable = False, default = ""),
     },
@@ -527,7 +585,7 @@ def datapack_modrinth_upload(
     git_tag_name = "%s_v%s" % (name, pack_version) if auto_tag else None
 
     upload_modrinth(
-        name = "upload_modrinth",
+        name = name + "_" + game_range + "_modrinth",
         changelog = changelog,
         file = datapack_target,
         file_name = file_name_template,
@@ -645,10 +703,16 @@ def complete_datapack_config(
         modrinth_dependency(**dep)
         dep_labels.append(":" + dep["name"])
 
+    # 计算旧版 gamerule 依赖
+    deps = kwargs.pop("deps", [])
+    legacy_deps = _to_legacy_deps(deps)
+
     # 创建数据包
     datapack(
         name = target_name,
         pack_id = pack_id,
+        deps = deps,
+        legacy_deps = legacy_deps,
         functions = native.glob(
             include = func_config["functions_include"],
             exclude = func_config["functions_exclude"],
@@ -666,15 +730,53 @@ def complete_datapack_config(
         actual = ":%s_server" % target_name,
     )
 
+    # 拆分版本并创建发布用 zip（带 game_range 命名）
+    legacy_versions, modern_versions = split_game_versions(game_versions)
+
+    if modern_versions:
+        modern_range = "%s-%s" % (modern_versions[0], modern_versions[-1])
+        native.genrule(
+            name = target_name + "_release",
+            srcs = [":" + target_name],
+            outs = ["%s_v%s_%s.zip" % (target_name, pack_version, modern_range)],
+            cmd = "cp $< $@",
+        )
+
+    if legacy_versions:
+        legacy_range = "%s-%s" % (legacy_versions[0], legacy_versions[-1])
+        native.genrule(
+            name = target_name + "_legacy_release",
+            srcs = [":" + target_name + "_legacy"],
+            outs = ["%s_v%s_%s.zip" % (target_name, pack_version, legacy_range)],
+            cmd = "cp $< $@",
+        )
+
     # 创建 Modrinth 上传配置（如果提供了项目 ID）
     if modrinth_project_id:
-        datapack_modrinth_upload(
-            name = target_name,
-            datapack_target = ":" + target_name,
-            pack_version = pack_version,
-            project_id = modrinth_project_id,
-            game_versions = game_versions,
-            version_type = version_type,
-            changelog = changelog,
-            deps = dep_labels,
-        )
+        has_both = bool(legacy_versions and modern_versions)
+
+        if modern_versions:
+            datapack_modrinth_upload(
+                name = target_name,
+                datapack_target = ":" + target_name,
+                pack_version = pack_version,
+                project_id = modrinth_project_id,
+                game_versions = modern_versions,
+                version_type = version_type,
+                changelog = changelog,
+                deps = dep_labels,
+            )
+
+        if legacy_versions:
+            datapack_modrinth_upload(
+                name = target_name,
+                datapack_target = ":" + target_name + "_legacy",
+                pack_version = pack_version,
+                project_id = modrinth_project_id,
+                game_versions = legacy_versions,
+                version_type = version_type,
+                changelog = changelog,
+                deps = dep_labels,
+                auto_tag = not has_both,
+            )
+

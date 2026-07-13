@@ -3,9 +3,9 @@ load("//rule:extract_jar.bzl", "extract_jar")
 
 extract_jar(
     name = "server_file",
-    entry_path = "META-INF/versions/1.21.10/server-1.21.10.jar",
+    entry_path = "META-INF/versions/26.2/server-26.2.jar",
     filename = "_minecraft/server.jar",
-    input = "@minecraft//:1.21.10_server",
+    input = "@minecraft//:26.2_server",
 )
 
 java_import(

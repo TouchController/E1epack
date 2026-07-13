@@ -1,10 +1,10 @@
 ## 关闭特殊伤害
 
 # 关闭溺水伤害
-gamerule drowningDamage false
+gamerule minecraft:drowning_damage false
 # 关闭摔落伤害
-gamerule fallDamage false
+gamerule minecraft:fall_damage false
 # 关闭火焰伤害
-gamerule fireDamage false
+gamerule minecraft:fire_damage false
 # 关闭冰冻伤害
-gamerule freezeDamage false
+gamerule minecraft:freeze_damage false

@@ -1,4 +1,5 @@
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "pkg_filegroup")
+load("@//rule:gamerule_replacer.bzl", "gamerule_replacer")
 load("@//rule:process_mcfunction.bzl", "process_mcfunction")
 load("@//rule:process_json.bzl", "process_json")
 
@@ -17,8 +18,29 @@ process_mcfunction(
     keep_original_name = True,
 )
 
+# 标准版：反向替换 old→new，产出 function/ 路径
+gamerule_replacer(
+    name = "unif_logger_upgraded_function",
+    visibility = ["//visibility:public"],
+    src = ":unif_logger_functions_processed",
+    reverse = True,
+    strip_prefix = "data/unif.logger/functions",
+    prefix = "data/unif.logger/function",
+)
+
+# 标准版：反向替换 old→new，产出 functions/ 路径
+gamerule_replacer(
+    name = "unif_logger_upgraded_functions",
+    visibility = ["//visibility:public"],
+    src = ":unif_logger_functions_processed",
+    reverse = True,
+    strip_prefix = "data/unif.logger/functions",
+    prefix = "data/unif.logger/functions",
+)
+
+# 旧版：直接使用原始输出
 pkg_files(
-    name = "unif_logger_functions",
+    name = "unif_logger_legacy_function",
     srcs = [":unif_logger_functions_processed"],
     visibility = ["//visibility:public"],
     strip_prefix = "data/unif.logger/functions",
@@ -26,7 +48,7 @@ pkg_files(
 )
 
 pkg_files(
-    name = "unif_logger_functions_legacy",
+    name = "unif_logger_legacy_functions",
     srcs = [":unif_logger_functions_processed"],
     visibility = ["//visibility:public"],
     strip_prefix = "data/unif.logger/functions",
@@ -59,8 +81,20 @@ pkg_filegroup(
     visibility = ["//visibility:public"],
     srcs = [
         ":unif_logger_license",
-        ":unif_logger_functions",
-        ":unif_logger_functions_legacy",
+        ":unif_logger_upgraded_function",
+        ":unif_logger_upgraded_functions",
+        ":unif_logger_tags",
+        ":unif_logger_tags_legacy",
+    ],
+)
+
+pkg_filegroup(
+    name = "unif-logger_legacy",
+    visibility = ["//visibility:public"],
+    srcs = [
+        ":unif_logger_license",
+        ":unif_logger_legacy_function",
+        ":unif_logger_legacy_functions",
         ":unif_logger_tags",
         ":unif_logger_tags_legacy",
     ],

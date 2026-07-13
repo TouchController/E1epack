@@ -56,30 +56,17 @@ jobs:
           disk-cache: ${{ github.workflow }}
           repository-cache: true
 
-      - name: Build specific project
+      - name: Build release artifacts
         run: |
-          bazel build \
-            --verbose_failures \
-            //${{ steps.extract_tag.outputs.project_name }}
+          PROJECT="${{ steps.extract_tag.outputs.project_name }}"
+          bazel build --verbose_failures //$PROJECT:all
 
-      - name: Find and rename build artifact
-        id: find_artifact
+      - name: Collect release files
         run: |
-          # Get bazel-bin path
-          BAZEL_BIN_PATH=$(bazel info bazel-bin)
-          # Find the built zip file
-          OLD_ARTIFACT_PATH=$(find $BAZEL_BIN_PATH/${{ steps.extract_tag.outputs.project_name }} -name "*.zip" | head -1)
-          if [ -z "$OLD_ARTIFACT_PATH" ]; then
-            echo "Error: No zip file found for project ${{ steps.extract_tag.outputs.project_name }}"
-            exit 1
-          fi
-          echo "Found artifact: $OLD_ARTIFACT_PATH"
-
-          NEW_ARTIFACT_NAME="${{ github.ref_name }}.zip"
-          mv "$OLD_ARTIFACT_PATH" "$NEW_ARTIFACT_NAME"
-          echo "Renamed artifact to $NEW_ARTIFACT_NAME"
-
-          echo "artifact_path=$NEW_ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          BAZEL_BIN=$(bazel info bazel-bin)
+          PROJECT="${{ steps.extract_tag.outputs.project_name }}"
+          cp "$BAZEL_BIN/$PROJECT"/*_v*.zip . 2>/dev/null || true
+          ls *_v*.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -87,7 +74,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           body: ${{ steps.release_notes.outputs.release_body }}
-          files: ${{ steps.find_artifact.outputs.artifact_path }}
+          files: |
+            ${{ github.ref_name }}_*.zip
           draft: false
           prerelease: false
           discussion_category_name: Announcements

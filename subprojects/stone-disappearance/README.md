@@ -39,7 +39,7 @@
 
 - `fill_falling_block`：是否替换沙子、红沙、沙砾
 - `fill_falling_block_with`：用于替换三种沙子的方块
-- `tick_fill`：是否实时清除玩家附近3*3*3区域内的石头
+- `tick_fill`：是否实时清除玩家附近3x3x3区域内的石头
 
 ---
 

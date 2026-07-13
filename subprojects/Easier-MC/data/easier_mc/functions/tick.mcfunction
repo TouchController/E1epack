@@ -1,7 +1,7 @@
-gamerule doDaylightCycle false
-gamerule doWeatherCycle false
+gamerule minecraft:advance_time false
+gamerule minecraft:advance_weather false
 time set day
 weather clear
-gamerule keepInventory true
+gamerule minecraft:keep_inventory true
 effect give @a minecraft:night_vision
 effect give @a minecraft:glowing

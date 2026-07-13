@@ -57,4 +57,24 @@ minecraft.minecraft_jar(
     type = "server",
     version = "1.21.10",
 )
+minecraft.minecraft_jar(
+    type = "server",
+    version = "1.21.11",
+)
+minecraft.minecraft_jar(
+    type = "server",
+    version = "26.1",
+)
+minecraft.minecraft_jar(
+    type = "server",
+    version = "26.1.1",
+)
+minecraft.minecraft_jar(
+    type = "server",
+    version = "26.1.2",
+)
+minecraft.minecraft_jar(
+    type = "server",
+    version = "26.2",
+)
 use_repo(minecraft, "minecraft")
