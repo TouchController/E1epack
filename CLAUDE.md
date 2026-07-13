@@ -10,8 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 主要构建命令
 
-- `bazelisk build [数据包目录]` - 构建指定的数据包
-- `bazelisk run [数据包目录]:server` - 构建并启动开发服务器
+- `bazel build //[数据包目录]` - 构建指定的数据包
+- `bazel run //[数据包目录]:server` - 构建并启动开发服务器
 
 ### 常用构建目标
 
@@ -32,31 +32,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # 构建石头消失数据包
-bazelisk build stone-disappearance
+bazel build //stone-disappearance
 
 # 启动自动幸运方块开发服务器
-bazelisk run auto-lucky-block:server
+bazel run //auto-lucky-block:server
 
 # 构建所有数据包
-bazelisk build ...
+bazel build //...
 ```
 
 ### Bazel 命令语法说明
 
-在 bash 环境中，使用 Bazel 构建命令时**不需要**在目标前添加 `//` 前缀：
+在当前 Debian 环境中，使用标准的 Bazel 命令语法，目标前需添加 `//` 前缀：
 
-- ✅ 正确：`bazelisk build datapack-function-library`
-- ❌ 错误：`bazelisk build //subprojects/datapack-function-library`
-
-这是因为在 Windows bash 环境中，`//` 前缀会被错误解析为路径分隔符，导致构建失败。所有构建目标都应该直接使用目录名称，无需 `//` 前缀。
-
-在标准的 shell 环境中，可以使用带 `//` 前缀的语法：
-
-```shell
-# 标准 shell 环境中的语法
-bazelisk build //stone-disappearance:stone-disappearance
-bazelisk build //...
-```
+- ✅ 正确：`bazel build //datapack-function-library`
+- ✅ 正确：`bazel build //stone-disappearance:stone-disappearance`
+- ✅ 正确：`bazel build //...`
+- ❌ 错误：`bazel build //subprojects/datapack-function-library`（子项目需用其目录名）
 
 ## 项目架构
 
