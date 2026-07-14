@@ -1,7 +1,6 @@
 {
     "replace": false,
     "values": [
-        "highly_toxic_water:start",
-        "unif.logger:load"
+        "highly_toxic_water:start"
     ]
 }
