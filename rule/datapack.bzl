@@ -323,6 +323,9 @@ def _version_idx(v):
 def version_segments(game_versions):
     """按所有命令替换边界拆分版本列表，每段确定需要的 mapping 文件。
 
+    Args:
+      game_versions: 游戏版本列表
+
     Returns:
         [(range_name, versions, mapping_labels), ...]
         mapping_labels 为空时表示该段无需替换（最新语法）。
@@ -774,6 +777,41 @@ def complete_datapack_config(
     native.alias(
         name = "server",
         actual = ":%s_server" % latest_seg_name,
+    )
+
+    # 验证服务器目标（自动停止）
+    _validate_mc_version = extra_mc_version if extra_mc_version else ALL_MINECRAFT_VERSIONS[-1]
+    java_binary(
+        name = "validate_server",
+        visibility = extra_visibility,
+        srcs = [],
+        data = [
+            ":" + latest_seg_name,
+            "//game:ops_json",
+            "//template:pack.mcmeta",
+        ],
+        jvm_flags = [
+            "-Ddev.launch.version=%s" % _validate_mc_version,
+            "-Ddev.launch.type=server",
+            "-Ddev.launch.mainClass=net.minecraft.server.Main",
+            "-Xmx4G",
+            "-Ddev.launch.autostop=true",
+            "-Ddev.launch.copyFiles=" +
+            "$(rlocationpath //%s:%s):world/datapacks/%s.zip," % (native.package_name(), latest_seg_name, latest_seg_name) +
+            "$(rlocationpath //game:ops_json):ops.json," +
+            "$(rlocationpath //template:pack.mcmeta):world/datapacks/autostop/pack.mcmeta",
+        ],
+        main_class = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper",
+        runtime_deps = [
+            "//game:server",
+            "//rule/dev_launch_wrapper",
+            "@minecraft//:%s_server_libraries" % _validate_mc_version,
+        ],
+    )
+
+    native.alias(
+        name = "validate",
+        actual = ":validate_server",
     )
 
     # 命名空间依赖目标

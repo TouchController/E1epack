@@ -1,6 +1,8 @@
 load("@//rule:process_json.bzl", "process_json")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
 
+exports_files(["pack.mcmeta"])
+
 process_json(
     name = "mcmeta_compress",
     srcs = ["pack.mcmeta"],
