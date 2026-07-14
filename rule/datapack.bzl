@@ -357,18 +357,22 @@ def standard_localization_dependency():
         "project_id": "3S0b1XES",
     }
 
-# 依赖包的标准版 → 旧版 gamerule 映射
-_LEGACY_DEP_MAP = {
-    "//subprojects/datapack-function-library:dfl": "//subprojects/datapack-function-library:dfl_legacy",
-    "@unif-logger//:unif-logger": "@unif-logger//:unif-logger_legacy",
-}
-
 def _to_legacy_deps(deps):
+    """将依赖列表中的命名空间目标替换为旧版 gamerule 兼容版本。
+
+    约定：complete_datapack_config 为每个包自动生成 <pack_id> 和 <pack_id>_legacy。
+    对于 label 类型的依赖（含 // 或 @），自动追加 _legacy 后缀；
+    文件依赖（如 "LICENSE"）直接透传。
+    """
     result = []
     for d in deps:
         s = str(d)
-        result.append(_LEGACY_DEP_MAP.get(s, s))
+        if "//" in s or "@" in s:
+            result.append(s + "_legacy")
+        else:
+            result.append(d)
     return result
+
 
 def _datapack_impl(
         name,
@@ -779,4 +783,27 @@ def complete_datapack_config(
                 deps = dep_labels,
                 auto_tag = not has_both,
             )
+
+    # 自动创建可被其他数据包依赖的命名空间目标
+    # 其他包通过在 deps 中引用 //subprojects/<name>:<pack_id> 即可依赖此包
+    # 筛选 label 型依赖（含 // 或 @ 的命名空间目标），排除文件依赖（如 LICENSE）
+    _namespace_deps = [d for d in deps if "//" in str(d) or "@" in str(d)]
+
+    pkg_filegroup(
+        name = pack_id,
+        srcs = [
+            ":" + target_name + "_pack_function",
+            ":" + target_name + "_pack_namespace_json",
+        ] + _namespace_deps,
+        visibility = ["//visibility:public"],
+    )
+
+    pkg_filegroup(
+        name = pack_id + "_legacy",
+        srcs = [
+            ":" + target_name + "_pack_function_legacy",
+            ":" + target_name + "_pack_namespace_json",
+        ] + _to_legacy_deps(_namespace_deps),
+        visibility = ["//visibility:public"],
+    )
 

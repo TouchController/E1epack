@@ -1,5 +1,4 @@
 load("@//rule:datapack.bzl", "complete_datapack_config", "minecraft_versions_range")
-load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup")
 
 pack_version = "4.0.1"
 
@@ -15,26 +14,9 @@ complete_datapack_config(
         "README.md",
         "README-en_us.md",
         "pack.png",
-        "@unif-logger//:unif-logger",
     ],
 )
 
-# 创建只包含dfl命名空间的目标，供其他数据包依赖
-pkg_filegroup(
-    name = "dfl",
-    srcs = [
-        ":datapack-function-library_pack_function",
-        ":datapack-function-library_pack_namespace_json",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-# 旧版 gamerule 名版本，供依赖包的旧版 zip 使用
-pkg_filegroup(
-    name = "dfl_legacy",
-    srcs = [
-        ":datapack-function-library_pack_function_legacy",
-        ":datapack-function-library_pack_namespace_json",
-    ],
-    visibility = ["//visibility:public"],
-)
+# 跨数据包函数调用需要使用命名空间目标，而非完整 zip
+# complete_datapack_config 已自动生成 :dfl 和 :dfl_legacy
+# 作为仅含命名空间内容的 pkg_filegroup，其他包通过 deps 引用它们
