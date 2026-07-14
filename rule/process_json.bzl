@@ -73,7 +73,7 @@ process_json = rule(
     implementation = _process_json_impl,
     attrs = {
         "srcs": attr.label_list(
-            allow_files = [".json"],
+            allow_files = [".json", ".mcmeta"],
             mandatory = True,
             doc = "List of .json files to compress",
         ),

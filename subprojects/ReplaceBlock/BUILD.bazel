@@ -12,6 +12,6 @@ complete_datapack_config(
         "pack.png",
         "//:license_gpl",
         "//subprojects/datapack-function-library:dfl",
-        "@unif-logger//:unif-logger",
+        "//subprojects/unif-logger:unif.logger",
     ],
 )

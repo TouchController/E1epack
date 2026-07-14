@@ -1,0 +1,27 @@
+load("@//rule:datapack.bzl", "complete_datapack_config", "minecraft_versions_range")
+load("@//rule:process_json.bzl", "process_json")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
+
+pack_version = "1.0.0"
+
+process_json(
+    name = "pack_mcmeta_compress",
+    srcs = ["pack.mcmeta"],
+)
+
+pkg_files(
+    name = "pack_mcmeta_pkg",
+    srcs = [":pack_mcmeta_compress"],
+)
+
+complete_datapack_config(
+    game_versions = minecraft_versions_range("1.20.2"),
+    pack_id = "unif.logger",
+    pack_version = pack_version,
+    visibility = ["//visibility:public"],
+    deps = [
+        "LICENSE.txt",
+        "README.md",
+        ":pack_mcmeta_pkg",
+    ],
+)

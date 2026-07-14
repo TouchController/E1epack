@@ -361,17 +361,18 @@ def _to_legacy_deps(deps):
     """将依赖列表中的命名空间目标替换为旧版 gamerule 兼容版本。
 
     约定：complete_datapack_config 为每个包自动生成 <pack_id> 和 <pack_id>_legacy。
-    对于 label 类型的依赖（含 // 或 @），自动追加 _legacy 后缀；
-    文件依赖（如 "LICENSE"）直接透传。
+    仅对 subprojects 和外部依赖（含 "//subprojects/" 或 "@"）追加 _legacy；
+    根级目标（如 "//:license_gpl"）和文件依赖直接透传。
     """
     result = []
     for d in deps:
         s = str(d)
-        if "//" in s or "@" in s:
+        if "//subprojects/" in s:
             result.append(s + "_legacy")
         else:
             result.append(d)
     return result
+
 
 
 def _datapack_impl(
@@ -384,6 +385,7 @@ def _datapack_impl(
         legacy_deps,
         minecraft_version,
         namespace_json,
+        namespace_function_tags,
         minecraft_json):
     # 默认使用版本列表中的最新版本
     if not minecraft_version:
@@ -415,6 +417,20 @@ def _datapack_impl(
         srcs = [":%s_namespace_json_compress" % name],
         prefix = "data",
         strip_prefix = "data",
+    )
+
+    # namespace function tags: data/<pack>/tags/function/ → data/<pack>/tags/functions/
+    process_json(
+        name = name + "_namespace_function_tags_compress",
+        srcs = namespace_function_tags,
+    )
+
+    pkg_files(
+        name = name + "_pack_namespace_function_tags",
+        visibility = visibility,
+        srcs = [":%s_namespace_function_tags_compress" % name],
+        prefix = "data/" + pack_id + "/tags/functions",
+        strip_prefix = "data/" + pack_id + "/tags/function",
     )
 
     process_json(
@@ -453,6 +469,7 @@ def _datapack_impl(
         srcs = [
             ":%s_pack_function" % name,
             ":%s_pack_namespace_json" % name,
+            ":%s_pack_namespace_function_tags" % name,
             ":%s_pack_minecraft_json" % name,
             ":%s_function_tag_legacy" % name,
         ],
@@ -473,6 +490,7 @@ def _datapack_impl(
         srcs = [
             ":%s_pack_function_legacy" % name,
             ":%s_pack_namespace_json" % name,
+            ":%s_pack_namespace_function_tags" % name,
             ":%s_pack_minecraft_json" % name,
             ":%s_function_tag_legacy" % name,
         ],
@@ -519,6 +537,7 @@ datapack = macro(
         "functions": attr.label_list(default = []),
         "function_tags": attr.label_list(default = []),
         "namespace_json": attr.label_list(default = []),
+        "namespace_function_tags": attr.label_list(default = []),
         "minecraft_json": attr.label_list(default = []),
         "deps": attr.label_list(default = []),
         "legacy_deps": attr.label_list(default = []),
@@ -712,6 +731,12 @@ def complete_datapack_config(
     legacy_deps = _to_legacy_deps(deps)
 
     # 创建数据包
+    # 拆分 namespace JSON：function tags 需要 function→functions 路径转换
+    all_ns_json = native.glob(["data/%s/**/*.json" % pack_id], allow_empty = True)
+    ns_tag_pattern = "data/%s/tags/function/" % pack_id
+    namespace_function_tags = [f for f in all_ns_json if ns_tag_pattern in f]
+    namespace_json = [f for f in all_ns_json if ns_tag_pattern not in f]
+
     datapack(
         name = target_name,
         pack_id = pack_id,
@@ -722,7 +747,8 @@ def complete_datapack_config(
             exclude = func_config["functions_exclude"],
             allow_empty = True,
         ),
-        namespace_json = native.glob(["data/%s/**/*.json" % pack_id], allow_empty = True),
+        namespace_json = namespace_json,
+        namespace_function_tags = namespace_function_tags,
         minecraft_json = native.glob(["data/minecraft/**/*.json"], allow_empty = True),
         function_tags = native.glob(["data/minecraft/tags/function/*.json"], allow_empty = True),
         **kwargs
@@ -786,8 +812,8 @@ def complete_datapack_config(
 
     # 自动创建可被其他数据包依赖的命名空间目标
     # 其他包通过在 deps 中引用 //subprojects/<name>:<pack_id> 即可依赖此包
-    # 筛选 label 型依赖（含 // 或 @ 的命名空间目标），排除文件依赖（如 LICENSE）
-    _namespace_deps = [d for d in deps if "//" in str(d) or "@" in str(d)]
+    # 筛选 subprojects 命名空间目标，排除根级别名（如 //:license_gpl）和文件依赖
+    _namespace_deps = [d for d in deps if "//subprojects/" in str(d)]
 
     pkg_filegroup(
         name = pack_id,
