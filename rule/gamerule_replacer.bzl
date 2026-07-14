@@ -1,6 +1,7 @@
 """Gamerule 名称替换规则。
 
-对 process_mcfunction 产出的 mcfunction 文件进行 gamerule 名称替换。
+将 mcfunction 中的新版 gamerule 名（minecraft:snake_case）替换为旧版
+（camelCase），用于生成兼容 Minecraft < 1.21.11 的旧版 zip。
 """
 
 load("@rules_pkg//pkg:providers.bzl", "PackageFilesInfo")
@@ -20,9 +21,7 @@ def _gamerule_replacer_impl(ctx):
     pfi = dep[PackageFilesInfo]
     strip = ctx.attr.strip_prefix
     prefix = ctx.attr.prefix
-    reverse_flag = " --reverse" if ctx.attr.reverse else ""
 
-    # 按源文件分组
     file_to_dests = {}
     for dest_path, src_file in pfi.dest_src_map.items():
         if src_file not in file_to_dests:
@@ -36,16 +35,14 @@ def _gamerule_replacer_impl(ctx):
         base = src_file.basename
         if base.endswith(".processed.mcfunction"):
             base = base.replace(".processed.mcfunction", ".mcfunction")
-        # 用序号子目录避免同名冲突
         output_file = ctx.actions.declare_file(str(i) + "/" + base)
         output_files.append(output_file)
 
         ctx.actions.run_shell(
             inputs = [src_file, ctx.file._mapping, ctx.file._script],
             outputs = [output_file],
-            command = "python3 '{script}'{reverse} '{input}' '{output}' '{mapping}'".format(
+            command = "python3 '{script}' '{input}' '{output}' '{mapping}'".format(
                 script = ctx.file._script.path,
-                reverse = reverse_flag,
                 input = src_file.path,
                 output = output_file.path,
                 mapping = ctx.file._mapping.path,
@@ -73,10 +70,6 @@ gamerule_replacer = rule(
             providers = [PackageFilesInfo],
             doc = "process_mcfunction 的输出",
         ),
-        "reverse": attr.bool(
-            default = False,
-            doc = "True 时反向替换（old→new），用于迁移第三方包到新版",
-        ),
         "strip_prefix": attr.string(
             default = "",
             doc = "从目标路径中移除的前缀",
@@ -95,5 +88,5 @@ gamerule_replacer = rule(
             allow_single_file = True,
         ),
     },
-    doc = "将 mcfunction 中的 gamerule 名替换为另一版本",
+    doc = "将新版 gamerule 名替换为旧版，用于生成旧版兼容 zip",
 )

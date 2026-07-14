@@ -39,19 +39,6 @@ maven.install(
 )
 use_repo(maven, "maven")
 
-http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-http_archive(
-    name = "unif-logger",
-    build_file = "@//third_party/unif-logger:BUILD.unif-logger.bazel",
-    patch_strip = 1,
-    patches = [
-        "@//third_party/unif-logger/patches:license.patch",
-    ],
-    sha256 = "c65e360caa1bef72801df7026ec0abe4a6a4718fc2a9f7f359ec60563b97d4b2",
-    url = "https://cdn.modrinth.com/data/ATVC2dJr/versions/qESWh4KO/UniF-Logger-1.0.0.zip",
-)
-
 minecraft = use_extension("//repo:minecraft_jar.bzl", "minecraft")
 minecraft.minecraft_jar(
     type = "server",
