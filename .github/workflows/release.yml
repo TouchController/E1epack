@@ -49,6 +49,11 @@ jobs:
             echo "release_body=Release ${{ github.ref_name }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
       - name: Setup Bazel
         uses: bazel-contrib/setup-bazel@0.14.0
         with:

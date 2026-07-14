@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
       - uses: bazel-contrib/setup-bazel@0.14.0
         with:
           bazelisk-cache: true
