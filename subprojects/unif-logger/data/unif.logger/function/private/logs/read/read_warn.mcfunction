@@ -1,5 +1,5 @@
 scoreboard objectives add unif.10000 dummy "Cache"
-gamerule maxCommandChainLength 2147483647
+gamerule minecraft:max_command_sequence_length 2147483647
 
 data remove storage unif.logger:cache Cache.Logs
 
@@ -8,4 +8,4 @@ data modify storage unif.logger:cache Cache.Logs set from storage unif.logger:wa
 function unif.logger:private/logs/read/_reader
 
 scoreboard objectives remove unif.10000
-gamerule maxCommandChainLength 65536
+gamerule minecraft:max_command_sequence_length 65536
