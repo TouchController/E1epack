@@ -1,1 +1,0 @@
-$tellraw @s [{"text": "","color": "white","extra": ["[",{"text": "$(Day):$(Time)","color": "red"},"] [",{"text": "$(Level)","color": "$(LevelColor)","bold": true},"] (",{"text": "$(Namespace)","color": "aqua"},") ",$(Message)]}]
