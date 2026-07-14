@@ -35,7 +35,7 @@ execute if entity @a[scores={minecraft.is.too.hard=1}] run \
     function lucky_block_island:mith
 # no friendly fire and collision
 execute if entity @a[scores={no.friendly.fire.and.collision=1}] run \
-    function dfl:tick/team
+    function dfl:tick/disable_friendly_fire
 # 垃圾桶
 execute as @a[scores={clear.offhand=1}] run \
     item replace entity @s weapon.offhand with air
