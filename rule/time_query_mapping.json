@@ -1,0 +1,5 @@
+{
+  "\\btime query minecraft:day repetition\\b": "time query day",
+  "\\btime query minecraft:day\\b": "time query daytime",
+  "\\btime query time\\b": "time query gametime"
+}

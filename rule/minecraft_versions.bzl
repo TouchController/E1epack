@@ -69,6 +69,7 @@ def _compare_versions(v1, v2):
     """比较两个版本字符串，返回负数如果 v1 < v2，0 如果相等，正数如果 v1 > v2。"""
     parts1 = _parse_version(v1)
     parts2 = _parse_version(v2)
+
     # 使两个列表长度相同，用0填充较短的部分
     max_len = max(len(parts1), len(parts2))
     parts1.extend([0] * (max_len - len(parts1)))

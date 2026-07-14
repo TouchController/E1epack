@@ -1,7 +1,5 @@
 load("@rules_java//java:defs.bzl", "java_binary")
 
-exports_files(["gamerule_mapping.json"])
-
 java_binary(
     name = "mcfunction_processor",
     srcs = ["McfunctionProcessor.java"],

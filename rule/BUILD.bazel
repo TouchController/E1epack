@@ -1,1 +1,10 @@
-exports_files(["gamerule_replacer.py"])
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "command_replacer",
+    srcs = ["command_replacer.py"],
+    main = "command_replacer.py",
+    visibility = ["//visibility:public"],
+)
+
+exports_files(["gamerule_mapping.json", "time_query_mapping.json"])

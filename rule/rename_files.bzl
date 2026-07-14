@@ -14,10 +14,10 @@
 def _rename_files_impl(ctx):
     """Implementation of the rename_files rule."""
     output_files = []
-    
+
     # 检测当前平台是否为 Windows
     is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
-    
+
     for src in ctx.files.srcs:
         # 创建重命名后的输出文件
         if "_processed.mcfunction" in src.basename:
@@ -26,10 +26,10 @@ def _rename_files_impl(ctx):
             output_name = src.basename.replace(".raw.mcfunction", ".mcfunction")
         else:
             output_name = src.basename
-        
+
         output_file = ctx.actions.declare_file(output_name, sibling = src)
         output_files.append(output_file)
-        
+
         # 跨平台复制文件并重命名
         if is_windows:
             # Windows 使用 cmd copy /y 命令，/y 选项避免覆盖提示
@@ -49,7 +49,7 @@ def _rename_files_impl(ctx):
                 mnemonic = "RenameFile",
                 progress_message = "Renaming %s to %s" % (src.basename, output_name),
             )
-    
+
     return [DefaultInfo(files = depset(output_files))]
 
 rename_files = rule(

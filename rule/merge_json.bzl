@@ -39,7 +39,7 @@ def _merge_json_impl(ctx):
     for src in ctx.files.srcs:
         basename = src.basename
         rel_path = _path_relative_to_package(src)
-        
+
         # 提取命名空间信息
         namespace = None
         if "assets/" in rel_path:
@@ -52,7 +52,7 @@ def _merge_json_impl(ctx):
             parts = rel_path.split("/")
             if len(parts) >= 4 and parts[0] == "translate" and parts[2] == "lang":
                 namespace = parts[1]
-        
+
         # 使用 namespace/basename 作为分组键
         group_key = namespace + "/" + basename if namespace else basename
         if group_key not in file_groups:
@@ -78,7 +78,7 @@ def _merge_json_impl(ctx):
             if "assets/" in rel_path:
                 target_path = rel_path
                 break
-        
+
         # 如果没有找到assets路径，将translate路径转换为assets路径
         if target_path == None:
             translate_path = _path_relative_to_package(files[0])
@@ -87,7 +87,7 @@ def _merge_json_impl(ctx):
                 target_path = translate_path.replace("translate/", "assets/")
             else:
                 target_path = translate_path
-        
+
         # 使用目标路径作为输出文件路径
         output_file = ctx.actions.declare_file(target_path)
         output_files.append(output_file)

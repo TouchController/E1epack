@@ -18,9 +18,9 @@ load("@rules_pkg//pkg:providers.bzl", "PackageFilesInfo")
 DataPackInfo = provider(
     doc = "Information about a data pack for cross-pack function resolution",
     fields = [
-        "pack_id",          # The ID of the pack (namespace)
-        "data_root",        # Path to the data directory root (relative to workspace)
-        "pack_root",        # Path to the pack root directory (relative to workspace)
+        "pack_id",  # The ID of the pack (namespace)
+        "data_root",  # Path to the data directory root (relative to workspace)
+        "pack_root",  # Path to the pack root directory (relative to workspace)
         "transitive_pack_ids",  # Set of all pack IDs in the transitive dependency closure
     ],
 )
@@ -47,7 +47,6 @@ def _process_mcfunction_impl(ctx):
     function_pattern = "data/%s/function" % ctx.attr.pack_id
     function_placement = "data/%s/functions" % ctx.attr.pack_id
 
-
     # 检测是否有文件来自functions目录
     has_functions_dir = False
     functions_dir_pattern = "data/%s/functions/" % ctx.attr.pack_id
@@ -66,6 +65,7 @@ def _process_mcfunction_impl(ctx):
 
         src_path = _path_relative_to_package(src)
         dest_src_map[src_path] = output_file
+
         # 只有在没有functions目录的情况下，才创建从function到functions的映射
         if function_pattern in src_path and not has_functions_dir:
             dest_src_map[src_path.replace(function_pattern, function_placement)] = output_file
@@ -95,27 +95,32 @@ def _process_mcfunction_impl(ctx):
     for dep in ctx.attr.deps:
         if DataPackInfo in dep:
             dep_info = dep[DataPackInfo]
+
             # Handle backward compatibility: old providers may not have transitive_pack_ids field
             dep_transitive_pack_ids = []
             if hasattr(dep_info, "transitive_pack_ids"):
                 dep_transitive_pack_ids = dep_info.transitive_pack_ids
+
             # Check if this pack_id already appears in dep's transitive closure (direct cycle)
             if ctx.attr.pack_id in dep_transitive_pack_ids:
                 fail("Circular dependency detected: pack '%s' depends on pack '%s' which already depends on '%s' through transitive dependencies" % (
-                    ctx.attr.pack_id, dep_info.pack_id, ctx.attr.pack_id
+                    ctx.attr.pack_id,
+                    dep_info.pack_id,
+                    ctx.attr.pack_id,
                 ))
+
             # Add dep's pack_id and its transitive pack_ids
             transitive_pack_ids[dep_info.pack_id] = True
             for pid in dep_transitive_pack_ids:
                 transitive_pack_ids[pid] = True
-    
+
     # Check for direct self-dependency (should be caught by Bazel but just in case)
     if ctx.attr.pack_id in transitive_pack_ids:
         fail("Circular dependency detected: pack '%s' depends on itself through transitive dependencies" % ctx.attr.pack_id)
-    
+
     # Include own pack_id in transitive closure (reflexive)
     transitive_pack_ids[ctx.attr.pack_id] = True
-    
+
     # Create DataPackInfo for this pack with transitive closure
     # This allows dependent packs to get information about this pack
     pack_info = DataPackInfo(
