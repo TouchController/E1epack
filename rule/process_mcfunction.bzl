@@ -13,15 +13,18 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_pkg//pkg:providers.bzl", "PackageFilesInfo")
+load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS")
 
 # Provider for data pack information
 DataPackInfo = provider(
     doc = "Information about a data pack for cross-pack function resolution",
     fields = [
-        "pack_id",  # The ID of the pack (namespace)
-        "data_root",  # Path to the data directory root (relative to workspace)
-        "pack_root",  # Path to the pack root directory (relative to workspace)
-        "transitive_pack_ids",  # Set of all pack IDs in the transitive dependency closure
+        "pack_id",
+        "data_root",
+        "pack_root",
+        "transitive_pack_ids",
+        "game_versions",
+        "segment_count",
     ],
 )
 
@@ -125,6 +128,8 @@ def _process_mcfunction_impl(ctx):
     # This allows dependent packs to get information about this pack
     pack_info = DataPackInfo(
         pack_id = ctx.attr.pack_id,
+        game_versions = ctx.attr.game_versions,
+        segment_count = ctx.attr.segment_count,
         data_root = "data",
         pack_root = ctx.label.package,
         transitive_pack_ids = list(transitive_pack_ids.keys()),
@@ -164,6 +169,51 @@ process_mcfunction = rule(
             default = False,
             doc = "Whether to keep the original file name without adding .processed suffix",
         ),
+        "game_versions": attr.string_list(
+            default = [],
+            doc = "Supported Minecraft versions for this pack",
+        ),
+        "segment_count": attr.int(
+            default = 1,
+            doc = "Number of version segments this pack produces",
+        ),
     },
     doc = "Processes .mcfunction files by handling line continuations",
+)
+
+def _validate_version_overlap_impl(ctx):
+    caller_versions = ctx.attr.caller_game_versions
+    if not caller_versions:
+        return []
+    caller_min = caller_versions[0]
+    caller_max = caller_versions[-1]
+
+    for dep in ctx.attr.deps:
+        if DataPackInfo not in dep:
+            continue
+        info = dep[DataPackInfo]
+        dep_versions = info.game_versions
+        if not dep_versions:
+            continue
+        dep_min = dep_versions[0]
+        dep_max = dep_versions[-1]
+
+        dep_max_idx = ALL_MINECRAFT_VERSIONS.index(dep_max)
+        dep_min_idx = ALL_MINECRAFT_VERSIONS.index(dep_min)
+        caller_min_idx = ALL_MINECRAFT_VERSIONS.index(caller_min)
+        caller_max_idx = ALL_MINECRAFT_VERSIONS.index(caller_max)
+        if dep_max_idx < caller_min_idx or dep_min_idx > caller_max_idx:
+            fail("%s 的 game_versions [%s-%s] 与依赖 %s 的 [%s-%s] 没有重叠" %
+                 (ctx.attr.pack_id, caller_min, caller_max, info.pack_id, dep_min, dep_max))
+
+    return []
+
+validate_dep_compatibility = rule(
+    implementation = _validate_version_overlap_impl,
+    attrs = {
+        "pack_id": attr.string(mandatory = True),
+        "caller_game_versions": attr.string_list(default = []),
+        "deps": attr.label_list(),
+    },
+    doc = "Verifies that dependencies support at least the caller's version range",
 )

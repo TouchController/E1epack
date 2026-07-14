@@ -17,6 +17,5 @@ complete_datapack_config(
     ],
 )
 
-# 跨数据包函数调用需要使用命名空间目标，而非完整 zip
-# complete_datapack_config 已自动生成 :dfl 和 :dfl_legacy
-# 作为仅含命名空间内容的 pkg_filegroup，其他包通过 deps 引用它们
+# complete_datapack_config 已自动生成 :dfl 和 :dfl_sN 段目标
+# 其他包通过 deps 引用 :dfl（默认最新段）或 :dfl_sN（指定段）

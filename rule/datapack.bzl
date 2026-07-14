@@ -15,7 +15,7 @@
 
 load("@//rule:command_replacer.bzl", "command_replacer")
 load("@//rule:process_json.bzl", "process_json")
-load("@//rule:process_mcfunction.bzl", "process_mcfunction")
+load("@//rule:process_mcfunction.bzl", "process_mcfunction", "validate_dep_compatibility")
 load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
@@ -316,6 +316,8 @@ COMMAND_BOUNDARIES = [
 ]
 
 def _version_idx(v):
+    if v not in ALL_MINECRAFT_VERSIONS:
+        fail("COMMAND_BOUNDARIES 中的版本 '%s' 不在支持的版本列表中" % v)
     return ALL_MINECRAFT_VERSIONS.index(v)
 
 def version_segments(game_versions):
@@ -380,8 +382,7 @@ def standard_localization_dependency():
 def _segment_deps(deps, seg_index):
     """将依赖列表中的命名空间目标替换为对应版本段的变体。
 
-    约定：complete_datapack_config 为每个段自动生成 <pack_id>_s<index> 目标。
-    仅对 subprojects 依赖追加 _s<index> 后缀；根级目标和文件依赖直接透传。
+    仅对不同子项目的 pack_id 目标追加 _s<index> 后缀。
     """
     result = []
     for d in deps:
@@ -416,39 +417,28 @@ def _datapack_impl(
     if mappings:
         command_replacer(
             name = name + "_func" + sfx, visibility = visibility,
-            src = func_target,
-            mappings = mappings,
+            src = func_target, mappings = mappings,
         )
-        pkg_filegroup(
-            name = name + "_components" + sfx, visibility = visibility,
-            srcs = [
-                ":" + name + "_func" + sfx,
-                ns_json_target,
-                ns_tags_target,
-                mc_json_target,
-                mc_tags_target,
-            ],
-        )
-        seg_deps = _segment_deps(deps, seg_index)
-        pkg_zip(
-            name = name, visibility = visibility,
-            srcs = [":" + name + "_components" + sfx, "//template:mcmeta"] + seg_deps,
-        )
+        effective_func = ":" + name + "_func" + sfx
+        effective_deps = _segment_deps(deps, seg_index)
     else:
-        pkg_filegroup(
-            name = name + "_components" + sfx, visibility = visibility,
-            srcs = [
-                func_target,
-                ns_json_target,
-                ns_tags_target,
-                mc_json_target,
-                mc_tags_target,
-            ],
-        )
-        pkg_zip(
-            name = name, visibility = visibility,
-            srcs = [":" + name + "_components" + sfx, "//template:mcmeta"] + deps,
-        )
+        effective_func = func_target
+        effective_deps = deps
+
+    pkg_filegroup(
+        name = name + "_components" + sfx, visibility = visibility,
+        srcs = [
+            effective_func,
+            ns_json_target,
+            ns_tags_target,
+            mc_json_target,
+            mc_tags_target,
+        ],
+    )
+    pkg_zip(
+        name = name, visibility = visibility,
+        srcs = [":" + name + "_components" + sfx, "//template:mcmeta"] + effective_deps,
+    )
 
     if seg_index == seg_count - 1:
         java_binary(
@@ -621,6 +611,8 @@ def complete_datapack_config(
     # 确定目标名称，默认使用当前包名称
     if target_name == None:
         target_name = native.package_name().split("/")[-1]
+    if target_name == pack_id:
+        fail("target_name '%s' 与 pack_id 相同，会导致目标名冲突，请设置不同的 target_name" % target_name)
 
     # 设置默认游戏版本
     if game_versions == None:
@@ -675,18 +667,30 @@ def complete_datapack_config(
     mc_tags = native.glob(["data/minecraft/tags/function/*.json"], allow_empty = True)
 
     # 按版本段为每个段创建独立的 datapack pipeline
-    segments = version_segments(game_versions)
-    total_segments = len(segments)
 
     extra_visibility = kwargs.pop("visibility", ["//visibility:public"])
     extra_mc_version = kwargs.pop("minecraft_version", "")
+    if kwargs:
+        fail("complete_datapack_config received unexpected kwargs: %s" % list(kwargs.keys()))
 
     # 共享组件：所有段共用
+    segments = version_segments(game_versions)
+    total_segments = len(segments)
+
     process_mcfunction(
         name = target_name + "_pack_function", visibility = extra_visibility,
         pack_id = pack_id, srcs = functions_srcs, deps = deps,
+        game_versions = game_versions,
+        segment_count = total_segments,
     )
     func_target = ":" + target_name + "_pack_function"
+
+    validate_dep_compatibility(
+        name = target_name + "_validate_deps",
+        pack_id = pack_id,
+        caller_game_versions = game_versions,
+        deps = [d for d in deps if "//subprojects/" in str(d)],
+    )
 
     process_json(name = target_name + "_namespace_json_compress", srcs = namespace_json)
     pkg_files(
