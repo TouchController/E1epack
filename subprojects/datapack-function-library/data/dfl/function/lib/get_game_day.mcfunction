@@ -4,4 +4,4 @@
 scoreboard objectives add dfl_scoreboard dummy "DFL"
 
 # 查询游戏天数并存储到计分板
-execute store result score day dfl_scoreboard run time query day
+execute store result score day dfl_scoreboard run time query minecraft:day repetition

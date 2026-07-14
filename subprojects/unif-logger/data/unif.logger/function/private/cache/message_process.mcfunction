@@ -13,8 +13,8 @@ $data modify storage unif.logger:cache Cache.Logger.LevelColor set value $(level
 $data modify storage unif.logger:cache Cache.Logger.Level set value $(level)
 
 # Time
-execute store result storage unif.logger:cache Cache.Logger.Time int 1 run time query daytime
-execute store result storage unif.logger:cache Cache.Logger.Day int 1 run time query day
+execute store result storage unif.logger:cache Cache.Logger.Time int 1 run time query minecraft:day
+execute store result storage unif.logger:cache Cache.Logger.Day int 1 run time query minecraft:day repetition
 
 # 对过大数据进行处理
 data modify storage unif.logger:cache Cache.Logger.Namespace set string storage unif.logger:cache Cache.Logger.Namespace 0 64
