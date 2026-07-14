@@ -100,6 +100,6 @@ tellraw @a [{"type":"translatable","translate":"no.resource.pack.white.elephant.
     {"type":"translatable","translate":"no.resource.pack.white.elephant.nothing","fallback":" | "},\
     {"type":"translatable","translate":"no.resource.pack.white.elephant.nothing","fallback":"GitHub",\
         "color":"blue","underlined":true,"italic":true,\
-        "click_event":{"action":"open_url","url":"https://github.com/WhiteElephant-abc/Localization-Resource-Pack"},\
-        "hover_event":{"action":"show_text","value":"https://github.com/WhiteElephant-abc/Localization-Resource-Pack"}}]
+        "click_event":{"action":"open_url","url":"https://github.com/TouchController/E1epack/tree/main/subprojects/Localization-Resource-Pack"},\
+        "hover_event":{"action":"show_text","value":"https://github.com/TouchController/E1epack/tree/main/subprojects/Localization-Resource-Pack"}}]
 tellraw @a [{"type":"translatable","translate":"no.resource.pack.white.elephant.nothing","fallback":"--------------------"}]

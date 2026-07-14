@@ -240,23 +240,23 @@ Function usage: `/function dfl:tick/always_sunny`
 
 ### Clear a single item and execute a command
 
-Function usage: `/function dfl:tick/clear_and_execute_single {name:"stone",run:"tp ~ 100 ~"}`
+Function usage: `/function dfl:tick/clear_and_execute_single {namespace:"minecraft",name:"stone",run:"tp ~ 100 ~"}`
 
-- Clear one {name} from all players and execute {run};
+- Clear one {namespace}:{name} from all players and execute {run};
 - Note: There should be no extra spaces at the beginning and end of the command in the run parameter, and there should be no slash before the command.
 
 ### Clear specified items and execute commands multiple times
 
-Function usage: `/function dfl:tick/clear_and_execute_multiple {name:"sand",run:"give @s anvil"}`
+Function usage: `/function dfl:tick/clear_and_execute_multiple {namespace:"minecraft",name:"sand",run:"give @s anvil"}`
 
-- Clear all {name} of the function executor and execute the corresponding number of {run} **(within the same tick)**;
+- Clear all {namespace}:{name} of the function executor and execute the corresponding number of {run} **(within the same tick)**;
 - Note: There should be no extra spaces at the beginning and end of the command in the run parameter, and there should be no slash before the command.
 
 ### Keep having an item
 
-Function usage: `/function dfl:tick/maintain_item_count {name:"slime_block",num:"64"}`
+Function usage: `/function dfl:tick/maintain_item_count {namespace:"minecraft",name:"slime_block",num:"64"}`
 
-- Let the command executor have exactly the specified number of items.
+- Let the command executor have exactly the specified number of {namespace}:{name}.
 
 ### Self-rescue platform
 
@@ -272,9 +272,9 @@ Prerequisite function: `/function dfl:lib/get_game_time`
 
 ### Convert items to experience
 
-Function usage: `/function dfl:tick/things_to_xp {name:"tnt",xp:"1"}`
+Function usage: `/function dfl:tick/convert_items_to_xp {namespace:"minecraft",name:"tnt",xp:"1"}`
 
-- Convert each {name} on the function executor into {xp} experience points.
+- Convert each {namespace}:{name} on the function executor into {xp} experience points.
 
 ### tpa
 
@@ -289,9 +289,19 @@ Prerequisite function: `/function dfl:lib/generate_player_id`
 
 ### Auto-smelting
 
-Function usage: `/function auto_smelt:smelt {input:"raw_iron",output:"iron_ingot"}`
+Function usage: `/function dfl:tick/smelt_item {input_namespace:"minecraft",input:"raw_iron",fuel_namespace:"minecraft",fuel:"coal_block",output:"iron_ingot",amount:"9"}`
 
-- Consume {input} and give the function executor the corresponding amount of {output};
+- Consume one {fuel_namespace}:{fuel} and multiple {input_namespace}:{input};
+- Give the function executor the corresponding amount of {output} for {input_namespace}:{input};
+- {input} cannot contain `:`, {output} can;
+- Smelting an item consumes 1 experience point. If the player has no experience, the item will not be smelted;
+- {amount} indicates the number of items that one {fuel_namespace}:{fuel} can smelt.
+
+### Auto-smelting using fuel
+
+Function usage: `/function dfl:tick/coal_smelt {input_namespace:"minecraft",input:"raw_iron",output:"iron_ingot"}`
+
+- Consume {input_namespace}:{input} and give the function executor the corresponding amount of {output};
 - Smelting an item consumes 1 experience point. If the player has no experience, the item will not be smelted;
 - If the backpack has three supported fuels at the same time, these fuels will be consumed at the same time;
 - After consuming a coal block, 9 items can be smelted at the same time, and 9 experience points will be deducted.
@@ -422,10 +432,10 @@ Function usage: `/function dfl:lib/generate_player_id`
 
 ### Detect the number of items
 
-Function usage: `/function dfl:lib/count_items {name:"stone"}`
+Function usage: `/function dfl:lib/count_items {namespace:"minecraft",name:"stone"}`
 
-- Create a scoreboard item named dfl\_{name}\_num;
-- Write the number of {name} of all players to their respective scoreboard items.
+- Create a scoreboard item named dfl\_{namespace}.{name}\_count;
+- Write the number of {namespace}:{name} of all players to their respective scoreboard items.
 
 ### Batch generate dummies
 

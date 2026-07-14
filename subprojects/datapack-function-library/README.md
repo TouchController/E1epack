@@ -240,23 +240,23 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ### 清除单个物品并执行命令
 
-函数用法：`/function dfl:tick/clear_and_execute_single {name:"stone",run:"tp ~ 100 ~"}`
+函数用法：`/function dfl:tick/clear_and_execute_single {namespace:"minecraft",name:"stone",run:"tp ~ 100 ~"}`
 
-- 清除所有玩家的一个 {name} 并执行 {run}；
+- 清除所有玩家的一个 {namespace}:{name} 并执行 {run}；
 - 注意：参数 run 中的命令首尾不能有多余的空格，命令前不能有斜杠。
 
 ### 清除指定物品并执行多次命令
 
-函数用法：`/function dfl:tick/clear_and_execute_multiple {name:"sand",run:"give @s anvil"}`
+函数用法：`/function dfl:tick/clear_and_execute_multiple {namespace:"minecraft",name:"sand",run:"give @s anvil"}`
 
-- 清除函数执行者的所有 {name} 并执行对应次数的 {run}**（在同一 tick 之内）**；
+- 清除函数执行者的所有 {namespace}:{name} 并执行对应次数的 {run}**（在同一 tick 之内）**；
 - 注意：参数 run 中的命令首尾不能有多余的空格，命令前不能有斜杠。
 
 ### 保持拥有某物品
 
-函数用法：`/function dfl:tick/maintain_item_count {name:"slime_block",num:"64"}`
+函数用法：`/function dfl:tick/maintain_item_count {namespace:"minecraft",name:"slime_block",num:"64"}`
 
-- 让命令执行者刚好拥有指定数量的物品。
+- 让命令执行者刚好拥有指定数量的 {namespace}:{name}。
 
 ### 自救平台
 
@@ -272,9 +272,9 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ### 物品转化为经验
 
-函数用法：`/function dfl:tick/convert_items_to_xp {name:"tnt",xp:"1"}`
+函数用法：`/function dfl:tick/convert_items_to_xp {namespace:"minecraft",name:"tnt",xp:"1"}`
 
-- 将函数执行者身上的每个 {name} 转化为 {xp} 点经验值。
+- 将函数执行者身上的每个 {namespace}:{name} 转化为 {xp} 点经验值。
 
 ### tpa
 
@@ -289,9 +289,19 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ### 自动冶炼
 
-函数用法：`/function auto_smelt:smelt {input:"raw_iron",output:"iron_ingot"}`
+函数用法：`/function dfl:tick/smelt_item {input_namespace:"minecraft",input:"raw_iron",fuel_namespace:"minecraft",fuel:"coal_block",output:"iron_ingot",amount:"9"}`
 
-- 消耗 {input} 并给予函数执行者对应数量的 {output}；
+- 消耗一个 {fuel_namespace}:{fuel} 和多个 {input_namespace}:{input}；
+- 给予函数执行者 {input_namespace}:{input} 对应数量的 {output}；
+- {input} 中不能包含 `:`，{output} 可以；
+- 烧炼一个物品会消耗 1 点经验，如果玩家没有经验则不会烧炼物品；
+- {amount} 表示一个 {fuel_namespace}:{fuel} 可以烧炼的物品数量。
+
+### 使用燃料自动冶炼
+
+函数用法：`/function dfl:tick/coal_smelt {input_namespace:"minecraft",input:"raw_iron",output:"iron_ingot"}`
+
+- 消耗 {input_namespace}:{input} 并给予函数执行者对应数量的 {output}；
 - 烧炼一个物品会消耗 1 点经验，如果玩家没有经验则不会烧炼物品；
 - 如果背包中同时拥有三种支持的燃料，会同时消耗这些燃料；
 - 消耗煤炭块后可以同时烧炼 9 个物品，并扣除 9 点经验。
@@ -422,10 +432,10 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ### 检测物品数量
 
-函数用法：`/function dfl:lib/count_items {name:"stone"}`
+函数用法：`/function dfl:lib/count_items {namespace:"minecraft",name:"stone"}`
 
-- 创建名为 dfl\_{name}\_num 的记分项；
-- 将所有玩家的 {name} 数量写入各自的此记分项。
+- 创建名为 dfl\_{namespace}.{name}\_count 的记分项；
+- 将所有玩家的 {namespace}:{name} 数量写入各自的此记分项。
 
 ### 批量生成假人
 

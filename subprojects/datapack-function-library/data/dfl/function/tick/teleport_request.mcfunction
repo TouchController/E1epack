@@ -10,8 +10,9 @@ scoreboard players enable @a tpa
 execute as @a unless score @s tpa_enable matches 1 \
     run scoreboard players enable @s tpa_enable
 
-# 处理随机一个玩家tpa_enable
+# 处理传送请求，遍历设置了tpa计分板的玩家
+    # 对每个玩家，遍历并设置位置到tpa_enable玩家，判断id并tp
 execute as @a[scores={tpa=1..}] \
     at @a[scores={tpa_enable=1}] \
-    if score @s tpa = @p tpa \
+    if score @s tpa = @p dfl_playerid \
     run tp @s @p

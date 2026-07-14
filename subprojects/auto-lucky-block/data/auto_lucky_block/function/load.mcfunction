@@ -1,4 +1,4 @@
-function dfl:lib/datapack_banner {\
+function dfl:private/datapack_banner {\
     name:"auto lucky block",\
     author:"white_elephant_",\
     author_url:"https://modrinth.com/user/white_elephant",\
