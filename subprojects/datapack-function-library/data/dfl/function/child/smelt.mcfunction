@@ -2,7 +2,7 @@
     # 输入物品数量
 $function dfl:lib/count_items {name:"$(input)"}
     # 燃料数量
-function dfl:lib/count_items {name:"$(fuel)"}
+$function dfl:lib/count_items {name:"$(fuel)"}
 # 数量足够则添加标签
 $execute \
     if score @s dfl_$(input)_num matches $(amount).. \
