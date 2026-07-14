@@ -1,6 +1,15 @@
 {
-    "pack": {
-        "pack_format": 12,
-        "description": "UniF-Logger by Huanlan233"
-    }
+  "pack": {
+    "pack_format": 88,
+    "min_format": 1,
+    "max_format": [
+      101,
+      0
+    ],
+    "description": "UniF-Logger by Huanlan233",
+    "supported_formats": [
+      1,
+      88
+    ]
+  }
 }
