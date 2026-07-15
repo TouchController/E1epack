@@ -18,7 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 每个数据包目录都包含以下构建目标：
 
 - `:datapack` - 构建数据包 ZIP 文件
-- `:server` - 启动开发服务器别名
+- `:server` - 启动开发服务器别名（4GB 内存，可在 `datapack.bzl` 中调整）
+- `:validate` - 启动自动停止的验证服务器，用于 CI 自动验证数据包是否能正常加载（通过 `-Ddev.launch.autostop=true` 实现）
 
 ### 跨数据包函数调用
 
@@ -27,6 +28,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **自动展开**：当函数文件中包含 `function dfl:lib/xxx` 等跨数据包调用时，`process_mcfunction` 规则会自动展开为正确的目标数据包函数路径
 - **依赖感知**：展开机制基于数据包依赖关系，确保函数调用指向正确的目标数据包
 - **性能优化**：使用 Worker 协议进行高效处理，避免重复的构建开销
+
+### 版本段拆分
+
+构建系统会根据 Minecraft 版本的命令语法差异自动将构建拆分为多个版本段：
+
+- **命令边界（COMMAND_BOUNDARIES）**：定义在 `datapack.bzl` 中，标记了命令语法发生变化的 Minecraft 版本。当前边界包括：
+  - `1.21.11` — gamerule 命令语法变更（使用 `//rule:gamerule_mapping.json` 进行替换）
+  - `26.1` — time query 命令语法变更（使用 `//rule:time_query_mapping.json` 进行替换）
+- **分段构建**：`version_segments()` 函数将 `game_versions` 按边界拆分为多个段，每个段生成独立的数据包 ZIP（命名格式：`{target_name}_{范围}.zip`）
+- **命令替换**：对于边界之前的版本段，`command_replacer` 规则会根据对应的 mapping JSON 文件将新语法命令替换为旧版本兼容语法
+- **依赖分段**：跨子项目依赖会按段索引追加 `_s{index}` 后缀（如 `:dfl_s0`），确保每个版本段链接到对应段的目标
+
+### 跨数据包 Function Tag 合并
+
+当数据包依赖其他数据包时，`merge_tags` 规则会自动合并 `data/minecraft/tags/function/` 下的 tag JSON 文件（如 `load.json`、`tick.json`）：
+
+- 来自依赖的 `*_mc_tags` filegroup 会被收集并与当前数据包的 mc_tags 合并
+- 按文件名分组，合并 `values` 数组，按 `id` 去重
+- 依赖的输出通过 `merge_function_tags` 规则声明，使用 `//rule:merge_tags` Python 脚本执行合并
 
 ### 示例构建命令
 
@@ -59,11 +79,16 @@ bazel build //...
   - `[pack_id]/` - 其他命名空间特定文件
   - `minecraft/` - Minecraft 原生命名空间文件
 - `rule/` - Bazel 构建规则定义
-  - `datapack.bzl` - 主要的数据包构建宏
+  - `datapack.bzl` - 主要的数据包构建宏（含版本段拆分、命令替换、SemVer 验证）
   - `process_mcfunction.bzl` - 函数文件处理规则（支持跨数据包函数调用展开）
   - `process_json.bzl` - JSON 文件压缩规则
   - `merge_json.bzl` - JSON 文件合并规则（用于本地化系统）
+  - `merge_tags.bzl` / `merge_tags.py` - Function tag JSON 合并规则（跨数据包 tag 去重合并）
+  - `command_replacer.bzl` / `command_replacer.py` - 跨版本命令语法替换规则
   - `upload_modrinth.bzl` - Modrinth 上传规则
+  - `minecraft_versions.bzl` - 支持的 Minecraft 版本列表
+  - `rename_files.bzl` - 文件重命名规则
+  - `extract_jar.bzl` - JAR 文件提取规则
 - `repo/` - 外部依赖配置
 - `third_party/` - 第三方库集成
 - `template/` - 数据包模板文件
@@ -168,13 +193,37 @@ bazel build //...
 2. 自动翻译会在 CI 中触发生成对应语言文件
 3. 构建系统自动处理合并到最终资源包
 
+## CI/CD
+
+### GitHub Actions 工作流
+
+- **Build** (`.github/workflows/build.yml`)：push/PR 触发，使用 Bazel 构建所有目标，上传构建产物。构建失败时自动创建带有日志的 GitHub Issue。
+- **Check** (`.github/workflows/check.yml`)：push/PR 触发，检查所有 `BUILD.bazel` 中的 `pack_id` 和 `modrinth_project_id` 是否有重复。发现重复时创建 GitHub Issue。
+- **Release** (`.github/workflows/release.yml`)：推送 `{项目名}_v{版本号}` 格式的 tag 时触发（如 `stone-disappearance_v1.0.0`），构建并创建 GitHub Release。
+- **Translate** (`.github/workflows/translate.yml`)：本地化资源包资产变更时自动触发翻译。
+
+### 发布流程
+
+1. 确保 `NEWS.md` 包含最新的更新日志
+2. 推送格式为 `{target_name}_v{版本号}` 的 Git tag（`datapack_modrinth_upload` 中 `auto_tag=True` 时会自动创建）
+3. Release CI 自动构建对应项目并创建 GitHub Release
+
+## 提交规范
+
+所有提交消息遵循 Conventional Commits 格式，并**必须**包含更改项目的名称标记：
+
+```
+[项目标记] emoji type: 简短描述
+```
+
+其中项目标记来自各数据包的简称（如 `[SD]`、`[ALB]`、`[LBI]`、`[DFL]`、`[NEL]` 等），`type` 为 `feat`/`fix`/`build` 等。可使用 `/commit` 技能自动生成符合规范的提交消息。
+
 ## 注意事项
 
 - 所有数据包都使用 GPL 许可证
 - 项目包含本地化资源包依赖
 - 构建系统会自动处理 JSON 文件压缩、函数文件扩展和跨数据包函数调用展开
 - 开发服务器配置为 4GB 内存，可在 `datapack.bzl` 中调整
-- **提交消息要求**：所有提交消息**必须**包含更改项目的名称标记
 - **本地化注意事项**：
   - 不必手动更新 `translate/` 的机器翻译
   - `assets/` 的条目优先于 `translate/` 的自动翻译

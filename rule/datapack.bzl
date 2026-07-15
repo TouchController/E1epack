@@ -14,6 +14,7 @@
 """
 
 load("@//rule:command_replacer.bzl", "command_replacer")
+load("@//rule:merge_tags.bzl", "merge_function_tags")
 load("@//rule:process_json.bzl", "process_json")
 load("@//rule:process_mcfunction.bzl", "process_mcfunction", "validate_dep_compatibility")
 load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
@@ -312,7 +313,7 @@ def minecraft_versions_range(start_version, end_version = None):
 # 命令替换规则：boundary 版本及其之后使用新语法，之前需要旧版替换
 COMMAND_BOUNDARIES = [
     ("1.21.11", "//rule:gamerule_mapping.json"),
-    ("26.1",    "//rule:time_query_mapping.json"),
+    ("26.1", "//rule:time_query_mapping.json"),
 ]
 
 def _version_idx(v):
@@ -330,7 +331,7 @@ def version_segments(game_versions):
         [(range_name, versions, mapping_labels), ...]
         mapping_labels 为空时表示该段无需替换（最新语法）。
     """
-    boundaries = sorted(COMMAND_BOUNDARIES, key=lambda bv: _version_idx(bv[0]))
+    boundaries = sorted(COMMAND_BOUNDARIES, key = lambda bv: _version_idx(bv[0]))
     segments = []
     remaining = list(game_versions)
 
@@ -341,7 +342,8 @@ def version_segments(game_versions):
         if pre:
             range_name = pre[0] if pre[0] == pre[-1] else "%s-%s" % (pre[0], pre[-1])
             mappings = [
-                m for bv, m in boundaries
+                m
+                for bv, m in boundaries
                 if _version_idx(bv) > _version_idx(pre[-1])
             ]
             segments.append((range_name, pre, mappings))
@@ -414,13 +416,17 @@ def _datapack_impl(
         minecraft_version = ALL_MINECRAFT_VERSIONS[-1]
     if not all([func_target, ns_json_target, ns_tags_target, mc_json_target, mc_tags_target]):
         fail("_datapack_impl requires all *_target parameters")
+    ns_tags_target = list(ns_tags_target)
+    mc_tags_target = list(mc_tags_target)
 
     sfx = "_s" + str(seg_index)
 
     if mappings:
         command_replacer(
-            name = name + "_func" + sfx, visibility = visibility,
-            src = func_target, mappings = mappings,
+            name = name + "_func" + sfx,
+            visibility = visibility,
+            src = func_target,
+            mappings = mappings,
         )
         effective_func = ":" + name + "_func" + sfx
         effective_deps = _segment_deps(deps, seg_index)
@@ -429,23 +435,21 @@ def _datapack_impl(
         effective_deps = deps
 
     pkg_filegroup(
-        name = name + "_components" + sfx, visibility = visibility,
-        srcs = [
-            effective_func,
-            ns_json_target,
-            ns_tags_target,
-            mc_json_target,
-            mc_tags_target,
-        ],
+        name = name + "_components" + sfx,
+        visibility = visibility,
+        srcs = [effective_func, ns_json_target] + ns_tags_target + [mc_json_target] + mc_tags_target,
     )
     pkg_zip(
-        name = name, visibility = visibility,
+        name = name,
+        visibility = visibility,
         srcs = [":" + name + "_components" + sfx, "//template:mcmeta"] + effective_deps,
     )
 
     if seg_index == seg_count - 1:
         java_binary(
-            name = name + "_server", visibility = visibility, srcs = [],
+            name = name + "_server",
+            visibility = visibility,
+            srcs = [],
             data = [
                 ":" + name,
                 "//game:ops_json",
@@ -666,8 +670,19 @@ def complete_datapack_config(
         exclude = func_config["functions_exclude"],
         allow_empty = True,
     )
-    mc_json = native.glob(["data/minecraft/**/*.json"], allow_empty = True)
+    mc_json = native.glob(
+        ["data/minecraft/**/*.json"],
+        exclude = ["data/minecraft/tags/function/*.json"],
+        allow_empty = True,
+    )
     mc_tags = native.glob(["data/minecraft/tags/function/*.json"], allow_empty = True)
+
+    # Export raw mc_tags for dependents to merge
+    native.filegroup(
+        name = pack_id + "_mc_tags",
+        srcs = mc_tags,
+        visibility = ["//visibility:public"],
+    )
 
     # 按版本段为每个段创建独立的 datapack pipeline
 
@@ -681,8 +696,11 @@ def complete_datapack_config(
     total_segments = len(segments)
 
     process_mcfunction(
-        name = target_name + "_pack_function", visibility = extra_visibility,
-        pack_id = pack_id, srcs = functions_srcs, deps = deps,
+        name = target_name + "_pack_function",
+        visibility = extra_visibility,
+        pack_id = pack_id,
+        srcs = functions_srcs,
+        deps = deps,
         game_versions = game_versions,
         segment_count = total_segments,
     )
@@ -697,37 +715,94 @@ def complete_datapack_config(
 
     process_json(name = target_name + "_namespace_json_compress", srcs = namespace_json)
     pkg_files(
-        name = target_name + "_pack_namespace_json", visibility = extra_visibility,
+        name = target_name + "_pack_namespace_json",
+        visibility = extra_visibility,
         srcs = [":" + target_name + "_namespace_json_compress"],
-        prefix = "data", strip_prefix = "data",
+        prefix = "data",
+        strip_prefix = "data",
     )
     ns_json_target = ":" + target_name + "_pack_namespace_json"
 
     process_json(name = target_name + "_namespace_function_tags_compress", srcs = namespace_function_tags)
     pkg_files(
-        name = target_name + "_pack_namespace_function_tags", visibility = extra_visibility,
+        name = target_name + "_pack_namespace_function_tags_singular",
+        visibility = extra_visibility,
+        srcs = [":" + target_name + "_namespace_function_tags_compress"],
+        prefix = "data/" + pack_id + "/tags/function",
+        strip_prefix = "data/" + pack_id + "/tags/function",
+    )
+    pkg_files(
+        name = target_name + "_pack_namespace_function_tags_plural",
+        visibility = extra_visibility,
         srcs = [":" + target_name + "_namespace_function_tags_compress"],
         prefix = "data/" + pack_id + "/tags/functions",
         strip_prefix = "data/" + pack_id + "/tags/function",
     )
-    ns_tags_target = ":" + target_name + "_pack_namespace_function_tags"
+    ns_tags_target = [
+        ":" + target_name + "_pack_namespace_function_tags_singular",
+        ":" + target_name + "_pack_namespace_function_tags_plural",
+    ]
 
     process_json(name = target_name + "_minecraft_json_compress", srcs = mc_json)
     pkg_files(
-        name = target_name + "_pack_minecraft_json", visibility = extra_visibility,
+        name = target_name + "_pack_minecraft_json",
+        visibility = extra_visibility,
         srcs = [":" + target_name + "_minecraft_json_compress"],
-        prefix = "data", strip_prefix = "data",
+        prefix = "data",
+        strip_prefix = "data",
     )
     mc_json_target = ":" + target_name + "_pack_minecraft_json"
 
-    process_json(name = target_name + "_function_tag_compress", srcs = mc_tags)
-    pkg_files(
-        name = target_name + "_function_tag", visibility = extra_visibility,
-        srcs = [":" + target_name + "_function_tag_compress"],
-        prefix = "data/minecraft/tags/functions",
-        strip_prefix = "data/minecraft/tags/function",
-    )
-    mc_tags_target = ":" + target_name + "_function_tag"
+    # Merge mc_tags from dependencies
+    _dep_mc_tags = []
+    for dep in deps:
+        dep_str = str(dep)
+        if "//subprojects/" in dep_str:
+            _dep_mc_tags.append(dep_str + "_mc_tags")
+
+    if _dep_mc_tags:
+        merge_function_tags(
+            name = target_name + "_merged_mc_tags",
+            srcs = mc_tags + _dep_mc_tags,
+        )
+        pkg_files(
+            name = target_name + "_merged_mc_tag_files_singular",
+            visibility = extra_visibility,
+            srcs = [":" + target_name + "_merged_mc_tags"],
+            prefix = "data/minecraft/tags/function",
+            strip_prefix = "data/minecraft/tags/function",
+        )
+        pkg_files(
+            name = target_name + "_merged_mc_tag_files_plural",
+            visibility = extra_visibility,
+            srcs = [":" + target_name + "_merged_mc_tags"],
+            prefix = "data/minecraft/tags/functions",
+            strip_prefix = "data/minecraft/tags/function",
+        )
+        mc_tags_target = [
+            ":" + target_name + "_merged_mc_tag_files_singular",
+            ":" + target_name + "_merged_mc_tag_files_plural",
+        ]
+    else:
+        process_json(name = target_name + "_function_tag_compress", srcs = mc_tags)
+        pkg_files(
+            name = target_name + "_function_tag_singular",
+            visibility = extra_visibility,
+            srcs = [":" + target_name + "_function_tag_compress"],
+            prefix = "data/minecraft/tags/function",
+            strip_prefix = "data/minecraft/tags/function",
+        )
+        pkg_files(
+            name = target_name + "_function_tag_plural",
+            visibility = extra_visibility,
+            srcs = [":" + target_name + "_function_tag_compress"],
+            prefix = "data/minecraft/tags/functions",
+            strip_prefix = "data/minecraft/tags/function",
+        )
+        mc_tags_target = [
+            ":" + target_name + "_function_tag_singular",
+            ":" + target_name + "_function_tag_plural",
+        ]
 
     for i, seg in enumerate(segments):
         range_name, seg_versions, mappings = seg
@@ -818,10 +893,7 @@ def complete_datapack_config(
     _namespace_deps = [d for d in deps if "//subprojects/" in str(d)]
     pkg_filegroup(
         name = pack_id,
-        srcs = [
-            func_target,
-            ns_json_target,
-        ] + _namespace_deps,
+        srcs = [func_target, ns_json_target] + ns_tags_target + _namespace_deps,
         visibility = ["//visibility:public"],
     )
 
@@ -830,10 +902,7 @@ def complete_datapack_config(
         seg_name = target_name + "_" + range_name
         sfx = "_s" + str(i)
         seg_func_target = func_target if not mappings else ":" + seg_name + "_func" + sfx
-        seg_srcs = [
-            seg_func_target,
-            ns_json_target,
-        ] + _segment_deps(_namespace_deps, i)
+        seg_srcs = [seg_func_target, ns_json_target] + ns_tags_target + _segment_deps(_namespace_deps, i)
         pkg_filegroup(
             name = pack_id + "_s%d" % i,
             srcs = seg_srcs,

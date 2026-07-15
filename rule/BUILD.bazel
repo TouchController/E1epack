@@ -7,4 +7,11 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
+py_binary(
+    name = "merge_tags",
+    srcs = ["merge_tags.py"],
+    main = "merge_tags.py",
+    visibility = ["//visibility:public"],
+)
+
 exports_files(["gamerule_mapping.json", "time_query_mapping.json"])
