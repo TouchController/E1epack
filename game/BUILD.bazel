@@ -1,18 +1,36 @@
 load("@rules_java//java:defs.bzl", "java_import")
 load("//rule:extract_jar.bzl", "extract_jar")
+load("//rule:minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS")
 
-extract_jar(
-    name = "server_file",
-    entry_path = "META-INF/versions/26.2/server-26.2.jar",
-    filename = "_minecraft/server.jar",
-    input = "@minecraft//:26.2_server",
-)
+# Versions with explicit multi-release JAR extraction
+_EXPLICIT_VERSIONS = [
+    "1.21.10", "1.21.11",
+    "26.1", "26.1.1", "26.1.2", "26.2",
+]
 
-java_import(
-    name = "server",
-    jars = [":server_file"],
+[extract_jar(
+    name = "server_file_" + v.replace(".", "_"),
+    entry_path = "META-INF/versions/%s/server-%s.jar" % (v, v),
+    filename = "_minecraft/server_%s.jar" % v.replace(".", "_"),
+    input = "@minecraft//:%s_server" % v,
+) for v in _EXPLICIT_VERSIONS]
+
+[java_import(
+    name = "server_" + v.replace(".", "_"),
+    jars = [":server_file_" + v.replace(".", "_")],
     visibility = ["//visibility:public"],
-)
+) for v in _EXPLICIT_VERSIONS]
+
+# All other versions redirect to 26.2
+[
+    alias(
+        name = "server_" + v.replace(".", "_"),
+        actual = ":server_26_2",
+        visibility = ["//visibility:public"],
+    )
+    for v in ALL_MINECRAFT_VERSIONS
+    if v not in _EXPLICIT_VERSIONS
+]
 
 alias(
     name = "ops_json",

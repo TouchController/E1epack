@@ -1,0 +1,10 @@
+load("@rules_java//java:defs.bzl", "java_binary")
+
+java_binary(
+    name = "TestRunner",
+    srcs = ["TestRunner.java"],
+    main_class = "TestRunner",
+    visibility = ["//visibility:public"],
+)
+
+exports_files(["run_test.sh"])

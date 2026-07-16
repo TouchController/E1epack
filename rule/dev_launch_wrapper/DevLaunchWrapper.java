@@ -112,14 +112,6 @@ public class DevLaunchWrapper {
                 argsList.add("--nogui");
                 var eulaPath = Path.of("eula.txt");
                 Files.writeString(eulaPath, "eula=true\n");
-                if (Boolean.getBoolean("dev.launch.autostop")) {
-                    var dir = Path.of("world/datapacks/autostop");
-                    Files.createDirectories(dir.resolve("data/autostop/function"));
-                    Files.createDirectories(dir.resolve("data/minecraft/tags/function"));
-                    Files.writeString(dir.resolve("data/autostop/function/tick.mcfunction"), "stop\n");
-                    Files.writeString(dir.resolve("data/minecraft/tags/function/tick.json"),
-                        "{\"values\":[\"autostop:tick\"]}");
-                }
             }
         }
 

@@ -65,8 +65,16 @@ def _parse_version(version_str):
         result.append(int(part))
     return result
 
-def _compare_versions(v1, v2):
-    """比较两个版本字符串，返回负数如果 v1 < v2，0 如果相等，正数如果 v1 > v2。"""
+def compare_versions(v1, v2):
+    """比较两个版本字符串。
+
+    Args:
+      v1: 第一个版本字符串
+      v2: 第二个版本字符串
+
+    Returns:
+      负数如果 v1 < v2，0 如果相等，正数如果 v1 > v2。
+    """
     parts1 = _parse_version(v1)
     parts2 = _parse_version(v2)
 
@@ -84,11 +92,7 @@ def _validate_versions():
     for i in range(len(ALL_MINECRAFT_VERSIONS) - 1):
         current = ALL_MINECRAFT_VERSIONS[i]
         next_version = ALL_MINECRAFT_VERSIONS[i + 1]
-        if _compare_versions(current, next_version) >= 0:
+        if compare_versions(current, next_version) >= 0:
             fail("版本列表未按正确顺序排列：'%s' 在 '%s' 之后" % (current, next_version))
 
 _validate_versions()
-
-def latest_minecraft_version():
-    """获取最新的 Minecraft 版本。"""
-    return ALL_MINECRAFT_VERSIONS[-1]

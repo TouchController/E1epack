@@ -1,0 +1,5 @@
+scoreboard objectives add testing dummy
+function {{namespace}}:{{test-name}}
+execute if score result testing matches 1 run say [[TEST][{{test-name}}][PASS]]
+execute unless score result testing matches 1 run say [[TEST][{{test-name}}][FAIL]]
+scoreboard objectives remove testing

@@ -11,6 +11,7 @@ import sys
 def merge_tags(output_path, input_paths):
     merged = {"values": []}
     seen_ids = {}  # key -> entry, 保留对象形式（含 required: false 元数据）
+    parsed_count = 0
 
     for path in sorted(input_paths):
         try:
@@ -32,6 +33,7 @@ def merge_tags(output_path, input_paths):
             print("Warning: skipping %s: 'values' is not a list" % path, file=sys.stderr)
             continue
 
+        parsed_count += 1
         if data.get("replace", False):
             merged["values"] = []
             seen_ids.clear()
@@ -60,6 +62,10 @@ def merge_tags(output_path, input_paths):
             else:
                 seen_ids[key] = entry
                 merged["values"].append(entry)
+
+    if parsed_count == 0:
+        print("Error: no valid tag files parsed, refusing to write empty output", file=sys.stderr)
+        sys.exit(1)
 
     merged["replace"] = False
 

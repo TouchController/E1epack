@@ -14,4 +14,14 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
-exports_files(["gamerule_mapping.json", "time_query_mapping.json"])
+py_binary(
+    name = "generate_test_runner",
+    srcs = ["generate_test_runner.py"],
+    main = "generate_test_runner.py",
+    visibility = ["//visibility:public"],
+)
+
+exports_files([
+    "gamerule_mapping.json",
+    "time_query_mapping.json",
+])

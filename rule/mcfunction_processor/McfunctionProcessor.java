@@ -10,7 +10,6 @@ public class McfunctionProcessor extends Worker {
     private static final int MAX_INLINE_DEPTH = 5;
     private static final Pattern NAMESPACE_ID_PATTERN = Pattern.compile("^[a-z0-9_.-]+:[a-z0-9_./\\-]+$");
     private static final Pattern FUNCTION_CALL_PATTERN = Pattern.compile("^function\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)(?:\\s+(.+))?$");
-    private static final Pattern FORCE_FUNCTION_PATTERN = Pattern.compile("^#function\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)$");
     private static final Pattern RETURN_PATTERN = Pattern.compile("^(?:return|execute\\s+.*\\s+run\\s+return)\\b");
 
     private Map<String, List<String>> functionCache = new HashMap<>();
@@ -64,7 +63,10 @@ public class McfunctionProcessor extends Worker {
     private void processFile(String inputPath, String outputPath) throws IOException {
         var inputLines = Files.readAllLines(Paths.get(inputPath));
         determineDataPackInfo(Paths.get(inputPath));
-        var processedLines = processLines(inputLines);
+        boolean noInline = !inputLines.isEmpty()
+                && inputLines.get(0).trim().startsWith("#")
+                && inputLines.get(0).contains("@no-inline");
+        var processedLines = processLines(inputLines, noInline);
 
         var outputFile = Paths.get(outputPath);
         var outputDir = outputFile.getParent();
@@ -111,9 +113,12 @@ public class McfunctionProcessor extends Worker {
         return null;
     }
 
-    private List<String> processLines(List<String> rawLines) {
-        List<String> afterForceReplace = processForceReplace(rawLines);
-        List<String> afterBasicProcessing = processBasicLines(afterForceReplace);
+    private List<String> processLines(List<String> rawLines, boolean noInline) {
+        List<String> afterBasicProcessing = processBasicLines(rawLines);
+
+        if (noInline) {
+            return afterBasicProcessing;
+        }
 
         List<String> result = afterBasicProcessing;
         for (int depth = 0; depth < MAX_INLINE_DEPTH; depth++) {
@@ -122,26 +127,6 @@ public class McfunctionProcessor extends Worker {
                 break;
             }
             result = newResult;
-        }
-        return result;
-    }
-
-    private List<String> processForceReplace(List<String> lines) {
-        List<String> result = new ArrayList<>();
-        for (String line : lines) {
-            String trimmed = line.trim();
-            Matcher matcher = FORCE_FUNCTION_PATTERN.matcher(trimmed);
-            if (matcher.matches()) {
-                String functionName = matcher.group(1);
-                List<String> functionContent = loadFunction(functionName);
-                if (functionContent != null) {
-                    result.addAll(functionContent);
-                } else {
-                    result.add(line);
-                }
-            } else {
-                result.add(line);
-            }
         }
         return result;
     }

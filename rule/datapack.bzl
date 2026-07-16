@@ -21,7 +21,20 @@ load("@//rule:upload_modrinth.bzl", "modrinth_dependency", "upload_modrinth")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS", "compare_versions")
+
+# 共享 server java_binary 配置
+_SERVER_JVM_FLAGS = [
+    "-Ddev.launch.type=server",
+    "-Ddev.launch.mainClass=net.minecraft.server.Main",
+    "-Xmx4G",
+]
+_SERVER_MAIN_CLASS = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper"
+
+# 有独立 server 配置的版本，其余回退到 26.2
+_EXPLICIT_SERVER_VERSIONS = ["1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2", "26.2"]
+_FALLBACK_SERVER_LIB_VERSION = "26.2"
 
 def _is_valid_semver(version):
     """验证版本号是否符合语义化版本控制（SemVer）规范。
@@ -456,16 +469,14 @@ def _datapack_impl(
             ],
             jvm_flags = [
                 "-Ddev.launch.version=%s" % minecraft_version,
-                "-Ddev.launch.type=server",
-                "-Ddev.launch.mainClass=net.minecraft.server.Main",
-                "-Xmx4G",
+            ] + _SERVER_JVM_FLAGS + [
                 "-Ddev.launch.copyFiles=" +
                 "$(rlocationpath //%s:%s):world/datapacks/%s.zip," % (native.package_name(), name, name) +
                 "$(rlocationpath //game:ops_json):ops.json",
             ],
-            main_class = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper",
+            main_class = _SERVER_MAIN_CLASS,
             runtime_deps = [
-                "//game:server",
+                "//game:server_" + minecraft_version.replace(".", "_"),
                 "//rule/dev_launch_wrapper",
                 "@minecraft//:%s_server_libraries" % minecraft_version,
             ],
@@ -854,41 +865,6 @@ def complete_datapack_config(
         actual = ":%s_server" % latest_seg_name,
     )
 
-    # 验证服务器目标（自动停止）
-    _validate_mc_version = extra_mc_version if extra_mc_version else ALL_MINECRAFT_VERSIONS[-1]
-    java_binary(
-        name = "validate_server",
-        visibility = extra_visibility,
-        srcs = [],
-        data = [
-            ":" + latest_seg_name,
-            "//game:ops_json",
-            "//template:pack.mcmeta",
-        ],
-        jvm_flags = [
-            "-Ddev.launch.version=%s" % _validate_mc_version,
-            "-Ddev.launch.type=server",
-            "-Ddev.launch.mainClass=net.minecraft.server.Main",
-            "-Xmx4G",
-            "-Ddev.launch.autostop=true",
-            "-Ddev.launch.copyFiles=" +
-            "$(rlocationpath //%s:%s):world/datapacks/%s.zip," % (native.package_name(), latest_seg_name, latest_seg_name) +
-            "$(rlocationpath //game:ops_json):ops.json," +
-            "$(rlocationpath //template:pack.mcmeta):world/datapacks/autostop/pack.mcmeta",
-        ],
-        main_class = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper",
-        runtime_deps = [
-            "//game:server",
-            "//rule/dev_launch_wrapper",
-            "@minecraft//:%s_server_libraries" % _validate_mc_version,
-        ],
-    )
-
-    native.alias(
-        name = "validate",
-        actual = ":validate_server",
-    )
-
     # 命名空间依赖目标
     _namespace_deps = [d for d in deps if "//subprojects/" in str(d)]
     pkg_filegroup(
@@ -907,4 +883,203 @@ def complete_datapack_config(
             name = pack_id + "_s%d" % i,
             srcs = seg_srcs,
             visibility = ["//visibility:public"],
+        )
+
+    # --- Test 系统 ---
+    _setup_tests(
+        pack_id = pack_id,
+        target_name = target_name,
+        game_versions = game_versions,
+        segments = segments,
+        extra_visibility = extra_visibility,
+    )
+
+# --- Test 系统 ---
+
+def _is_version_str(s):
+    """检查字符串是否仅含数字和点。"""
+    for c in s.elems():
+        if c not in "0123456789.":
+            return False
+    return len(s) > 0
+
+def _test_dir_matches(dir_name, version):
+    """检查版本目录是否匹配目标 MC version。"""
+    if dir_name == "common":
+        return True
+    if "-" in dir_name:
+        parts = dir_name.split("-", 1)
+        lo, hi = parts[0], parts[1]
+        if lo and not _is_version_str(lo):
+            return False
+        if hi and not _is_version_str(hi):
+            return False
+        if lo and hi:
+            if not _version_ge(hi, lo):
+                fail("Inverted version range in test directory '%s': %s > %s" % (dir_name, lo, hi))
+            return _version_ge(version, lo) and _version_ge(hi, version)
+        elif lo:
+            return _version_ge(version, lo)
+        else:
+            return _version_ge(hi, version)
+    return False
+
+def _version_ge(a, b):
+    """a >= b，如 '1.20.3' >= '1.20'。"""
+    return compare_versions(a, b) >= 0
+
+def _setup_tests(
+        pack_id,
+        target_name,
+        game_versions,
+        segments,
+        extra_visibility):
+    """为 game_versions 中的每个版本创建测试目标。"""
+    test_ns = pack_id + "-test"
+    test_files = native.glob(["data/%s/function/*/*.mcfunction" % test_ns], allow_empty = True)
+
+    # 解析 {version_dir: [(dir, name, path), ...]}
+    entries = {}
+    for f in test_files:
+        parts = f.split("/")
+        d = parts[-2]
+        n = parts[-1][:-len(".mcfunction")]
+        entries.setdefault(d, []).append((d, n, f))
+
+    # 按段索引找每个 version 对应的 datapack zip 所属 segment
+    _ver_to_seg = {}
+    for _i, seg in enumerate(segments):
+        _, seg_vers, _ = seg
+        for v in seg_vers:
+            _ver_to_seg[v] = seg[0]
+
+    _last_test_v = None
+    for v in game_versions:
+        d_ver = v.replace(".", "_")
+        filtered = [(d, n, f) for d, ns in entries.items() if _test_dir_matches(d, v) for d, n, f in ns]
+        names = [d + "/" + n for d, n, _f in filtered]
+        # 打包：除明确不匹配的版本目录外，所有文件都包含
+        test_func_files = []
+        for f in test_files:
+            d = f.split("/")[-2]
+            if d == "common" or _test_dir_matches(d, v):
+                test_func_files.append(f)
+            elif not _is_version_str(d) and "-" not in d:
+                test_func_files.append(f)  # 非版本目录（helper 等）
+
+        # Runner genrule
+        native.genrule(
+            name = target_name + "_test_runner_v" + d_ver,
+            srcs = ["//template:test_runner.mcf"],
+            tools = ["//rule:generate_test_runner"],
+            outs = ["test_runner/" + d_ver + "/_test_runner.mcfunction"],
+            cmd = "mkdir -p $(@D) && $(location //rule:generate_test_runner) " +
+                  "--template $(location //template:test_runner.mcf) " +
+                  "--namespace " + test_ns + " --out $@ -- " +
+                  " ".join(["'" + n + "'" for n in names]),
+        )
+
+        # Test namespace zip
+        test_components = []
+        for suffix in ["function", "functions"]:
+            pkg_files(
+                name = target_name + "_test_funcs_v" + d_ver + "_" + suffix,
+                srcs = test_func_files,
+                prefix = "data/" + test_ns + "/" + suffix,
+                strip_prefix = "data/" + test_ns + "/function",
+                visibility = extra_visibility,
+            )
+            test_components.append(":" + target_name + "_test_funcs_v" + d_ver + "_" + suffix)
+
+            # Runner
+            pkg_files(
+                name = target_name + "_test_runner_pkg_v" + d_ver + "_" + suffix,
+                srcs = [":" + target_name + "_test_runner_v" + d_ver],
+                prefix = "data/" + test_ns + "/" + suffix,
+                strip_prefix = "test_runner/" + d_ver,
+                visibility = extra_visibility,
+            )
+            test_components.append(":" + target_name + "_test_runner_pkg_v" + d_ver + "_" + suffix)
+
+            # load.json
+            native.genrule(
+                name = target_name + "_test_load_v" + d_ver + "_" + suffix,
+                outs = ["load/" + d_ver + "/" + suffix + "/load.json"],
+                cmd = "mkdir -p $(@D) && echo '{\"values\":[\"%s:_test_runner\"],\"replace\":false}' > $@" % test_ns,
+            )
+            pkg_files(
+                name = target_name + "_test_load_pkg_v" + d_ver + "_" + suffix,
+                srcs = [":" + target_name + "_test_load_v" + d_ver + "_" + suffix],
+                prefix = "data/minecraft/tags/" + suffix,
+                strip_prefix = "load/" + d_ver + "/" + suffix,
+                visibility = extra_visibility,
+            )
+            test_components.append(":" + target_name + "_test_load_pkg_v" + d_ver + "_" + suffix)
+
+        pkg_filegroup(
+            name = target_name + "_test_components_v" + d_ver,
+            srcs = test_components,
+            visibility = extra_visibility,
+        )
+        pkg_zip(
+            name = target_name + "_test_pack_v" + d_ver,
+            srcs = [":" + target_name + "_test_components_v" + d_ver, "//template:mcmeta"],
+            visibility = extra_visibility,
+        )
+
+        # 对应的 datapack zip
+        range_name = _ver_to_seg.get(v)
+        if range_name == None:
+            fail("version %s is not in any segment" % v)
+        seg_name = target_name + "_" + range_name
+
+        # test_server
+        java_binary(
+            name = target_name + "_test_server_v" + d_ver,
+            visibility = extra_visibility,
+            srcs = [],
+            data = [
+                ":" + seg_name,
+                ":" + target_name + "_test_pack_v" + d_ver,
+                "//game:ops_json",
+            ],
+            jvm_flags = [
+                "-Ddev.launch.version=%s" % v,
+            ] + _SERVER_JVM_FLAGS + [
+                "-Ddev.launch.copyFiles=" +
+                "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), seg_name) +
+                "$(rlocationpath //%s:%s_test_pack_v%s):world/datapacks/test.zip," % (native.package_name(), target_name, d_ver) +
+                "$(rlocationpath //game:ops_json):ops.json",
+            ],
+            main_class = _SERVER_MAIN_CLASS,
+            runtime_deps = [
+                "//game:server_" + v.replace(".", "_"),
+                "//rule/dev_launch_wrapper",
+                "@minecraft//:%s_server_libraries" % (v if v in _EXPLICIT_SERVER_VERSIONS else _FALLBACK_SERVER_LIB_VERSION),
+            ],
+        )
+        _last_test_v = d_ver
+
+        # sh_test
+        sh_test(
+            name = target_name + "_test_v" + d_ver,
+            srcs = ["//rule/test_runner:run_test.sh"],
+            args = [
+                "$(rootpath :%s_test_server_v%s)" % (target_name, d_ver),
+                "$(rootpath //rule/test_runner:TestRunner)",
+            ] + names,
+            data = [
+                ":%s_test_server_v%s" % (target_name, d_ver),
+                "//rule/test_runner:TestRunner",
+            ],
+            timeout = "long",
+            size = "large",
+        )
+        _last_test_v = d_ver
+
+    # 顶层 test 别名 → 最新有效版本
+    if _last_test_v != None:
+        native.alias(
+            name = "test",
+            actual = ":%s_test_v%s" % (target_name, _last_test_v),
         )
