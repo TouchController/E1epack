@@ -55,7 +55,21 @@ public class PatchFuncMan implements Opcodes {
         }
     }
 
+    static boolean hasTargetMethod(byte[] classBytes) {
+        var found = new boolean[]{false};
+        new ClassReader(classBytes).accept(new ClassVisitor(ASM9) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String desc, String sig, String[] ex) {
+                if ((access & ACC_PUBLIC) != 0 && desc.startsWith("()L") && (access & ACC_STATIC) == 0)
+                    found[0] = true;
+                return null;
+            }
+        }, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+        return found[0];
+    }
+
     static byte[] patch(byte[] classBytes) {
+        if (!hasTargetMethod(classBytes)) return null;
         ClassReader cr = new ClassReader(classBytes);
         ClassWriter cw = new ClassWriter(cr, 0);
         boolean[] didPatch = {false};

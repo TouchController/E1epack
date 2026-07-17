@@ -917,7 +917,7 @@ def _setup_tests(
 
     for v in game_versions:
         d_ver = v.replace(".", "_")
-        filtered = [(d, n, f) for d, ns in entries.items() if _test_dir_matches(d, v) for d, n, f in ns]
+        filtered = [(dir_name, n, f) for dir_name, test_list in entries.items() if _test_dir_matches(dir_name, v) for dir_name, n, f in test_list]
         names = [d + "/" + n for d, n, _f in filtered]
 
         # 打包：除明确不匹配的版本目录外，所有文件都包含
@@ -962,21 +962,6 @@ def _setup_tests(
                 visibility = extra_visibility,
             )
             test_components.append(":" + target_name + "_test_runner_pkg_v" + d_ver + "_" + suffix)
-
-            # load.json
-            native.genrule(
-                name = target_name + "_test_load_v" + d_ver + "_" + suffix,
-                outs = ["load/" + d_ver + "/" + suffix + "/load.json"],
-                cmd = "mkdir -p $(@D) && echo '{\"values\":[\"%s:_test_runner\"],\"replace\":false}' > $@" % test_ns,
-            )
-            pkg_files(
-                name = target_name + "_test_load_pkg_v" + d_ver + "_" + suffix,
-                srcs = [":" + target_name + "_test_load_v" + d_ver + "_" + suffix],
-                prefix = "data/minecraft/tags/" + suffix,
-                strip_prefix = "load/" + d_ver + "/" + suffix,
-                visibility = extra_visibility,
-            )
-            test_components.append(":" + target_name + "_test_load_pkg_v" + d_ver + "_" + suffix)
 
         pkg_filegroup(
             name = target_name + "_test_components_v" + d_ver,
@@ -1032,6 +1017,7 @@ def _setup_tests(
                     "$(rootpath //rule/test_runner:TestRunner)",
                     "--version",
                     v,
+                    "--test-ns", test_ns,
                 ] + ns_args + names,
                 data = [
                     ":%s_test_server_v%s" % (target_name, d_ver),
@@ -1056,6 +1042,7 @@ def _setup_tests(
     )
 
     # :test_major — 每个大版本（X.Y）+ 最新版本（安静）
+    # Starlark 无 set 类型，用 dict 做 O(1) 去重
     _major = {}
     for v in game_versions:
         if len(v.split(".")) == 2:
