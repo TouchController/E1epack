@@ -1,0 +1,10 @@
+{
+  "worktree": {
+    "bgIsolation": "none"
+  },
+  "permissions": {
+    "deny": [
+      "Bash(bazel clean *)"
+    ]
+  }
+}
