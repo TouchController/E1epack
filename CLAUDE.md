@@ -61,6 +61,23 @@ bazel run //auto-lucky-block:server
 bazel build //...
 ```
 
+### 测试命令
+
+每个数据包通过 `complete_datapack_config()` 自动生成按 Minecraft 版本拆分的测试目标：
+
+```bash
+bazel test //subprojects/stone-disappearance:test        # 最新版本（verbose，实时输出服务器日志）
+bazel test //subprojects/stone-disappearance:test_major  # 每个大版本 + 最新版本（安静，CI 推荐）
+bazel test //subprojects/stone-disappearance:test_all    # 所有版本（安静）
+bazel test //subprojects/stone-disappearance:test_1.21.5 # 单个版本 verbose
+```
+
+- `:test` — 仅最新版本，verbose 模式（实时输出服务器日志），适合手动调试
+- `:test_major` — 每个大版本（X.Y）+ 最新版本，安静模式，CI 推荐
+- `:test_all` — 所有 game_versions，安静模式
+- `:test_{version}` — 单个版本 verbose
+- `:test_q_{version}` — 单个版本安静
+
 ### Bazel 命令语法说明
 
 在当前 Debian 环境中，使用标准的 Bazel 命令语法，目标前需添加 `//` 前缀：
@@ -74,10 +91,9 @@ bazel build //...
 
 ### 目录结构
 
-- `data/` - 各数据包的 Minecraft 数据文件
-  - `[pack_id]/function/` - 数据包函数文件（.mcfunction）
-  - `[pack_id]/` - 其他命名空间特定文件
-  - `minecraft/` - Minecraft 原生命名空间文件
+- `subprojects/` - 所有数据包子项目（每个子项目包含自己的 `data/` 目录）
+  - `subprojects/<项目>/data/<pack_id>/function/` - 数据包函数文件（.mcfunction）
+  - `subprojects/<项目>/data/minecraft/` - Minecraft 原生命名空间文件
 - `rule/` - Bazel 构建规则定义
   - `datapack.bzl` - 主要的数据包构建宏（含版本段拆分、命令替换、SemVer 验证）
   - `process_mcfunction.bzl` - 函数文件处理规则（支持跨数据包函数调用展开）
@@ -107,8 +123,8 @@ bazel build //...
 
 ### 依赖管理
 
-- **内部依赖**：数据包可以依赖其他数据包（如 `//subprojects/datapack-function-library:dfl`）
-- **外部依赖**：通过 `@unif-logger//:unif-logger` 等引用第三方库
+- **内部依赖**：数据包可以依赖其他数据包（如 `//subprojects/datapack-function-library:dfl`、`//subprojects/unif-logger:unif.logger`）
+- **外部依赖**：通过 MODULE.bazel 管理，如 `@rules_pkg`、`@rules_java` 等
 - **Minecraft 版本**：使用 `minecraft_versions_range()` 函数指定支持的版本范围
 
 ## 开发工作流
@@ -216,7 +232,25 @@ bazel build //...
 [项目标记] emoji type: 简短描述
 ```
 
-其中项目标记来自各数据包的简称（如 `[SD]`、`[ALB]`、`[LBI]`、`[DFL]`、`[NEL]` 等），`type` 为 `feat`/`fix`/`build` 等。可使用 `/commit` 技能自动生成符合规范的提交消息。
+其中项目标记来自各数据包的简称，`type` 为 `feat`/`fix`/`build` 等。
+
+项目标记与目录/pack_id 映射表：
+
+| 标记 | 目录 | pack_id |
+|------|------|---------|
+| `[SD]` | `stone-disappearance` | `stone_disappearance` |
+| `[ALB]` | `auto-lucky-block` | `auto_lucky_block` |
+| `[LBI]` | `Lucky-Block-Island` | `lucky_block_island` |
+| `[DFL]` | `datapack-function-library` | `dfl` |
+| `[SBT]` | `SetBlock-TNT` | `setblock_tnt` |
+| `[RB]` | `ReplaceBlock` | `replace_block` |
+| `[AF]` | `anvil-falling` | `anvil_falling` |
+| `[EMC]` | `Easier-MC` | `easier_mc` |
+| `[AS]` | `auto-smelt` | `auto_smelt` |
+| `[NEL]` | `no-entity-lag` | `no_entity_lag` |
+| `[HTW]` | `highly-toxic-water` | `highly_toxic_water` |
+| `[UL]` | `unif-logger` | `unif.logger` |
+| `[LRP]` | `Localization-Resource-Pack` | （资源包，非数据包） |
 
 ## 注意事项
 
@@ -228,3 +262,4 @@ bazel build //...
   - 不必手动更新 `translate/` 的机器翻译
   - `assets/` 的条目优先于 `translate/` 的自动翻译
   - 涉及 Modrinth 上传、密钥存储或公共发布的变更必须由项目维护者审核
+- `bazel clean` 已被项目配置禁用，无需尝试
