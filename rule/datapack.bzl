@@ -27,14 +27,9 @@ load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS", "compare_versions")
 # 共享 server java_binary 配置
 _SERVER_JVM_FLAGS = [
     "-Ddev.launch.type=server",
-    "-Ddev.launch.mainClass=net.minecraft.server.Main",
     "-Xmx4G",
 ]
 _SERVER_MAIN_CLASS = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper"
-
-# 有独立 server 配置的版本，其余回退到 26.2
-_EXPLICIT_SERVER_VERSIONS = ["1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2", "26.2"]
-_FALLBACK_SERVER_LIB_VERSION = "26.2"
 
 def _is_valid_semver(version):
     """验证版本号是否符合语义化版本控制（SemVer）规范。
@@ -94,28 +89,21 @@ def _is_valid_semver(version):
 
     return True
 
+def _str_in_set(s, allowed):
+    """检查字符串所有字符是否都在 allowed 集合中。"""
+    for c in s.elems():
+        if c not in allowed:
+            return False
+    return True
+
 def _is_valid_numeric_identifier(identifier):
-    """验证数字标识符是否有效。
-
-    Args:
-        identifier: 要验证的标识符字符串
-
-    Returns:
-        如果标识符有效则返回 True，否则返回 False
-    """
+    """验证数字标识符是否有效。"""
     if not identifier:
         return False
-
-    # 检查是否只包含数字
-    for i in range(len(identifier)):
-        char = identifier[i]
-        if char < "0" or char > "9":
-            return False
-
-    # 检查前导零：只有 "0" 本身是有效的，其他以 0 开头的多位数字无效
+    if not _str_in_set(identifier, "0123456789"):
+        return False
     if len(identifier) > 1 and identifier[0] == "0":
         return False
-
     return True
 
 def _is_valid_prerelease(prerelease):
@@ -142,64 +130,29 @@ def _is_valid_prerelease(prerelease):
     return True
 
 def _is_valid_prerelease_identifier(identifier):
-    """验证先行版本号标识符是否有效。
-
-    Args:
-        identifier: 要验证的标识符字符串
-
-    Returns:
-        如果标识符有效则返回 True，否则返回 False
-    """
+    """验证先行版本号标识符是否有效。"""
     if not identifier:
         return False
-
-    # 检查是否只包含允许的字符 [0-9A-Za-z-]
     is_numeric = True
-    for i in range(len(identifier)):
-        char = identifier[i]
-        if not ((char >= "0" and char <= "9") or
-                (char >= "A" and char <= "Z") or
-                (char >= "a" and char <= "z") or
-                char == "-"):
+    for c in identifier.elems():
+        if not ((c >= "0" and c <= "9") or (c >= "A" and c <= "Z") or (c >= "a" and c <= "z") or c == "-"):
             return False
-        if not (char >= "0" and char <= "9"):
+        if c < "0" or c > "9":
             is_numeric = False
-
-    # 如果是纯数字标识符，检查前导零
     if is_numeric and len(identifier) > 1 and identifier[0] == "0":
         return False
-
     return True
 
 def _is_valid_identifier_sequence(sequence):
-    """验证标识符序列是否有效（用于版本编译信息）。
-
-    Args:
-        sequence: 要验证的标识符序列字符串
-
-    Returns:
-        如果序列有效则返回 True，否则返回 False
-    """
+    """验证标识符序列是否有效（用于版本编译信息）。"""
     if not sequence:
         return False
-
-    identifiers = sequence.split(".")
-    if not identifiers:
-        return False
-
-    for identifier in identifiers:
-        if not identifier:
+    for id in sequence.split("."):
+        if not id:
             return False
-
-        # 检查是否只包含允许的字符 [0-9A-Za-z-]
-        for i in range(len(identifier)):
-            char = identifier[i]
-            if not ((char >= "0" and char <= "9") or
-                    (char >= "A" and char <= "Z") or
-                    (char >= "a" and char <= "z") or
-                    char == "-"):
+        for c in id.elems():
+            if not ((c >= "0" and c <= "9") or (c >= "A" and c <= "Z") or (c >= "a" and c <= "z") or c == "-"):
                 return False
-
     return True
 
 def validate_semver(version, context = "版本号"):
@@ -251,12 +204,9 @@ def _is_valid_pack_id(pack_id):
     if first_char in "._-" or last_char in "._-":
         return False
 
-    # 检查是否只包含允许的字符
-    for i in range(len(pack_id)):
-        char = pack_id[i]
-        if not ((char >= "a" and char <= "z") or
-                (char >= "0" and char <= "9") or
-                char == "_" or char == "-" or char == "."):
+    # 检查是否只包含允许的字符 [a-z0-9_-.]
+    for c in pack_id.elems():
+        if not ((c >= "a" and c <= "z") or (c >= "0" and c <= "9") or c == "_" or c == "-" or c == "."):
             return False
 
     # 检查连续的点
@@ -408,7 +358,7 @@ def _segment_deps(deps, seg_index):
         if "//subprojects/" in s:
             result.append(s + "_s" + str(seg_index))
         else:
-            result.append(d)
+            result.append(s)
     return result
 
 def _datapack_impl(
@@ -469,6 +419,7 @@ def _datapack_impl(
             ],
             jvm_flags = [
                 "-Ddev.launch.version=%s" % minecraft_version,
+                "-Ddev.launch.mainClass=net.minecraft.server.Main",
             ] + _SERVER_JVM_FLAGS + [
                 "-Ddev.launch.copyFiles=" +
                 "$(rlocationpath //%s:%s):world/datapacks/%s.zip," % (native.package_name(), name, name) +
@@ -569,6 +520,7 @@ def complete_datapack_config(
         version_type = "release",
         modrinth_deps = [],
         include_localization_dependency = True,
+        test_ignore_errors_from = [],
         **kwargs):
     """完整的数据包配置宏，包含所有常用设置。
 
@@ -587,6 +539,7 @@ def complete_datapack_config(
         version_type: 版本类型 (release, beta, alpha)
         modrinth_deps: Modrinth 依赖字典列表
         include_localization_dependency: 是否自动包含本地化资源包作为依赖
+        test_ignore_errors_from: 测试时忽略来自指定命名空间的加载错误
         **kwargs: 传递给 datapack 规则的其他参数
     """
 
@@ -886,22 +839,27 @@ def complete_datapack_config(
         )
 
     # --- Test 系统 ---
+    # 从依赖标签自动传播 test_ignore_errors_from
+    _all_ignore = list(test_ignore_errors_from)
+    for d in deps:
+        if type(d) == "string" and d.startswith("//") and ":" in d:
+            ns = d.rsplit(":", 1)[1]
+            if ns not in _all_ignore:
+                _all_ignore.append(ns)
     _setup_tests(
         pack_id = pack_id,
         target_name = target_name,
         game_versions = game_versions,
         segments = segments,
         extra_visibility = extra_visibility,
+        ignore_error_ns = _all_ignore,
     )
 
 # --- Test 系统 ---
 
 def _is_version_str(s):
     """检查字符串是否仅含数字和点。"""
-    for c in s.elems():
-        if c not in "0123456789.":
-            return False
-    return len(s) > 0
+    return len(s) > 0 and _str_in_set(s, "0123456789.")
 
 def _test_dir_matches(dir_name, version):
     """检查版本目录是否匹配目标 MC version。"""
@@ -922,6 +880,8 @@ def _test_dir_matches(dir_name, version):
             return _version_ge(version, lo)
         else:
             return _version_ge(hi, version)
+    elif _is_version_str(dir_name):
+        return dir_name == version
     return False
 
 def _version_ge(a, b):
@@ -933,9 +893,11 @@ def _setup_tests(
         target_name,
         game_versions,
         segments,
-        extra_visibility):
+        extra_visibility,
+        ignore_error_ns = []):
     """为 game_versions 中的每个版本创建测试目标。"""
     test_ns = pack_id + "-test"
+    ns_args = [arg for ns in ignore_error_ns for arg in ("--ignore-error-ns", ns)]
     test_files = native.glob(["data/%s/function/*/*.mcfunction" % test_ns], allow_empty = True)
 
     # 解析 {version_dir: [(dir, name, path), ...]}
@@ -953,11 +915,11 @@ def _setup_tests(
         for v in seg_vers:
             _ver_to_seg[v] = seg[0]
 
-    _last_test_v = None
     for v in game_versions:
         d_ver = v.replace(".", "_")
         filtered = [(d, n, f) for d, ns in entries.items() if _test_dir_matches(d, v) for d, n, f in ns]
         names = [d + "/" + n for d, n, _f in filtered]
+
         # 打包：除明确不匹配的版本目录外，所有文件都包含
         test_func_files = []
         for f in test_files:
@@ -1045,6 +1007,7 @@ def _setup_tests(
             ],
             jvm_flags = [
                 "-Ddev.launch.version=%s" % v,
+                "-Ddev.launch.mainClass=%s" % ("net.minecraft.server.MinecraftServer" if compare_versions(v, "1.16") < 0 else "net.minecraft.server.Main"),
             ] + _SERVER_JVM_FLAGS + [
                 "-Ddev.launch.copyFiles=" +
                 "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), seg_name) +
@@ -1055,31 +1018,59 @@ def _setup_tests(
             runtime_deps = [
                 "//game:server_" + v.replace(".", "_"),
                 "//rule/dev_launch_wrapper",
-                "@minecraft//:%s_server_libraries" % (v if v in _EXPLICIT_SERVER_VERSIONS else _FALLBACK_SERVER_LIB_VERSION),
+                "@minecraft//:%s_server_libraries" % v,
             ],
         )
-        _last_test_v = d_ver
 
-        # sh_test
-        sh_test(
-            name = target_name + "_test_v" + d_ver,
-            srcs = ["//rule/test_runner:run_test.sh"],
-            args = [
-                "$(rootpath :%s_test_server_v%s)" % (target_name, d_ver),
-                "$(rootpath //rule/test_runner:TestRunner)",
-            ] + names,
-            data = [
-                ":%s_test_server_v%s" % (target_name, d_ver),
-                "//rule/test_runner:TestRunner",
-            ],
-            timeout = "long",
-            size = "large",
-        )
-        _last_test_v = d_ver
+        # 共享的 sh_test 工厂
+        def _make_sh_test(name_suffix, env = {}):
+            sh_test(
+                name = name_suffix,
+                srcs = ["//rule/test_runner:run_test.sh"],
+                args = [
+                    "$(rootpath :%s_test_server_v%s)" % (target_name, d_ver),
+                    "$(rootpath //rule/test_runner:TestRunner)",
+                    "--version",
+                    v,
+                ] + ns_args + names,
+                data = [
+                    ":%s_test_server_v%s" % (target_name, d_ver),
+                    "//rule/test_runner:TestRunner",
+                ],
+                env = env,
+                timeout = "moderate",
+                size = "large",
+            )
 
-    # 顶层 test 别名 → 最新有效版本
-    if _last_test_v != None:
-        native.alias(
-            name = "test",
-            actual = ":%s_test_v%s" % (target_name, _last_test_v),
-        )
+        _make_sh_test("test_" + v, {"TEST_VERBOSE": "1"})   # verbose（手动单独测试）
+        _make_sh_test("test_q_" + v)                          # 安静（批量测试）
+
+    # 收集所有安静版测试目标（供批量测试）
+    _quiet = [":test_q_" + v for v in game_versions]
+
+    # :test — 最新版本（verbose，实时输出服务器日志）
+    native.test_suite(
+        name = "test",
+        tests = [":test_" + game_versions[-1]],
+        visibility = extra_visibility,
+    )
+
+    # :test_major — 每个大版本（X.Y）+ 最新版本（安静）
+    _major = {}
+    for v in game_versions:
+        if len(v.split(".")) == 2:
+            _major[v] = True
+    _major[game_versions[-1]] = True
+    _major_tests = [":test_q_" + v for v in _major.keys()]
+    native.test_suite(
+        name = "test_major",
+        tests = _major_tests,
+        visibility = extra_visibility,
+    )
+
+    # :test_all — 全部版本（安静）
+    native.test_suite(
+        name = "test_all",
+        tests = _quiet,
+        visibility = extra_visibility,
+    )

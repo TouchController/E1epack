@@ -1,0 +1,9 @@
+load("@rules_java//java:java_binary.bzl", "java_binary")
+
+java_binary(
+    name = "patch_funcman",
+    srcs = ["PatchFuncMan.java"],
+    main_class = "PatchFuncMan",
+    visibility = ["//visibility:public"],
+    deps = ["@maven//:org_ow2_asm_asm"],
+)

@@ -38,7 +38,7 @@ exclude_library = tag_class(
         "names": attr.string_list(
             doc = "Names to exclude",
             default = [],
-        )
+        ),
     },
 )
 
@@ -167,7 +167,7 @@ minecraft_assets_repo = repository_rule(
         "asset_objects": attr.string_dict(),
         "asset_manifests": attr.string_dict(),
         "version_assets": attr.string_dict(),
-    }
+    },
 )
 
 def _minecraft_impl(mctx):
@@ -285,12 +285,15 @@ def _minecraft_impl(mctx):
 
         # Append library entries
         libraries = []
+        seen_libs = {}
         for library in version_data["libraries"]:
             name = library["name"]
             if name in exclude_library_names:
                 continue
             library_repo_name = get_library_repo_name(name)
-            libraries.append('"@%s//file"' % library_repo_name)
+            if library_repo_name not in seen_libs:
+                seen_libs[library_repo_name] = True
+                libraries.append('"@%s//file"' % library_repo_name)
 
             if library_entries.get(name):
                 continue

@@ -1,36 +1,48 @@
 load("@rules_java//java:defs.bzl", "java_import")
 load("//rule:extract_jar.bzl", "extract_jar")
-load("//rule:minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS")
+load("//rule:minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS", "compare_versions")
 
-# Versions with explicit multi-release JAR extraction
-_EXPLICIT_VERSIONS = [
-    "1.21.10", "1.21.11",
-    "26.1", "26.1.1", "26.1.2", "26.2",
-]
+# Bundler JARs (1.18+): multi-release JAR, need to extract inner server JAR
+_BUNDLER_VERSIONS = [v for v in ALL_MINECRAFT_VERSIONS if compare_versions(v, "1.18") >= 0]
+
+# Direct JARs (pre-1.18): plain server JAR, use as-is
+_DIRECT_VERSIONS = [v for v in ALL_MINECRAFT_VERSIONS if compare_versions(v, "1.18") < 0]
 
 [extract_jar(
     name = "server_file_" + v.replace(".", "_"),
     entry_path = "META-INF/versions/%s/server-%s.jar" % (v, v),
     filename = "_minecraft/server_%s.jar" % v.replace(".", "_"),
     input = "@minecraft//:%s_server" % v,
-) for v in _EXPLICIT_VERSIONS]
+) for v in _BUNDLER_VERSIONS]
 
 [java_import(
     name = "server_" + v.replace(".", "_"),
     jars = [":server_file_" + v.replace(".", "_")],
     visibility = ["//visibility:public"],
-) for v in _EXPLICIT_VERSIONS]
+) for v in _BUNDLER_VERSIONS]
 
-# All other versions redirect to 26.2
-[
-    alias(
-        name = "server_" + v.replace(".", "_"),
-        actual = ":server_26_2",
-        visibility = ["//visibility:public"],
-    )
-    for v in ALL_MINECRAFT_VERSIONS
-    if v not in _EXPLICIT_VERSIONS
-]
+# Versions needing FunctionManager patch (compilation permission 2 → 4)
+_PATCH_VERSIONS = [v for v in _DIRECT_VERSIONS if compare_versions(v, "1.14.3") < 0]
+
+[genrule(
+    name = "patch_server_" + v.replace(".", "_"),
+    srcs = ["@minecraft//:%s_server" % v],
+    outs = ["_minecraft/server_%s_patched.jar" % v.replace(".", "_")],
+    cmd = "$(location //rule/patch_funcman) $(SRCS) $@",
+    tools = ["//rule/patch_funcman"],
+) for v in _PATCH_VERSIONS]
+
+[java_import(
+    name = "server_" + v.replace(".", "_"),
+    jars = [":patch_server_" + v.replace(".", "_")],
+    visibility = ["//visibility:public"],
+) for v in _PATCH_VERSIONS]
+
+[alias(
+    name = "server_" + v.replace(".", "_"),
+    actual = "@minecraft//:%s_server" % v,
+    visibility = ["//visibility:public"],
+) for v in _DIRECT_VERSIONS if v not in _PATCH_VERSIONS]
 
 alias(
     name = "ops_json",
