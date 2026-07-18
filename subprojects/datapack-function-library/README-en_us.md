@@ -437,12 +437,6 @@ Function usage: `/function dfl:lib/count_items {namespace:"minecraft",name:"ston
 - Create a scoreboard item named dfl\_{namespace}.{name}\_count;
 - Write the number of {namespace}:{name} of all players to their respective scoreboard items.
 
-### Batch generate dummies
-
-Function usage: `/function dfl:lib/spawn_dummies`
-
-- Generate 100 Carpet dummies based on the player's coordinates.
-
 # Dialog Description
 
 ## GNU GPL License Text

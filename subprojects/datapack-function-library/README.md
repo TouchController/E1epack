@@ -437,12 +437,6 @@ execute if score dfl_enable dfl_scoreboard matches 1
 - 创建名为 dfl\_{namespace}.{name}\_count 的记分项；
 - 将所有玩家的 {namespace}:{name} 数量写入各自的此记分项。
 
-### 批量生成假人
-
-函数用法：`/function dfl:lib/spawn_dummies`
-
-- 以玩家为坐标基准生成 100 个 Carpet 假人。
-
 # 对话框说明
 
 ## GNU GPL 协议原文
