@@ -2,26 +2,26 @@ load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
     name = "command_replacer",
-    srcs = ["command_replacer.py"],
-    main = "command_replacer.py",
+    srcs = ["scripts/command_replacer.py"],
+    main = "scripts/command_replacer.py",
     visibility = ["//visibility:public"],
 )
 
 py_binary(
     name = "merge_tags",
-    srcs = ["merge_tags.py"],
-    main = "merge_tags.py",
+    srcs = ["scripts/merge_tags.py"],
+    main = "scripts/merge_tags.py",
     visibility = ["//visibility:public"],
 )
 
 py_binary(
     name = "generate_test_runner",
-    srcs = ["generate_test_runner.py"],
-    main = "generate_test_runner.py",
+    srcs = ["scripts/generate_test_runner.py"],
+    main = "scripts/generate_test_runner.py",
     visibility = ["//visibility:public"],
 )
 
 exports_files([
-    "gamerule_mapping.json",
-    "time_query_mapping.json",
+    "data/gamerule_mapping.json",
+    "data/time_query_mapping.json",
 ])

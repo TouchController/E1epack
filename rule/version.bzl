@@ -46,8 +46,8 @@ def minecraft_versions_range(start_version, end_version = None):
 
 # 命令替换规则：boundary 版本及其之后使用新语法，之前需要旧版替换
 COMMAND_BOUNDARIES = [
-    ("1.21.11", "//rule:gamerule_mapping.json"),
-    ("26.1", "//rule:time_query_mapping.json"),
+    ("1.21.11", "//rule:data/gamerule_mapping.json"),
+    ("26.1", "//rule:data/time_query_mapping.json"),
 ]
 
 def _version_idx(v):
