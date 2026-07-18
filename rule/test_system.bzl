@@ -10,7 +10,7 @@ load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "pkg_filegroup")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
-load(":minecraft_versions.bzl", "compare_versions")
+load(":minecraft_versions.bzl", "ALL_MINECRAFT_VERSIONS", "compare_versions")
 
 def _is_version_str(s):
     """检查字符串是否仅含数字和点。"""
@@ -50,7 +50,7 @@ SERVER_JVM_FLAGS = [
 ]
 SERVER_MAIN_CLASS = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper"
 
-def _make_sh_test(target_name, d_ver, v, test_ns, ns_args, names, name_suffix, env = None):
+def _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, name_suffix, env = None):
     """创建单个版本的 sh_test 目标。"""
     sh_test(
         name = name_suffix,
@@ -60,6 +60,8 @@ def _make_sh_test(target_name, d_ver, v, test_ns, ns_args, names, name_suffix, e
             "$(rootpath //rule/tools/test_runner:TestRunner)",
             "--version",
             v,
+            "--rcon-port",
+            str(rcon_port),
             "--test-ns", test_ns,
         ] + ns_args + names,
         data = [
@@ -100,6 +102,9 @@ def setup_tests(
 
     for v in game_versions:
         d_ver = v.replace(".", "_")
+        port_idx = ALL_MINECRAFT_VERSIONS.index(v)
+        game_port = 49152 + port_idx * 2
+        rcon_port = 49152 + port_idx * 2 + 1
         filtered = [(dir_name, n, f) for dir_name, test_list in entries.items() if _test_dir_matches(dir_name, v) for dir_name, n, f in test_list]
         names = [d + "/" + n for d, n, _f in filtered]
 
@@ -177,6 +182,9 @@ def setup_tests(
                 "-Ddev.launch.version=%s" % v,
                 "-Ddev.launch.mainClass=%s" % ("net.minecraft.server.MinecraftServer" if compare_versions(v, "1.16") < 0 else "net.minecraft.server.Main"),
             ] + SERVER_JVM_FLAGS + [
+                "-Ddev.launch.rconPort=%d" % rcon_port,
+                "-Ddev.launch.gamePort=%d" % game_port,
+            ] + [
                 "-Ddev.launch.copyFiles=" +
                 "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), seg_name) +
                 "$(rlocationpath //%s:%s_test_pack_v%s):world/datapacks/test.zip," % (native.package_name(), target_name, d_ver) +
@@ -190,8 +198,8 @@ def setup_tests(
             ],
         )
 
-        _make_sh_test(target_name, d_ver, v, test_ns, ns_args, names, "test_" + v, {"TEST_VERBOSE": "1"})
-        _make_sh_test(target_name, d_ver, v, test_ns, ns_args, names, "test_q_" + v)
+        _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, "test_" + v, {"TEST_VERBOSE": "1"})
+        _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, "test_q_" + v)
 
     # 收集所有安静版测试目标（供批量测试）
     _quiet = [":test_q_" + v for v in game_versions]

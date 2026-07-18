@@ -105,9 +105,17 @@ public class DevLaunchWrapper {
                 Files.writeString(allowSymlinksPath, "[regex].*\n");
             }
             case "server" -> {
+                var rconPortStr = System.getProperty("dev.launch.rconPort", "25575");
+                var gamePortStr = System.getProperty("dev.launch.gamePort", "25565");
                 var serverPropertiesPath = Path.of("server.properties");
                 if (!Files.exists(serverPropertiesPath)) {
-                    Files.writeString(serverPropertiesPath, "online-mode=false\nfunction-permission-level=4\nenable-rcon=true\nrcon.password=dev\n");
+                    Files.writeString(serverPropertiesPath,
+                        "online-mode=false\n" +
+                        "function-permission-level=4\n" +
+                        "enable-rcon=true\n" +
+                        "rcon.password=dev\n" +
+                        "rcon.port=" + rconPortStr + "\n" +
+                        "server-port=" + gamePortStr + "\n");
                 }
                 argsList.add("--nogui");
                 var eulaPath = Path.of("eula.txt");

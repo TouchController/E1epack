@@ -15,10 +15,10 @@ import java.util.HashSet;
  */
 public class TestRunner {
     private static final String MARKER = "[[TEST][";
-    private static final int RCON_PORT = 25575;
     private static final String RCON_PW = "dev";
 
     public static void main(String[] args) throws Exception {
+        var rconPortHolder = new int[]{25575};
         String version = "?";
         var expected = new LinkedHashMap<String, String>();
         var ignoredNS = new HashSet<String>();
@@ -26,11 +26,13 @@ public class TestRunner {
         int ai = 0;
         while (ai < args.length) {
             if ("--version".equals(args[ai])) { ai++; if (ai < args.length) version = args[ai]; }
+            else if ("--rcon-port".equals(args[ai])) { ai++; if (ai < args.length) rconPortHolder[0] = Integer.parseInt(args[ai]); }
             else if ("--ignore-error-ns".equals(args[ai])) { ai++; if (ai < args.length) ignoredNS.add(args[ai]); }
             else if ("--test-ns".equals(args[ai])) { ai++; if (ai < args.length) testNsHolder[0] = args[ai]; }
             else expected.put(args[ai], null);
             ai++;
         }
+        final int rconPort = rconPortHolder[0];
 
         boolean verbose = "1".equals(System.getenv("TEST_VERBOSE"));
         var logDir = System.getenv("TEST_UNDECLARED_OUTPUTS_DIR");
@@ -42,7 +44,7 @@ public class TestRunner {
         // RCON background thread: poll until server accepts, auth, trigger runner
         var rconThread = new Thread(() -> {
             for (int i = 0; i < 120; i++) {
-                try (Socket s = new Socket("127.0.0.1", RCON_PORT)) {
+                try (Socket s = new Socket("127.0.0.1", rconPort)) {
                     var out = s.getOutputStream(); var in = s.getInputStream();
                     rconSend(out, 1, 3, RCON_PW);
                     var resp = rconRecv(in);
