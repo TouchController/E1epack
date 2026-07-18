@@ -8,6 +8,6 @@ java_binary(
     deps = [
         "@maven//:com_fasterxml_jackson_core_jackson_core",
         "@maven//:com_fasterxml_jackson_core_jackson_databind",
-        "//rule/worker_api",
+        "//rule/tools/worker_api",
     ],
 )

@@ -206,12 +206,12 @@ upload_modrinth = rule(
             mandatory = False,
         ),
         "_modrinth_uploader_binary": attr.label(
-            default = "//rule/modrinth_uploader",
+            default = "//rule/tools/modrinth_uploader",
             executable = True,
             cfg = "exec",
         ),
         "_modrinth_uploader_wrapper": attr.label(
-            default = "//rule/modrinth_uploader:modrinth_uploader_wrapper",
+            default = "//rule/tools/modrinth_uploader:modrinth_uploader_wrapper",
             allow_single_file = [".bash"],
         ),
         "_rlocation_library": attr.label(

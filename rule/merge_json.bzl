@@ -129,7 +129,7 @@ merge_json = rule(
             doc = "List of .json files to merge. Files with the same name will be merged together.",
         ),
         "_json_merger": attr.label(
-            default = Label("//rule/json_merger"),
+            default = Label("//rule/tools/json_merger"),
             executable = True,
             cfg = "exec",
         ),

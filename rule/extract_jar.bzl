@@ -46,7 +46,7 @@ extract_jar = rule(
             doc = "Output file name",
         ),
         "_extract_bin": attr.label(
-            default = Label("//rule/extract"),
+            default = Label("//rule/tools/extract"),
             executable = True,
             cfg = "exec",
         ),

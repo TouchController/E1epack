@@ -6,7 +6,7 @@ java_binary(
     main_class = "JsonCompressor",
     visibility = ["//visibility:public"],
     deps = [
-        "//rule/worker_api",
+        "//rule/tools/worker_api",
         "@maven//:com_fasterxml_jackson_core_jackson_databind",
     ],
 )

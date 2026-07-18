@@ -1,4 +1,4 @@
-load("@//rule:datapack.bzl", "minecraft_versions_range")
+load("@//rule:version.bzl", "minecraft_versions_range")
 load("@//rule:merge_json.bzl", "merge_json")
 load("@//rule:upload_modrinth.bzl", "upload_modrinth")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")

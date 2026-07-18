@@ -28,8 +28,8 @@ _PATCH_VERSIONS = [v for v in _DIRECT_VERSIONS if compare_versions(v, "1.14.3") 
     name = "patch_server_" + v.replace(".", "_"),
     srcs = ["@minecraft//:%s_server" % v],
     outs = ["_minecraft/server_%s_patched.jar" % v.replace(".", "_")],
-    cmd = "$(location //rule/patch_funcman) $(SRCS) $@",
-    tools = ["//rule/patch_funcman"],
+    cmd = "$(location //rule/tools/patch_funcman) $(SRCS) $@",
+    tools = ["//rule/tools/patch_funcman"],
 ) for v in _PATCH_VERSIONS]
 
 [java_import(

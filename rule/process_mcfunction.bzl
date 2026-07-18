@@ -157,7 +157,7 @@ process_mcfunction = rule(
             doc = "Dependencies that provide additional data pack files for cross-pack function calls",
         ),
         "_mcfunction_processor": attr.label(
-            default = Label("//rule/mcfunction_processor"),
+            default = Label("//rule/tools/mcfunction_processor"),
             executable = True,
             cfg = "exec",
         ),

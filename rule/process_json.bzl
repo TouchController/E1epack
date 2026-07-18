@@ -78,7 +78,7 @@ process_json = rule(
             doc = "List of .json files to compress",
         ),
         "_json_compressor": attr.label(
-            default = Label("//rule/json_compressor"),
+            default = Label("//rule/tools/json_compressor"),
             executable = True,
             cfg = "exec",
         ),
