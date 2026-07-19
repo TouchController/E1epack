@@ -5,10 +5,11 @@
 
 import os
 import sys
+import shutil
 from typing import Dict, List, Tuple
 from pathlib import Path
 
-from .config import get_all_target_languages, BATCH_SIZE, MAX_CONTEXT, MIN_KEYS_FOR_CONTEXT
+from .config import get_all_target_languages, BATCH_SIZE, MAX_CONTEXT, MIN_KEYS_FOR_CONTEXT, TRANSLATE_DIR
 from .logging import log_progress, log_section, log_section_end, ProgressTracker, flush_logs
 from .translator import DeepSeekTranslator
 from .git_changes import get_git_changes
@@ -272,6 +273,14 @@ def perform_cleanup_extra_keys():
                     log_progress(f"✗ 清理时发生错误: {namespace} -> {lang_code}, 错误: {str(e)}", "error")
             else:
                 log_progress(f"✓ {namespace} -> {lang_code}: 没有多余键", "info")
+
+    # 清理 translate/ 下不在 assets/ 中的未知命名空间目录
+    if os.path.isdir(TRANSLATE_DIR):
+        for entry in os.listdir(TRANSLATE_DIR):
+            entry_path = os.path.join(TRANSLATE_DIR, entry)
+            if os.path.isdir(entry_path) and entry not in all_namespaces:
+                shutil.rmtree(entry_path)
+                log_progress(f"✓ 删除了未知命名空间目录: {entry_path}")
 
     log_progress(f"清理完成，共清理了 {cleaned_count} 个文件，移除了 {total_keys_removed} 个多余键")
 

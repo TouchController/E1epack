@@ -4,6 +4,9 @@ on:
   push:
     paths:
        - 'subprojects/Localization-Resource-Pack/assets/**'
+       - 'subprojects/Localization-Resource-Pack/languages.json'
+       - '.github/scripts/translator/**'
+       - '.github/workflows/translate.yml'
   workflow_dispatch:
     inputs:
       force_translate:
