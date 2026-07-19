@@ -207,42 +207,51 @@ class DeepSeekTranslator:
             log_progress(f"    [尝试{attempt}/5] [{namespace}] {len(texts)}个文本 -> {target_lang_name} -> 失败: {error_summary}", "warning")
             flush_logs()  # 确保错误日志被及时写入
 
-    def log_translation_attempt(self, attempt: int, system_prompt: str, user_prompt: str,
-                                texts: Dict[str, str], namespace: str = "unknown",
-                                target_lang_name: str = "unknown", model: str = "unknown",
-                                temperature: float = 1.3) -> None:
-        """在调试模式下记录每次请求的详细信息，格式与失败日志一致"""
+    def log_translation_debug(self, attempt: int, system_prompt: str, user_prompt: str,
+                               texts: Dict[str, str], namespace: str = "unknown",
+                               target_lang_name: str = "unknown", model: str = "unknown",
+                               temperature: float = 1.3,
+                               raw_response: str = "", translated_result: str = "",
+                               success: bool = False, api_time: float = 0) -> None:
+        """在调试模式下记录每次请求和响应的完整信息"""
         log_dir = os.path.join(os.path.dirname(__file__), "logs")
         os.makedirs(log_dir, exist_ok=True)
 
+        status_text = "成功" if success else "失败"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
-        log_file = os.path.join(log_dir, f"translation_attempt_{timestamp}_attempt_{attempt}.log")
+        log_file = os.path.join(log_dir, f"translation_debug_{timestamp}_{namespace}_{target_lang_name}_attempt_{attempt}_{status_text}.log")
 
         with open(log_file, 'w', encoding='utf-8') as f:
-            f.write(f"翻译请求日志 - 尝试次数: {attempt}\n")
+            f.write(f"翻译调试日志\n")
             f.write(f"时间: {datetime.now().isoformat()}\n")
+            f.write(f"状态: {status_text}\n")
             f.write(f"命名空间: {namespace}\n")
             f.write(f"目标语言: {target_lang_name}\n")
             f.write(f"模型: {model}\n")
             f.write(f"温度: {temperature}\n")
             f.write(f"文本数量: {len(texts)}\n")
+            f.write(f"API耗时: {api_time:.2f}s\n")
             f.write("=" * 80 + "\n\n")
 
-            f.write("原始文本:\n")
+            f.write("=== 原始文本 ===\n")
             f.write(json.dumps(texts, ensure_ascii=False, indent=2))
             f.write("\n\n" + "=" * 80 + "\n\n")
 
-            f.write("系统提示词:\n")
+            f.write("=== API原始响应 ===\n")
+            f.write(raw_response if raw_response else "(无响应)")
+            f.write("\n\n" + "=" * 80 + "\n\n")
+
+            f.write("=== 翻译结果 ===\n")
+            f.write(translated_result if translated_result else "(空)")
+            f.write("\n\n" + "=" * 80 + "\n\n")
+
+            f.write("=== 系统提示词 ===\n")
             f.write(system_prompt)
             f.write("\n\n" + "=" * 80 + "\n\n")
 
-            f.write("用户提示词:\n")
+            f.write("=== 用户提示词 ===\n")
             f.write(user_prompt)
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("API响应:\n")
-            f.write("(调试模式) 未请求或未记录响应\n")
-            f.write("\n\n" + "=" * 80 + "\n")
+            f.write("\n")
 
     def prepare_texts_for_translation(self, texts: Dict[str, any]) -> Dict[str, str]:
         """准备合并后的文本进行翻译，处理列表值
@@ -311,19 +320,6 @@ class DeepSeekTranslator:
 {source_text}
 
 请直接返回翻译后的JSON，不要添加任何解释文字。"""
-
-            # 调试模式：记录请求详情（与失败日志格式一致）
-            if self.debug_mode:
-                self.log_translation_attempt(
-                    attempt=attempt,
-                    system_prompt=system_prompt,
-                    user_prompt=user_prompt,
-                    texts=texts_to_translate,
-                    namespace=namespace,
-                    target_lang_name=target_lang_name,
-                    model=self.model,
-                    temperature=temperature
-                )
 
             payload = {
                 "model": self.model,
@@ -399,6 +395,21 @@ class DeepSeekTranslator:
                 raise ValueError(f"翻译验证失败: {'; '.join(validation_errors)}")
 
             # 验证成功，返回结果
+            if self.debug_mode:
+                self.log_translation_debug(
+                    attempt=attempt,
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    texts=texts_to_translate,
+                    namespace=namespace,
+                    target_lang_name=target_lang_name,
+                    model=self.model,
+                    temperature=temperature,
+                    raw_response=response_text,
+                    translated_result=json.dumps(translated_dict, ensure_ascii=False, indent=2),
+                    success=True,
+                    api_time=api_time
+                )
             return translated_dict
 
         except Exception as e:
@@ -412,10 +423,21 @@ class DeepSeekTranslator:
                 texts=texts,
                 namespace=namespace,
                 target_lang_name=target_lang_name,
-                model=model,
+                model=self.model,
                 temperature=temperature,
                 log_to_main=False  # 不记录主日志，由execute_translation_request统一管理
             )
+            if self.debug_mode:
+                raw = response_text if 'response_text' in locals() else "无响应"
+                translated = translated_content if 'translated_content' in locals() else ""
+                self.log_translation_debug(
+                    attempt=attempt, system_prompt=system_prompt if 'system_prompt' in locals() else "未生成",
+                    user_prompt=user_prompt if 'user_prompt' in locals() else "未生成",
+                    texts=texts, namespace=namespace, target_lang_name=target_lang_name,
+                    model=self.model, temperature=temperature,
+                    raw_response=raw, translated_result=translated,
+                    success=False
+                )
             # 抛出异常让上层处理重试
             raise e
 
@@ -533,7 +555,6 @@ class DeepSeekTranslator:
                         log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}-> {request.target_lang_name} -> 翻译结果为空，重试中... (等待1秒)", "warning")
                         time.sleep(1)  # 验证失败等待1秒
                         continue
-                else:
                     log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}{len(request.texts)}个文本 -> {request.target_lang_name} -> 失败: 翻译结果为空 (达到验证失败上限)", "error")
                     return (request.request_id, request.target_lang, request.target_lang_name, {})
 
