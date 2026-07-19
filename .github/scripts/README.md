@@ -136,7 +136,7 @@ python .github/scripts/translate.py
 
 - `DEEPSEEK_API_KEY` - DeepSeek API密钥（在GitHub Secrets中配置）
 - `FORCE_TRANSLATE` - 强制重新翻译所有文件（可选，默认 0）
-- `DEEPSEEK_MODEL` - DeepSeek 模型ID（可选，默认 `deepseek-v4-flash`）
+- `DEEPSEEK_MODEL` - DeepSeek 模型ID（可选，默认 `deepseek-v4-pro`）
 - `DEEPSEEK_THINKING` - 开启思考模式（可选，默认 0）
 - `TRANSLATION_DEBUG` - 开启详细请求/响应记录（可选，默认 0）
 - `GITHUB_ACTIONS` - CI环境标识，启用日志分组与提示格式（自动）

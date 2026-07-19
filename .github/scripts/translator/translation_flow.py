@@ -553,7 +553,7 @@ def main():
     log_progress("✓ API密钥已配置")
 
     # 模型与思考开关
-    model = os.getenv('DEEPSEEK_MODEL', 'deepseek-v4-flash')
+    model = os.getenv('DEEPSEEK_MODEL', 'deepseek-v4-pro')
     thinking = os.getenv('DEEPSEEK_THINKING', '0') == '1'
     log_progress(f"模型: {model} | 思考: {'开启' if thinking else '关闭'}")
 

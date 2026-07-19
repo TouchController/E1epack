@@ -18,7 +18,7 @@ from translator.logging import log_progress, flush_logs
 
 
 class DeepSeekTranslator:
-    def __init__(self, api_key: str, model: str = "deepseek-v4-flash", thinking: bool = False):
+    def __init__(self, api_key: str, model: str = "deepseek-v4-pro", thinking: bool = False):
         self.api_key = api_key
         self.model = model
         self.thinking = thinking
