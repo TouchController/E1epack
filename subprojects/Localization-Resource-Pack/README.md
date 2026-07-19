@@ -4,7 +4,7 @@
 
 ## 简介
 
-本资源包主要为我的数据包提供本地化，基于 DeepSeek-V3.2-Exp 进行全自动智能翻译，拥有一系列的翻译质量保证机制，如分段机制、上下文补充机制、JSON 验证机制等，目前支持 19 种语言。本资源包现在同样提供 Distant Horizons 的本地化。
+本资源包为作者的其他数据包提供本地化，目前支持 19 种语言，使用 LLM 进行多语言翻译。
 
 ## 贡献
 
@@ -19,7 +19,7 @@
 
 ## Introduction
 
-This resource pack primarily provides localization for my data packs. It utilizes DeepSeek-V3.2-Exp for fully automated intelligent translation and incorporates a series of translation quality assurance mechanisms, such as segmentation, contextual supplementation, JSON validation, etc. Currently, it supports 19 languages. This resource pack now also provides localization for Distant Horizons.
+This resource pack provides localization for the author's other data packs, currently supporting 19 languages, using LLM for multilingual translation.
 
 ## Contribution
 

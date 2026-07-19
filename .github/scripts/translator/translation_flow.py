@@ -26,7 +26,7 @@ from .config import KeyChange, FileChanges, ChangeType
 
 def needs_translation(namespace: str, lang_code: str, source_dict: Dict[str, str]) -> bool:
     """判断是否需要翻译"""
-    force_translate = os.getenv('FORCE_TRANSLATE', 'false').lower() == 'true'
+    force_translate = os.getenv('FORCE_TRANSLATE', '0') == '1'
 
     if force_translate:
         return True
@@ -282,7 +282,7 @@ def continue_full_translation(translator, progress_tracker, namespaces):
 
     # 第一阶段：收集所有需要翻译的内容
     all_translation_tasks = []
-    force_translate = os.getenv('FORCE_TRANSLATE', 'false').lower() == 'true'
+    force_translate = os.getenv('FORCE_TRANSLATE', '0') == '1'
 
     for namespace in namespaces:
         # 使用合并后的参考翻译
@@ -543,19 +543,17 @@ def main():
 
     log_progress("✓ API密钥已配置")
 
-    # 检查是否使用非思考模式
-    non_thinking_mode = os.getenv('NON_THINKING_MODE', 'false').lower() == 'true'
-    if non_thinking_mode:
-        log_progress("⚡ 非思考模式：使用deepseek-chat模型以提升速度")
-    else:
-        log_progress("🧠 思考模式：使用deepseek-reasoner模型以提升质量")
+    # 模型与思考开关
+    model = os.getenv('DEEPSEEK_MODEL', 'deepseek-v4-flash')
+    thinking = os.getenv('DEEPSEEK_THINKING', '0') == '1'
+    log_progress(f"模型: {model} | 思考: {'开启' if thinking else '关闭'}")
 
     # 创建翻译器
-    translator = DeepSeekTranslator(api_key, non_thinking_mode)
+    translator = DeepSeekTranslator(api_key, model=model, thinking=thinking)
     log_progress("✓ 翻译器初始化完成")
 
     # 检查翻译模式
-    force_translate = os.getenv('FORCE_TRANSLATE', 'false').lower() == 'true'
+    force_translate = os.getenv('FORCE_TRANSLATE', '0') == '1'
 
     if force_translate:
         log_progress("🔄 强制翻译模式：将重新翻译所有内容（使用合并翻译逻辑）")

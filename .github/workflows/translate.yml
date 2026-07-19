@@ -11,8 +11,16 @@ on:
         required: false
         default: false
         type: boolean
-      non_thinking_mode:
-        description: 'Use non-thinking mode'
+      deepseek_model:
+        description: 'DeepSeek model'
+        required: false
+        default: 'deepseek-v4-flash'
+        type: choice
+        options:
+        - 'deepseek-v4-flash'
+        - 'deepseek-v4-pro'
+      deepseek_thinking:
+        description: 'Enable thinking mode'
         required: false
         default: false
         type: boolean
@@ -54,9 +62,10 @@ jobs:
     - name: Run translation script
       env:
         DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        FORCE_TRANSLATE: ${{ github.event.inputs.force_translate || 'false' }}
-        NON_THINKING_MODE: ${{ github.event.inputs.non_thinking_mode || 'false' }}
-        TRANSLATION_DEBUG: ${{ github.event.inputs.translation_debug || 'false' }}
+        FORCE_TRANSLATE: ${{ github.event.inputs.force_translate == 'true' && '1' || '0' }}
+        DEEPSEEK_MODEL: ${{ github.event.inputs.deepseek_model || 'deepseek-v4-flash' }}
+        DEEPSEEK_THINKING: ${{ github.event.inputs.deepseek_thinking == 'true' && '1' || '0' }}
+        TRANSLATION_DEBUG: ${{ github.event.inputs.translation_debug == 'true' && '1' || '0' }}
       run: |
         python .github/scripts/translate.py
 

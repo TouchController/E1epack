@@ -13,16 +13,17 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 import concurrent.futures
 
-from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_CONTEXT, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, TEMPERATURE_ADJUSTMENTS, API_TIMEOUT
+from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_CONTEXT, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, API_TIMEOUT
 from translator.logging import log_progress, flush_logs
 
 
 class DeepSeekTranslator:
-    def __init__(self, api_key: str, non_thinking_mode: bool = False):
+    def __init__(self, api_key: str, model: str = "deepseek-v4-flash", thinking: bool = False):
         self.api_key = api_key
-        self.non_thinking_mode = non_thinking_mode
+        self.model = model
+        self.thinking = thinking
         # 调试模式：在每次请求前记录详细日志（与错误日志格式一致）
-        self.debug_mode = os.getenv('TRANSLATION_DEBUG', 'false').lower() == 'true'
+        self.debug_mode = os.getenv('TRANSLATION_DEBUG', '0') == '1'
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}"
@@ -43,7 +44,7 @@ class DeepSeekTranslator:
         with open(summary_file, 'w', encoding='utf-8') as f:
             f.write(f"翻译错误汇总日志\n")
             f.write(f"会话开始时间: {session_start}\n")
-            f.write(f"模式: {'非思考模式' if self.non_thinking_mode else '思考模式'}\n")
+            f.write(f"模型: {self.model} | 思考: {'开启' if self.thinking else '关闭'}\n")
             f.write("=" * 80 + "\n\n")
 
     def _load_prompt_template(self, file_path: str) -> str:
@@ -282,21 +283,21 @@ class DeepSeekTranslator:
         try:
             # 使用提示词模板或回退到默认提示词
             if self.system_prompt:
-                    system_prompt = self._format_prompt(
-                        self.system_prompt,
-                        target_language=target_lang_name
-                    )
-                else:
-                    system_prompt = "你是一个专业的游戏本地化翻译专家，擅长Minecraft相关内容的翻译。"
+                system_prompt = self._format_prompt(
+                    self.system_prompt,
+                    target_language=target_lang_name
+                )
+            else:
+                system_prompt = "你是一个专业的游戏本地化翻译专家，擅长Minecraft相关内容的翻译。"
 
-                if self.user_prompt:
-                    user_prompt = self._format_prompt(
-                        self.user_prompt,
-                        target_language=target_lang_name,
-                        content_to_translate=source_text
-                    )
-                else:
-                    user_prompt = f"""请将以下JSON格式的游戏本地化文本翻译为{target_lang_name}。
+            if self.user_prompt:
+                user_prompt = self._format_prompt(
+                    self.user_prompt,
+                    target_language=target_lang_name,
+                    content_to_translate=source_text
+                )
+            else:
+                user_prompt = f"""请将以下JSON格式的游戏本地化文本翻译为{target_lang_name}。
 
 要求：
 1. 保持JSON格式不变，只翻译值部分
@@ -311,96 +312,94 @@ class DeepSeekTranslator:
 
 请直接返回翻译后的JSON，不要添加任何解释文字。"""
 
-                # 调试模式：记录请求详情（与失败日志格式一致）
-                if self.debug_mode:
-                    self.log_translation_attempt(
-                        attempt=attempt,
-                        system_prompt=system_prompt,
-                        user_prompt=user_prompt,
-                        texts=texts_to_translate,
-                        namespace=namespace,
-                        target_lang_name=target_lang_name,
-                        model=("deepseek-chat" if self.non_thinking_mode else "deepseek-reasoner"),
-                        temperature=temperature
-                    )
+            # 调试模式：记录请求详情（与失败日志格式一致）
+            if self.debug_mode:
+                self.log_translation_attempt(
+                    attempt=attempt,
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    texts=texts_to_translate,
+                    namespace=namespace,
+                    target_lang_name=target_lang_name,
+                    model=self.model,
+                    temperature=temperature
+                )
 
-                # 根据模式选择模型
-                model = "deepseek-chat" if self.non_thinking_mode else "deepseek-reasoner"
+            payload = {
+                "model": self.model,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": system_prompt
+                    },
+                    {
+                        "role": "user",
+                        "content": user_prompt
+                    }
+                ],
+                "temperature": temperature,
+                "stream": False,
+                "thinking": {"type": "enabled"} if self.thinking else {"type": "disabled"}
+            }
 
-                payload = {
-                    "model": model,
-                    "messages": [
-                        {
-                            "role": "system",
-                            "content": system_prompt
-                        },
-                        {
-                            "role": "user",
-                            "content": user_prompt
-                        }
-                    ],
-                    "temperature": temperature,
-                    "stream": False
-                }
+            # 调用API
+            start_time = time.time()
+            response = requests.post(DEEPSEEK_API_URL, headers=self.headers, json=payload, timeout=API_TIMEOUT)
+            api_time = time.time() - start_time
 
-                # 调用API
-                start_time = time.time()
-                response = requests.post(DEEPSEEK_API_URL, headers=self.headers, json=payload, timeout=API_TIMEOUT)
-                api_time = time.time() - start_time
+            response.raise_for_status()
 
-                response.raise_for_status()
+            # 处理响应文本，过滤空行
+            response_text = response.text.strip()
+            if not response_text:
+                raise ValueError("API返回空响应")
 
-                # 处理响应文本，过滤空行
-                response_text = response.text.strip()
-                if not response_text:
-                    raise ValueError("API返回空响应")
+            # 过滤空行和只包含空白字符的行
+            filtered_lines = []
+            for line in response_text.split('\n'):
+                line = line.strip()
+                if line:  # 只保留非空行
+                    filtered_lines.append(line)
 
-                # 过滤空行和只包含空白字符的行
-                filtered_lines = []
-                for line in response_text.split('\n'):
-                    line = line.strip()
-                    if line:  # 只保留非空行
-                        filtered_lines.append(line)
+            if not filtered_lines:
+                raise ValueError("API响应过滤后为空")
 
-                if not filtered_lines:
-                    raise ValueError("API响应过滤后为空")
+            # 重新组合过滤后的响应
+            filtered_response = '\n'.join(filtered_lines)
 
-                # 重新组合过滤后的响应
-                filtered_response = '\n'.join(filtered_lines)
+            # 解析JSON
+            try:
+                result = json.loads(filtered_response)
+            except json.JSONDecodeError as e:
+                # 如果过滤后仍然解析失败，尝试原始响应
+                log_progress(f"      过滤后JSON解析失败，尝试原始响应: {e}", "warning")
+                result = response.json()
 
-                # 解析JSON
-                try:
-                    result = json.loads(filtered_response)
-                except json.JSONDecodeError as e:
-                    # 如果过滤后仍然解析失败，尝试原始响应
-                    log_progress(f"      过滤后JSON解析失败，尝试原始响应: {e}", "warning")
-                    result = response.json()
+            translated_content = result["choices"][0]["message"]["content"].strip()
 
-                translated_content = result["choices"][0]["message"]["content"].strip()
+            # 清理响应内容
+            original_content = translated_content
+            if translated_content.startswith("```json"):
+                translated_content = translated_content[7:]
+            if translated_content.startswith("```"):
+                translated_content = translated_content[3:]
+            if translated_content.endswith("```"):
+                translated_content = translated_content[:-3]
+            translated_content = translated_content.strip()
 
-                # 清理响应内容
-                original_content = translated_content
-                if translated_content.startswith("```json"):
-                    translated_content = translated_content[7:]
-                if translated_content.startswith("```"):
-                    translated_content = translated_content[3:]
-                if translated_content.endswith("```"):
-                    translated_content = translated_content[:-3]
-                translated_content = translated_content.strip()
+            # 解析JSON
+            try:
+                translated_dict = json.loads(translated_content)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"JSON解析失败: {e}")
 
-                # 解析JSON
-                try:
-                    translated_dict = json.loads(translated_content)
-                except json.JSONDecodeError as e:
-                    raise ValueError(f"JSON解析失败: {e}")
+            # 验证翻译结果
+            validation_errors = self.validate_translation_result(texts_to_translate, translated_dict)
+            if validation_errors:
+                raise ValueError(f"翻译验证失败: {'; '.join(validation_errors)}")
 
-                # 验证翻译结果
-                validation_errors = self.validate_translation_result(texts_to_translate, translated_dict)
-                if validation_errors:
-                    raise ValueError(f"翻译验证失败: {'; '.join(validation_errors)}")
-
-                # 验证成功，返回结果
-                return translated_dict
+            # 验证成功，返回结果
+            return translated_dict
 
         except Exception as e:
             # 记录失败详情到文件（不记录主日志，由上层函数统一管理主日志）
@@ -515,41 +514,17 @@ class DeepSeekTranslator:
         validation_failure_count = 0  # 模型输出验证失败计数
         total_attempts = 0  # 总尝试次数（仅用于日志记录）
 
-        # 温度调整策略
-        def get_temperature_and_mode(validation_attempt: int):
-            if validation_attempt <= 5:
-                # 前5次：调整温度
-                temperatures = TEMPERATURE_ADJUSTMENTS
-                return temperatures[validation_attempt - 1], self.non_thinking_mode
-            else:
-                # 第6次开始：切换思考模式，重新开始温度循环
-                cycle_pos = (validation_attempt - 6) % 5
-                temperatures = TEMPERATURE_ADJUSTMENTS
-                return temperatures[cycle_pos], not self.non_thinking_mode
-
         batch_info = f"批次{request.batch_id}/{request.total_batches} " if request.total_batches > 1 else ""
 
         while api_failure_count < max_individual_retries and validation_failure_count < max_individual_retries:
             total_attempts += 1
 
             try:
-                # 根据验证失败次数调整参数
-                if validation_failure_count > 0:
-                    temperature, thinking_mode = get_temperature_and_mode(validation_failure_count)
-                    # 临时切换模式和温度
-                    original_mode = self.non_thinking_mode
-                    self.non_thinking_mode = thinking_mode
-                else:
-                    temperature = 1.3
-                    original_mode = self.non_thinking_mode
+                temperature = DEFAULT_TEMPERATURE
 
                 # 执行翻译
                 result = self.translate_batch(request.texts, request.target_lang, request.target_lang_name,
                                             request.namespace, total_attempts, temperature)
-
-                # 恢复原始模式
-                if validation_failure_count > 0:
-                    self.non_thinking_mode = original_mode
 
                 # 检查翻译结果是否为空
                 if not result:
@@ -558,9 +533,9 @@ class DeepSeekTranslator:
                         log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}-> {request.target_lang_name} -> 翻译结果为空，重试中... (等待1秒)", "warning")
                         time.sleep(1)  # 验证失败等待1秒
                         continue
-            else:
-                        log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}{len(request.texts)}个文本 -> {request.target_lang_name} -> 失败: 翻译结果为空 (达到验证失败上限)", "error")
-                        return (request.request_id, request.target_lang, request.target_lang_name, {})
+                else:
+                    log_progress(f"    [总尝试{total_attempts}|API失败{api_failure_count}/{max_individual_retries}|验证失败{validation_failure_count}/{max_individual_retries}] [{request.namespace}] {batch_info}{len(request.texts)}个文本 -> {request.target_lang_name} -> 失败: 翻译结果为空 (达到验证失败上限)", "error")
+                    return (request.request_id, request.target_lang, request.target_lang_name, {})
 
                 # 成功
                 attempt_info = f"（API失败{api_failure_count}次，验证失败{validation_failure_count}次）" if total_attempts > 1 else ""
@@ -581,10 +556,6 @@ class DeepSeekTranslator:
                     api_failure_count += 1
                     failure_type = "API失败"
                     wait_time = 5  # API失败等待5秒
-
-                # 恢复原始模式
-                if validation_failure_count > 0:
-                    self.non_thinking_mode = original_mode
 
                 if api_failure_count < max_individual_retries and validation_failure_count < max_individual_retries:
                     # 记录失败并提示重试
