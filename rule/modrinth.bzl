@@ -44,7 +44,10 @@ def datapack_modrinth_upload(
         deps = [":localization_resource_pack"]
 
     # 确定游戏版本范围字符串，使用首尾版本
-    game_range = "%s-%s" % (game_versions[0], game_versions[-1])
+    if len(game_versions) == 1:
+        game_range = game_versions[0]
+    else:
+        game_range = "%s-%s" % (game_versions[0], game_versions[-1])
 
     # 设置默认模板
     if file_name_template == None:
@@ -69,7 +72,7 @@ def datapack_modrinth_upload(
     git_tag_name = "%s_v%s" % (name, pack_version) if auto_tag else None
 
     upload_modrinth(
-        name = name + "_" + game_range + "_modrinth",
+        name = game_range + "_modrinth",
         changelog = changelog,
         file = datapack_target,
         file_name = file_name_template,

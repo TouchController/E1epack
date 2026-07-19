@@ -50,13 +50,13 @@ SERVER_JVM_FLAGS = [
 ]
 SERVER_MAIN_CLASS = "top.fifthlight.fabazel.devlaunchwrapper.DevLaunchWrapper"
 
-def _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, name_suffix, env = None):
+def _make_sh_test(d_ver, v, test_ns, rcon_port, ns_args, names, name_suffix, env = None):
     """创建单个版本的 sh_test 目标。"""
     sh_test(
         name = name_suffix,
         srcs = ["//rule/tools/test_runner:run_test.sh"],
         args = [
-            "$(rootpath :%s_test_server_v%s)" % (target_name, d_ver),
+            "$(rootpath :test_server_%s)" % d_ver,
             "$(rootpath //rule/tools/test_runner:TestRunner)",
             "--version",
             v,
@@ -65,7 +65,7 @@ def _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, nam
             "--test-ns", test_ns,
         ] + ns_args + names,
         data = [
-            ":%s_test_server_v%s" % (target_name, d_ver),
+            ":test_server_%s" % d_ver,
             "//rule/tools/test_runner:TestRunner",
         ],
         env = env or {},
@@ -101,7 +101,6 @@ def setup_tests(
             _ver_to_seg[v] = seg[0]
 
     for v in game_versions:
-        d_ver = v.replace(".", "_")
         port_idx = ALL_MINECRAFT_VERSIONS.index(v)
         game_port = 49152 + port_idx * 2
         rcon_port = 49152 + port_idx * 2 + 1
@@ -119,10 +118,10 @@ def setup_tests(
 
         # Runner genrule
         native.genrule(
-            name = target_name + "_test_runner_v" + d_ver,
+            name = "test_runner_" + v,
             srcs = ["//template:test_runner.mcf"],
             tools = ["//rule:generate_test_runner"],
-            outs = ["test_runner/" + d_ver + "/_test_runner.mcfunction"],
+            outs = ["test_runner/" + v + "/_test_runner.mcfunction"],
             cmd = "mkdir -p $(@D) && $(location //rule:generate_test_runner) " +
                   "--template $(location //template:test_runner.mcf) " +
                   "--namespace " + test_ns + " --out $@ -- " +
@@ -131,34 +130,34 @@ def setup_tests(
 
         # Test namespace zip
         test_components = []
-        for suffix in ["function", "functions"]:
+        for suffix, suffix_name in [("function", "singular"), ("functions", "plural")]:
             pkg_files(
-                name = target_name + "_test_funcs_v" + d_ver + "_" + suffix,
+                name = "test_function_files_" + suffix_name + "_" + v,
                 srcs = test_func_files,
                 prefix = "data/" + test_ns + "/" + suffix,
                 strip_prefix = "data/" + test_ns + "/function",
                 visibility = extra_visibility,
             )
-            test_components.append(":" + target_name + "_test_funcs_v" + d_ver + "_" + suffix)
+            test_components.append(":test_function_files_" + suffix_name + "_" + v)
 
             # Runner
             pkg_files(
-                name = target_name + "_test_runner_pkg_v" + d_ver + "_" + suffix,
-                srcs = [":" + target_name + "_test_runner_v" + d_ver],
+                name = "test_runner_function_files_" + suffix_name + "_" + v,
+                srcs = [":test_runner_" + v],
                 prefix = "data/" + test_ns + "/" + suffix,
-                strip_prefix = "test_runner/" + d_ver,
+                strip_prefix = "test_runner/" + v,
                 visibility = extra_visibility,
             )
-            test_components.append(":" + target_name + "_test_runner_pkg_v" + d_ver + "_" + suffix)
+            test_components.append(":test_runner_function_files_" + suffix_name + "_" + v)
 
         pkg_filegroup(
-            name = target_name + "_test_components_v" + d_ver,
+            name = "test_datapack_files_" + v,
             srcs = test_components,
             visibility = extra_visibility,
         )
         pkg_zip(
-            name = target_name + "_test_pack_v" + d_ver,
-            srcs = [":" + target_name + "_test_components_v" + d_ver, "//template:mcmeta"],
+            name = "test_datapack_" + v,
+            srcs = [":test_datapack_files_" + v, "//template:mcmeta"],
             visibility = extra_visibility,
         )
 
@@ -166,16 +165,15 @@ def setup_tests(
         range_name = _ver_to_seg.get(v)
         if range_name == None:
             fail("version %s is not in any segment" % v)
-        seg_name = target_name + "_" + range_name
 
         # test_server
         java_binary(
-            name = target_name + "_test_server_v" + d_ver,
+            name = "test_server_" + v,
             visibility = extra_visibility,
             srcs = [],
             data = [
-                ":" + seg_name,
-                ":" + target_name + "_test_pack_v" + d_ver,
+                ":" + range_name,
+                ":test_datapack_" + v,
                 "//game:ops_json",
             ],
             jvm_flags = [
@@ -186,8 +184,8 @@ def setup_tests(
                 "-Ddev.launch.gamePort=%d" % game_port,
             ] + [
                 "-Ddev.launch.copyFiles=" +
-                "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), seg_name) +
-                "$(rlocationpath //%s:%s_test_pack_v%s):world/datapacks/test.zip," % (native.package_name(), target_name, d_ver) +
+                "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), range_name) +
+                "$(rlocationpath //%s:test_datapack_%s):world/datapacks/test.zip," % (native.package_name(), v) +
                 "$(rlocationpath //game:ops_json):ops.json",
             ],
             main_class = SERVER_MAIN_CLASS,
@@ -198,8 +196,8 @@ def setup_tests(
             ],
         )
 
-        _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, "test_" + v, {"TEST_VERBOSE": "1"})
-        _make_sh_test(target_name, d_ver, v, test_ns, rcon_port, ns_args, names, "test_q_" + v)
+        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_" + v, {"TEST_VERBOSE": "1"})
+        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_q_" + v)
 
     # 收集所有安静版测试目标（供批量测试）
     _quiet = [":test_q_" + v for v in game_versions]
