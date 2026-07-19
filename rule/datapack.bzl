@@ -69,7 +69,6 @@ def _segment_deps(deps, seg_index):
 
 def _datapack_impl(
         name,
-        visibility,
         deps,
         minecraft_version,
         mappings,
@@ -91,7 +90,6 @@ def _datapack_impl(
     if mappings:
         command_replacer(
             name = name + "_functions",
-            visibility = visibility,
             src = func_target,
             mappings = mappings,
         )
@@ -103,19 +101,16 @@ def _datapack_impl(
 
     pkg_filegroup(
         name = name + "_components",
-        visibility = visibility,
         srcs = [effective_func, ns_json_target] + ns_tags_target + [mc_json_target] + mc_tags_target,
     )
     pkg_zip(
         name = name,
-        visibility = visibility,
         srcs = [":" + name + "_components", "//template:mcmeta"] + effective_deps,
     )
 
     if seg_index == seg_count - 1:
         java_binary(
             name = name + "_server",
-            visibility = visibility,
             srcs = [],
             data = [
                 ":" + name,
@@ -278,7 +273,6 @@ def complete_datapack_config(
 
     # 按版本段为每个段创建独立的 datapack pipeline
 
-    extra_visibility = kwargs.pop("visibility", ["//visibility:public"])
     extra_mc_version = kwargs.pop("minecraft_version", "")
     if kwargs:
         fail("complete_datapack_config received unexpected kwargs: %s" % list(kwargs.keys()))
@@ -289,7 +283,6 @@ def complete_datapack_config(
 
     process_mcfunction(
         name = "process_functions",
-        visibility = extra_visibility,
         pack_id = pack_id,
         srcs = functions_srcs,
         deps = deps,
@@ -308,7 +301,6 @@ def complete_datapack_config(
     process_json(name = "compress_namespace_json", srcs = namespace_json)
     pkg_files(
         name = "package_namespace_json",
-        visibility = extra_visibility,
         srcs = [":compress_namespace_json"],
         prefix = "data",
         strip_prefix = "data",
@@ -318,14 +310,12 @@ def complete_datapack_config(
     process_json(name = "compress_namespace_function_tags", srcs = namespace_function_tags)
     pkg_files(
         name = "package_namespace_function_tags_singular",
-        visibility = extra_visibility,
         srcs = [":compress_namespace_function_tags"],
         prefix = "data/" + pack_id + "/tags/function",
         strip_prefix = "data/" + pack_id + "/tags/function",
     )
     pkg_files(
         name = "package_namespace_function_tags_plural",
-        visibility = extra_visibility,
         srcs = [":compress_namespace_function_tags"],
         prefix = "data/" + pack_id + "/tags/functions",
         strip_prefix = "data/" + pack_id + "/tags/function",
@@ -338,7 +328,6 @@ def complete_datapack_config(
     process_json(name = "compress_minecraft_json", srcs = mc_json)
     pkg_files(
         name = "package_minecraft_json",
-        visibility = extra_visibility,
         srcs = [":compress_minecraft_json"],
         prefix = "data",
         strip_prefix = "data",
@@ -359,14 +348,12 @@ def complete_datapack_config(
         )
         pkg_files(
             name = "merge_mc_tag_files_singular",
-            visibility = extra_visibility,
             srcs = [":merge_mc_tags"],
             prefix = "data/minecraft/tags/function",
             strip_prefix = "data/minecraft/tags/function",
         )
         pkg_files(
             name = "merge_mc_tag_files_plural",
-            visibility = extra_visibility,
             srcs = [":merge_mc_tags"],
             prefix = "data/minecraft/tags/functions",
             strip_prefix = "data/minecraft/tags/function",
@@ -379,14 +366,12 @@ def complete_datapack_config(
         process_json(name = "compress_minecraft_function_tags", srcs = mc_tags)
         pkg_files(
             name = "package_minecraft_function_tags_singular",
-            visibility = extra_visibility,
             srcs = [":compress_minecraft_function_tags"],
             prefix = "data/minecraft/tags/function",
             strip_prefix = "data/minecraft/tags/function",
         )
         pkg_files(
             name = "package_minecraft_function_tags_plural",
-            visibility = extra_visibility,
             srcs = [":compress_minecraft_function_tags"],
             prefix = "data/minecraft/tags/functions",
             strip_prefix = "data/minecraft/tags/function",
@@ -402,7 +387,6 @@ def complete_datapack_config(
 
         _datapack_impl(
             name = seg_name,
-            visibility = extra_visibility,
             deps = deps,
             minecraft_version = extra_mc_version,
             mappings = mappings,
@@ -437,9 +421,9 @@ def complete_datapack_config(
 
     # 向后兼容别名
     latest_seg_name = segments[-1][0]
-    native.alias(
+    native.filegroup(
         name = target_name,
-        actual = ":" + latest_seg_name,
+        srcs = [":release_" + seg[0] for seg in segments],
     )
     native.alias(
         name = "server",
@@ -478,6 +462,5 @@ def complete_datapack_config(
         target_name = target_name,
         game_versions = game_versions,
         segments = segments,
-        extra_visibility = extra_visibility,
         ignore_error_ns = _all_ignore,
     )

@@ -31,7 +31,6 @@ pkg_files(
     name = "localization_resource_pack_assets",
     srcs = [":merged_translations"],
     strip_prefix = "",
-    visibility = ["//visibility:public"],
 )
 
 pkg_zip(

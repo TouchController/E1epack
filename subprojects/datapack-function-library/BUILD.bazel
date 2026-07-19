@@ -10,7 +10,6 @@ complete_datapack_config(
     pack_id = "dfl",
     pack_version = pack_version,
     test_ignore_errors_from = ["dfl"],
-    visibility = ["//visibility:public"],
     deps = [
         "LICENSE",
         "README.md",

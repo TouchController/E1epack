@@ -78,7 +78,6 @@ def setup_tests(
         target_name,
         game_versions,
         segments,
-        extra_visibility,
         ignore_error_ns = []):
     """为 game_versions 中的每个版本创建测试目标。"""
     test_ns = pack_id + "-test"
@@ -136,7 +135,6 @@ def setup_tests(
                 srcs = test_func_files,
                 prefix = "data/" + test_ns + "/" + suffix,
                 strip_prefix = "data/" + test_ns + "/function",
-                visibility = extra_visibility,
             )
             test_components.append(":test_function_files_" + suffix_name + "_" + v)
 
@@ -146,19 +144,16 @@ def setup_tests(
                 srcs = [":test_runner_" + v],
                 prefix = "data/" + test_ns + "/" + suffix,
                 strip_prefix = "test_runner/" + v,
-                visibility = extra_visibility,
             )
             test_components.append(":test_runner_function_files_" + suffix_name + "_" + v)
 
         pkg_filegroup(
             name = "test_datapack_files_" + v,
             srcs = test_components,
-            visibility = extra_visibility,
         )
         pkg_zip(
             name = "test_datapack_" + v,
             srcs = [":test_datapack_files_" + v, "//template:mcmeta"],
-            visibility = extra_visibility,
         )
 
         # 对应的 datapack zip
@@ -169,7 +164,6 @@ def setup_tests(
         # test_server
         java_binary(
             name = "test_server_" + v,
-            visibility = extra_visibility,
             srcs = [],
             data = [
                 ":" + range_name,
@@ -196,17 +190,16 @@ def setup_tests(
             ],
         )
 
-        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_" + v, {"TEST_VERBOSE": "1"})
-        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_q_" + v)
+        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_verbose_" + v, {"TEST_VERBOSE": "1"})
+        _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_quiet_" + v)
 
     # 收集所有安静版测试目标（供批量测试）
-    _quiet = [":test_q_" + v for v in game_versions]
+    _quiet = [":test_quiet_" + v for v in game_versions]
 
     # :test — 最新版本（verbose，实时输出服务器日志）
     native.test_suite(
         name = "test",
-        tests = [":test_" + game_versions[-1]],
-        visibility = extra_visibility,
+        tests = [":test_verbose_" + game_versions[-1]],
     )
 
     # :test_major — 每个大版本（X.Y）+ 最新版本（安静）
@@ -216,16 +209,14 @@ def setup_tests(
         if len(v.split(".")) == 2:
             _major[v] = True
     _major[game_versions[-1]] = True
-    _major_tests = [":test_q_" + v for v in _major.keys()]
+    _major_tests = [":test_quiet_" + v for v in _major.keys()]
     native.test_suite(
         name = "test_major",
         tests = _major_tests,
-        visibility = extra_visibility,
     )
 
     # :test_all — 全部版本（安静）
     native.test_suite(
         name = "test_all",
         tests = _quiet,
-        visibility = extra_visibility,
     )
