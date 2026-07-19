@@ -6,7 +6,7 @@
   "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "缺少前置",
-  "need.dfl.white.elephant.please.install": "请安装数据包：",
+  "need.dfl.white.elephant.please.install": "请安装数据包: ",
   "dialog.white.elephant.new_player.line1": "%s 数据包已加载到此世界中！",
   "dialog.white.elephant.new_player.author": "作者：",
   "dialog.white.elephant.new_player.tech_support": "技术支持：",
