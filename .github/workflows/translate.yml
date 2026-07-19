@@ -25,7 +25,7 @@ on:
         default: false
         type: boolean
       translation_debug:
-        description: 'Enable per-request debug logs'
+        description: 'Enable debug logs'
         required: false
         default: false
         type: boolean
