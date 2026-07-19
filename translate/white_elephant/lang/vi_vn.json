@@ -1,1 +1,21 @@
-{}
+{
+  "banner.white.elephant.enabled": "%s 数据包加载成功",
+  "banner.white.elephant.author": "作者：%s",
+  "banner.white.elephant.license": "本数据包使用 %s 协议开源",
+  "banner.white.elephant.official": "数据包官网",
+  "no.resource.pack.white.elephant.a": "--------------------",
+  "no.resource.pack.white.elephant.nothing": "",
+  "need.dfl.white.elephant.no": "缺少前置",
+  "need.dfl.white.elephant.please.install": "请安装数据包: ",
+  "dialog.white.elephant.new_player.line1": "%s 数据包已加载到此世界中！",
+  "dialog.white.elephant.new_player.author": "作者：",
+  "dialog.white.elephant.new_player.tech_support": "技术支持：",
+  "dialog.white.elephant.new_player.license": "本数据包使用 %s 开源协议",
+  "dialog.white.elephant.new_player.view_license": "查看开源协议",
+  "dialog.white.elephant.options.admin_only": "只有管理员才能修改设置！",
+  "dialog.white.elephant.common.cancel": "取消",
+  "dialog.white.elephant.common.save_and_exit": "保存并退出",
+  "dialog.white.elephant.common.cancel_tooltip": "放弃当前更改",
+  "dialog.white.elephant.common.save_tooltip": "保存当前设置",
+  "dialog.white.elephant.common.technical_limitation": "由于技术限制，此处显示的设置均为默认值"
+}

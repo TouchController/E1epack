@@ -1,1 +1,21 @@
-{}
+{
+  "banner.white.elephant.enabled": "%s datapack succesvol geladen",
+  "banner.white.elephant.author": "Auteur: %s",
+  "banner.white.elephant.license": "Dit datapack is gelicentieerd onder de %s-licentie",
+  "banner.white.elephant.official": "Datapack website",
+  "no.resource.pack.white.elephant.a": "--------------------",
+  "no.resource.pack.white.elephant.nothing": "",
+  "need.dfl.white.elephant.no": "Vereiste ontbreekt",
+  "need.dfl.white.elephant.please.install": "Installeer datapack: ",
+  "dialog.white.elephant.new_player.line1": "%s datapack is geladen in deze wereld!",
+  "dialog.white.elephant.new_player.author": "Auteur: ",
+  "dialog.white.elephant.new_player.tech_support": "Technische ondersteuning: ",
+  "dialog.white.elephant.new_player.license": "Dit datapack gebruikt de %s open-source licentie",
+  "dialog.white.elephant.new_player.view_license": "Bekijk open-source licentie",
+  "dialog.white.elephant.options.admin_only": "Alleen beheerders kunnen instellingen wijzigen!",
+  "dialog.white.elephant.common.cancel": "Annuleren",
+  "dialog.white.elephant.common.save_and_exit": "Opslaan en afsluiten",
+  "dialog.white.elephant.common.cancel_tooltip": "Huidige wijzigingen negeren",
+  "dialog.white.elephant.common.save_tooltip": "Huidige instellingen opslaan",
+  "dialog.white.elephant.common.technical_limitation": "Vanwege technische beperkingen worden hier de standaardwaarden weergegeven"
+}

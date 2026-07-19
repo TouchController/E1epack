@@ -1,1 +1,21 @@
-{}
+{
+  "banner.white.elephant.enabled": "%s Paket Data berhasil dimuat",
+  "banner.white.elephant.author": "Pembuat: %s",
+  "banner.white.elephant.license": "Paket Data ini menggunakan lisensi %s",
+  "banner.white.elephant.official": "Situs Resmi Paket Data",
+  "no.resource.pack.white.elephant.a": "--------------------",
+  "no.resource.pack.white.elephant.nothing": "",
+  "need.dfl.white.elephant.no": "Ketergantungan Hilang",
+  "need.dfl.white.elephant.please.install": "Silakan instal paket data: ",
+  "dialog.white.elephant.new_player.line1": "Paket Data %s telah dimuat ke dunia ini!",
+  "dialog.white.elephant.new_player.author": "Pembuat: ",
+  "dialog.white.elephant.new_player.tech_support": "Dukungan Teknis: ",
+  "dialog.white.elephant.new_player.license": "Paket Data ini menggunakan lisensi %s",
+  "dialog.white.elephant.new_player.view_license": "Lihat Lisensi",
+  "dialog.white.elephant.options.admin_only": "Hanya admin yang dapat mengubah pengaturan!",
+  "dialog.white.elephant.common.cancel": "Batal",
+  "dialog.white.elephant.common.save_and_exit": "Simpan & Keluar",
+  "dialog.white.elephant.common.cancel_tooltip": "Batalkan perubahan saat ini",
+  "dialog.white.elephant.common.save_tooltip": "Simpan pengaturan saat ini",
+  "dialog.white.elephant.common.technical_limitation": "Karena keterbatasan teknis, pengaturan yang ditampilkan adalah nilai default"
+}
