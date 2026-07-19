@@ -34,7 +34,7 @@ class DeepSeekTranslator:
 
     def _init_error_logging(self):
         """初始化错误日志系统"""
-        log_dir = os.path.join(os.path.dirname(__file__), "logs")
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
         os.makedirs(log_dir, exist_ok=True)
 
         # 创建新的错误汇总日志文件
@@ -154,7 +154,7 @@ class DeepSeekTranslator:
                               model: str = "unknown", temperature: float = 1.3,
                               log_to_main: bool = True) -> None:
         """记录翻译失败的详细信息到日志文件"""
-        log_dir = os.path.join(os.path.dirname(__file__), "logs")
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
         os.makedirs(log_dir, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 包含毫秒
@@ -214,7 +214,7 @@ class DeepSeekTranslator:
                                raw_response: str = "", translated_result: str = "",
                                success: bool = False, api_time: float = 0) -> None:
         """在调试模式下记录每次请求和响应的完整信息"""
-        log_dir = os.path.join(os.path.dirname(__file__), "logs")
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
         os.makedirs(log_dir, exist_ok=True)
 
         status_text = "成功" if success else "失败"
