@@ -30,7 +30,7 @@ jobs:
           for dir in "$BIN_PATH/subprojects"/*/ ; do
             dir_name=$(basename "$dir")
             for zip_file in "$dir"/*.zip; do
-              if [ -f "$zip_file" ]; then
+              if [ -f "$zip_file" ] && [[ ! "$(basename "$zip_file")" =~ ^test_ ]]; then
                 cp "$zip_file" release_artifacts/
               fi
             done
