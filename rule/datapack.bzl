@@ -402,7 +402,7 @@ def complete_datapack_config(
         native.genrule(
             name = "release_" + range_name,
             srcs = [":" + seg_name],
-            outs = ["%s_v%s_%s.zip" % (target_name, pack_version, range_name)],
+            outs = ["release/%s_v%s_%s.zip" % (target_name, pack_version, range_name)],
             cmd = "cp $< $@",
         )
 

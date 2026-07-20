@@ -70,7 +70,7 @@ jobs:
         run: |
           BAZEL_BIN=$(bazel info bazel-bin)
           PROJECT="${{ steps.extract_tag.outputs.project_name }}"
-          cp -f "$BAZEL_BIN/$PROJECT"/*_v*.zip . 2>/dev/null || true
+          cp -f "$BAZEL_BIN/$PROJECT"/release/*.zip . 2>/dev/null || true
           ls *_v*.zip
 
       - name: Create Release
