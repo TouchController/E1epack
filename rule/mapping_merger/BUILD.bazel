@@ -1,0 +1,19 @@
+load("@rules_java//java:defs.bzl", "java_binary")
+
+java_binary(
+    name = "mapping_merger",
+    srcs = glob(["*.java"]),
+    main_class = "top.fifthlight.fabazel.mappingmerger.MappingMerger",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//rule/mapping_merger/context",
+        "//rule/mapping_merger/operation",
+        "//rule/tools/worker_api",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:net_fabricmc_mapping_io",
+        "@maven//:org_jetbrains_annotations",
+        "@maven//:org_jspecify_jspecify",
+    ],
+)

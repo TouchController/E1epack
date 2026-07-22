@@ -41,11 +41,51 @@ maven.install(
         "net.java.dev.jna:jna:5.18.0",
         "net.java.dev.jna:jna-platform:5.18.0",
         "org.ow2.asm:asm:9.7",
+        # Tiny Remapper dependencies
+        "com.google.jimfs:jimfs:1.3.1",
+        "net.fabricmc:class-tweaker:0.2",
+        "net.fabricmc:mapping-io:0.8.0",
+        "net.fabricmc:mapping-io-extras:0.8.0",
+        "net.fabricmc:tiny-remapper:0.14.0",
+        "org.jetbrains:annotations:24.0.1",
     ],
     fetch_sources = True,
     lock_file = "//:maven_install.json",
+    repositories = [
+        "https://repo1.maven.org/maven2",
+        "https://maven.fabricmc.net/",
+    ],
 )
 use_repo(maven, "maven")
+
+# Fabric dependencies for spawn-chunk-fix mod (1.21.9-26.2)
+[
+    (
+        maven.install(
+            name = "maven_fabric_%s" % v,
+            artifacts = [
+                "net.fabricmc:fabric-loader:%s" % loader,
+                "net.fabricmc:sponge-mixin:%s" % mixin,
+            ] + (["net.fabricmc:intermediary:%s:v2" % v] if ("1.21." in v) else []),
+            fetch_sources = True,
+            lock_file = "//game/%s:maven_install_fabric.json" % v,
+            repositories = [
+                "https://maven.fabricmc.net/",
+                "https://repo1.maven.org/maven2/",
+            ],
+        ),
+        use_repo(maven, "maven_fabric_%s" % v),
+    )
+    for v, loader, mixin in [
+        ("1.21.9", "0.17.2", "0.16.3+mixin.0.8.7"),
+        ("1.21.10", "0.17.2", "0.16.3+mixin.0.8.7"),
+        ("1.21.11", "0.17.3", "0.16.5+mixin.0.8.7"),
+        ("26.1", "0.18.4", "0.17.0+mixin.0.8.7"),
+        ("26.1.1", "0.18.4", "0.17.0+mixin.0.8.7"),
+        ("26.1.2", "0.18.4", "0.17.0+mixin.0.8.7"),
+        ("26.2", "0.19.2", "0.17.2+mixin.0.8.7"),
+    ]
+]
 
 minecraft = use_extension("//repo:minecraft_jar.bzl", "minecraft")
 
@@ -59,6 +99,16 @@ minecraft = use_extension("//repo:minecraft_jar.bzl", "minecraft")
         "26.1.2",
         "26.1.1",
         "26.1",
+    ]
+]
+
+[
+    minecraft.minecraft_jar(
+        type = "server",
+        version = v,
+        mapping = True,
+    )
+    for v in [
         "1.21.11",
         "1.21.10",
         "1.21.9",
@@ -107,5 +157,10 @@ minecraft = use_extension("//repo:minecraft_jar.bzl", "minecraft")
         "1.13",
     ]
 ]
+
+minecraft.exclude_library(names = [
+    "org.ow2.asm:asm:9.6",
+    "org.ow2.asm:asm:9.7",
+])
 
 use_repo(minecraft, "minecraft")

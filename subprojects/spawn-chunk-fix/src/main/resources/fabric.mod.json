@@ -1,0 +1,22 @@
+{
+    "schemaVersion": 1,
+    "id": "spawn-chunk-fix",
+    "version": "1.0.0",
+    "name": "Spawn Chunk Fix",
+    "description": "Fixes spawn chunk loading for datapack tests in 1.21.9+",
+    "authors": [
+        "white_elephant"
+    ],
+    "contact": {
+        "sources": "https://github.com/TouchController/E1epack"
+    },
+    "license": "GPL-3.0-or-later",
+    "environment": "server",
+    "mixins": [
+        "spawn-chunk-fix.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.15.0",
+        "minecraft": ">=1.21.9"
+    }
+}

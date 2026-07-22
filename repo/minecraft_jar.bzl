@@ -187,8 +187,8 @@ def _minecraft_impl(mctx):
         for minecraft_jar in mod.tags.minecraft_jar:
             key = (minecraft_jar.version, minecraft_jar.type)
             if key in version_entries:
-                version_entries[key]["mapping"] |= minecraft_jar.mapping
-                version_entries[key]["assets"] |= minecraft_jar.assets
+                version_entries[key]["mapping"] = version_entries[key]["mapping"] or minecraft_jar.mapping
+                version_entries[key]["assets"] = version_entries[key]["assets"] or minecraft_jar.assets
             else:
                 version_entries[key] = {
                     "version": minecraft_jar.version,
@@ -258,18 +258,19 @@ def _minecraft_impl(mctx):
         # Create repository for mapping
         if target_mapping:
             mapping_info = version_data["downloads"].get("%s_mappings" % target_type)
-            if mapping_info == None:
-                fail("No mappings for version %s" % target_version)
-
-            # Create mapping repository
-            mapping_repo_name = "%s_%s_mapping" % (target_version, target_type)
-            http_file(
-                name = "minecraft_%s" % mapping_repo_name,
-                url = mapping_info["url"],
-                integrity = hex_sha1_to_sri(mapping_info["sha1"]),
-                downloaded_file_path = "mappings.txt",
-            )
-            version_repo_names.append(mapping_repo_name)
+            if mapping_info != None:
+                # Create mapping repository
+                mapping_repo_name = "%s_%s_mapping" % (target_version, target_type)
+                http_file(
+                    name = "minecraft_%s" % mapping_repo_name,
+                    url = mapping_info["url"],
+                    integrity = hex_sha1_to_sri(mapping_info["sha1"]),
+                    downloaded_file_path = "mappings.txt",
+                )
+                version_repo_names.append(mapping_repo_name)
+            else:
+                # buildifier: disable=print
+                print("WARNING: No %s mappings for version %s" % (target_type, target_version))
 
         if target_assets:
             asset_info = version_data["assetIndex"]

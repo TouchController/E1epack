@@ -1,0 +1,108 @@
+load("@rules_java//java:defs.bzl", "java_library")
+load("//rule:remap_jar.bzl", "remap_jar")
+load("//rule:merge_mapping.bzl", "merge_mapping", "merge_mapping_input")
+
+# 26.1+ 不需要反混淆
+[
+    java_library(
+        name = v,
+        srcs = glob(["src/main/java/**/*.java"]),
+        resources = glob(["src/main/resources/**"]),
+        resource_strip_prefix = "subprojects/spawn-chunk-fix/src/main/resources",
+        visibility = ["//visibility:public"],
+        deps = [
+            "@maven_fabric_%s//:net_fabricmc_sponge_mixin" % v,
+            "//game:server_%s" % v.replace(".", "_"),
+        ],
+    )
+    for v in [
+        "26.1",
+        "26.1.1",
+        "26.1.2",
+        "26.2",
+    ]
+]
+
+# 1.21.9-1.21.11 需要反混淆
+# 转换 ProGuard mapping 为 tiny 格式
+[merge_mapping_input(
+    name = "proguard_mapping_" + v.replace(".", "_"),
+    file = "@minecraft//:%s_server_mapping" % v,
+    format = "proguard",
+    namespace_mappings = {
+        "source": "named",
+        "target": "official",
+    },
+) for v in [
+    "1.21.9",
+    "1.21.10",
+    "1.21.11",
+]]
+
+[merge_mapping(
+    name = "tiny_mapping_" + v.replace(".", "_"),
+    inputs = {
+        "mojmap": ":proguard_mapping_%s" % v.replace(".", "_"),
+    },
+    output = "mapping_%s.tiny" % v.replace(".", "_"),
+    operations = [
+        ">mojmap",
+        "changeSrc(official)",
+    ],
+) for v in [
+    "1.21.9",
+    "1.21.10",
+    "1.21.11",
+]]
+
+[remap_jar(
+    name = "server_remapped_" + v.replace(".", "_"),
+    inputs = ["//game:server_%s" % v.replace(".", "_")],
+    mapping = ":tiny_mapping_%s" % v.replace(".", "_"),
+    from_namespace = "official",
+    to_namespace = "named",
+    classpath = ["@minecraft//:%s_server_libraries" % v],
+) for v in [
+    "1.21.9",
+    "1.21.10",
+    "1.21.11",
+]]
+
+[
+    java_library(
+        name = v + "_named",
+        srcs = glob(["src/main/v21/java/**/*.java"]),
+        resources = glob(["src/main/resources/**"]),
+        resource_strip_prefix = "subprojects/spawn-chunk-fix/src/main/resources",
+        visibility = ["//visibility:public"],
+        deps = [
+            "@maven_fabric_%s//:net_fabricmc_sponge_mixin" % v,
+            ":server_remapped_%s" % v.replace(".", "_"),
+            "@minecraft//:%s_server_libraries" % v,
+        ],
+    )
+    for v in [
+        "1.21.9",
+        "1.21.10",
+        "1.21.11",
+    ]
+]
+
+# 重混淆 mod 到 official namespace
+[
+    remap_jar(
+        name = v,
+        visibility = ["//visibility:public"],
+        inputs = [":" + v + "_named"],
+        mapping = ":tiny_mapping_%s" % v.replace(".", "_"),
+        from_namespace = "named",
+        to_namespace = "official",
+        mixin = True,
+        inline_refmap = True,
+    )
+    for v in [
+        "1.21.9",
+        "1.21.10",
+        "1.21.11",
+    ]
+]
