@@ -219,6 +219,91 @@ execute if <条件> run function dfl:test/pass
 - 游戏端口: `49152 + version_index * 2`
 - RCON 端口: `49152 + version_index * 2 + 1`
 
+### 辅助测试脚本
+
+除了 `./test` 便捷脚本外，`scripts/` 目录下还有额外的测试工具：
+
+- **`scripts/test_loop.sh`**: 循环运行测试 N 次，统计失败率。用法：`./scripts/test_loop.sh <数据包名> <版本> [次数]`
+- **`scripts/bisect_tests.py`**: 通过二分查找定位测试失败的版本分界点。由 `./test --bisect` 调用，也可直接使用
+
+`./test` 脚本本身是指向 `scripts/run_test.sh` 的符号链接，封装了 Bazel 目标选择和参数解析逻辑。
+
+## game 目录与 Fabric 模组支持
+
+### game/ 目录
+
+`game/BUILD.bazel` 为每个 Minecraft 版本的 server JAR 提供构建目标，处理不同版本的 JAR 格式差异：
+
+- **1.18+（bundler JAR）**: 使用 `extract_jar` 从多版本 JAR 中提取内嵌的 `server-<version>.jar`
+- **pre-1.18（plain JAR）**: 直接使用原始 server JAR
+- **pre-1.14.3**: 额外应用 `patch_funcman` 工具修补 FunctionManager 权限（`gameRuleType` 2 → 4）
+- **1.21.9+**: 额外需要 Fabric Loader 和 Mixin 依赖（通过 `game/<version>/` 子目录的 `maven_install_fabric.json` 锁定）
+
+每个版本生成 `//game:server_<version>` java_import 目标（版本号中的 `.` 替换为 `_`），供子项目引用。`//game:ops_json` 提供测试服务器的管理员配置。
+
+### JAR 重映射系统
+
+对于需要反混淆的 Minecraft 版本（1.21.9-1.21.11），项目使用 Tiny Remapper 进行 JAR 重映射：
+
+- **`rule/remap_jar.bzl`**: JAR 重映射规则，基于 tiny 格式的映射文件，支持 mixin 处理、access widener 重映射、refmap 内联、Jar-in-Jar 移除等
+- **`rule/merge_mapping.bzl`**: 映射文件合并/转换规则，将 ProGuard 格式的 mapping 转换为 tiny 格式
+- **`rule/mapping_merger/`**: MappingMerger Java 工具，执行映射文件的合并和命名空间操作（如 `changeSrc`）
+- **`rule/tiny_remapper_worker/`**: Tiny Remapper Worker，使用 Bazel Worker 协议高效执行重映射，包含 `MixinRefmapInliner`、`AccessWidenerRemapper`、`JarInJarRemover` 等组件
+
+### 非数据包子项目
+
+部分子项目不是传统的数据包，而是 Fabric 模组：
+
+- **`spawn-chunk-fix`**: Fabric 模组，通过 Mixin 修改 Minecraft 服务器行为。需要先编译为 named namespace 的 JAR（依赖反混淆后的 server），再重映射回 official namespace 用于部署。源代码在 `src/main/java/`（26.1+ 使用）和 `src/main/v21/java/`（1.21.9-1.21.11 使用）两个目录中，对应不同的 Minecraft 版本 API
+
+### Fabric 依赖管理
+
+`MODULE.bazel` 中为每个需要 Fabric 的版本配置了独立的 `maven_fabric_<version>` 仓库，锁定 Fabric Loader 和 Mixin 版本。使用 `scripts/repin_fabric.sh` 更新这些 Maven 依赖的 lock 文件。
+
+## 映射与版本兼容性
+
+### 映射类型
+
+不同 Minecraft 版本使用不同的映射：
+
+- **1.13-1.21.8**: 使用 ProGuard mapping（MoJang 提供的混淆映射），需要 `mapping = True` 下载
+- **1.21.9-1.21.11**: 同样使用 ProGuard mapping，但通过 Tiny Remapper 转换为 tiny 格式用于 Fabric 模组开发
+- **26.1+**: Mojang 已公开官方映射，不再需要 ProGuard mapping（`repo/minecraft_jar.bzl` 中 mapping 下载失败时仅为警告，不再报错）
+
+### 版本段与 Fabric 测试
+
+从 1.21.9 开始，测试服务器使用 Fabric Loader（`KnotServer`）而非 vanilla 主类启动，并自动加载 `spawn-chunk-fix` 模组。测试系统（`rule/test_system.bzl`）自动检测版本是否需要 Fabric 运行时。
+
+## CI/CD
+
+项目在 `.github/workflows/` 下配置了 4 个 GitHub Actions 工作流：
+
+### build.yml
+
+- 触发条件：PR 和 push
+- 运行 `bazel build --verbose_failures //...`
+- 收集所有 release zip 作为 artifact
+- **失败时自动创建 issue**：包含失败 commit 信息和构建日志片段（防止重复创建）
+
+### check.yml
+
+- 触发条件：PR 和 push
+- 扫描所有 `BUILD.bazel` 文件，检查 `modrinth_project_id` 和 `pack_id` 是否重复
+- **失败时自动创建 issue**：包含重复 ID 和涉及的文件列表
+
+### release.yml
+
+- 触发条件：推送 tag（格式 `<项目名>_v<版本>`，如 `datapack-function-library_v1.0.0`）
+- 从 tag 提取项目名和版本号
+- 从项目的 `NEWS.md` 读取发布说明
+- 构建该项目并创建 GitHub Release（含 Discussion）
+
+### translate.yml
+
+- 触发条件：`Localization-Resource-Pack` 相关文件变更或手动触发
+- 使用 DeepSeek API（`deepseek-v4-pro`）自动翻译资源包语言文件
+- 支持强制翻译、debug 日志等选项
+
 ## 开发流程
 
 ### 添加新数据包
