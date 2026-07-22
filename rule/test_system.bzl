@@ -74,23 +74,38 @@ def _make_sh_test(d_ver, v, test_ns, rcon_port, ns_args, names, name_suffix, env
     )
 
 def setup_tests(
+        name,
         pack_id,
-        target_name,
         game_versions,
         segments,
         ignore_error_ns = []):
-    """为 game_versions 中的每个版本创建测试目标。"""
+    """为 game_versions 中的每个版本创建测试目标。
+
+    Args:
+      name: 宏名称（Bazel 约定要求）。
+      pack_id: 数据包命名空间 ID。
+      game_versions: 支持的游戏版本列表。
+      segments: 版本段列表。
+      ignore_error_ns: 测试时忽略加载错误的命名空间列表。
+    """
     test_ns = pack_id + "-test"
     ns_args = [arg for ns in ignore_error_ns for arg in ("--ignore-error-ns", ns)]
-    test_files = native.glob(["data/%s/function/*/*.mcfunction" % test_ns], allow_empty = True)
+    # glob pattern: data/<test-ns>/function/**/*.mcfunction
+    # prefix 用于定位 function/ 下的相对路径
+    func_prefix = "data/%s/function/" % test_ns
+    test_files = native.glob(["data/%s/function/**/*.mcfunction" % test_ns], allow_empty = True)
 
-    # 解析 {version_dir: [(dir, name, path), ...]}
+    # 解析 {version_dir: [(rel_path, path), ...]}
+    # version_dir 是 function/ 的直接子目录（如 common、1.21-26.2、helper 等）
+    # rel_path 是相对于 function/ 的完整路径（不含 .mcfunction 后缀）
     entries = {}
     for f in test_files:
-        parts = f.split("/")
-        d = parts[-2]
-        n = parts[-1][:-len(".mcfunction")]
-        entries.setdefault(d, []).append((d, n, f))
+        rel = f[len(func_prefix):]  # 如 common/helper/summon_armor_stand.mcfunction
+        # version_dir: function/ 的直接子目录
+        version_dir = rel.split("/")[0]
+        # 测试名：去掉 .mcfunction 后缀
+        name = rel[:-len(".mcfunction")] if rel.endswith(".mcfunction") else rel.rsplit(".", 1)[0]
+        entries.setdefault(version_dir, []).append((name, f))
 
     # 按段索引找每个 version 对应的 datapack zip 所属 segment
     _ver_to_seg = {}
@@ -103,16 +118,18 @@ def setup_tests(
         port_idx = ALL_MINECRAFT_VERSIONS.index(v)
         game_port = 49152 + port_idx * 2
         rcon_port = 49152 + port_idx * 2 + 1
-        filtered = [(dir_name, n, f) for dir_name, test_list in entries.items() if _test_dir_matches(dir_name, v) for dir_name, n, f in test_list]
-        names = [d + "/" + n for d, n, _f in filtered]
+        # 过滤：只运行版本匹配的目录下的顶层测试（子目录文件仅打包不运行）
+        filtered = [(name, f) for version_dir, test_list in entries.items() if _test_dir_matches(version_dir, v) for name, f in test_list if "/" not in name[len(version_dir) + 1:]]
+        names = [name for name, _f in filtered]
 
         # 打包：除明确不匹配的版本目录外，所有文件都包含
         test_func_files = []
         for f in test_files:
-            d = f.split("/")[-2]
-            if d == "common" or _test_dir_matches(d, v):
+            rel = f[len(func_prefix):]
+            version_dir = rel.split("/")[0]
+            if version_dir == "common" or _test_dir_matches(version_dir, v):
                 test_func_files.append(f)
-            elif not _is_version_str(d) and "-" not in d:
+            elif not _is_version_str(version_dir) and "-" not in version_dir:
                 test_func_files.append(f)  # 非版本目录（helper 等）
 
         # Runner genrule
@@ -162,6 +179,7 @@ def setup_tests(
             fail("version %s is not in any segment" % v)
 
         # test_server
+        _uses_fabric = compare_versions(v, "1.21.9") >= 0
         java_binary(
             name = "test_server_" + v,
             srcs = [],
@@ -169,10 +187,10 @@ def setup_tests(
                 ":" + range_name,
                 ":test_datapack_" + v,
                 "//game:ops_json",
-            ],
+            ] + (["//subprojects/spawn-chunk-fix:%s" % v] if _uses_fabric else []),
             jvm_flags = [
                 "-Ddev.launch.version=%s" % v,
-                "-Ddev.launch.mainClass=%s" % ("net.minecraft.server.MinecraftServer" if compare_versions(v, "1.16") < 0 else "net.minecraft.server.Main"),
+                "-Ddev.launch.mainClass=%s" % ("net.minecraft.server.MinecraftServer" if compare_versions(v, "1.16") < 0 else ("net.fabricmc.loader.impl.launch.knot.KnotServer" if _uses_fabric else "net.minecraft.server.Main")),
             ] + SERVER_JVM_FLAGS + [
                 "-Ddev.launch.rconPort=%d" % rcon_port,
                 "-Ddev.launch.gamePort=%d" % game_port,
@@ -180,14 +198,18 @@ def setup_tests(
                 "-Ddev.launch.copyFiles=" +
                 "$(rlocationpath //%s:%s):world/datapacks/main.zip," % (native.package_name(), range_name) +
                 "$(rlocationpath //%s:test_datapack_%s):world/datapacks/test.zip," % (native.package_name(), v) +
-                "$(rlocationpath //game:ops_json):ops.json",
+                "$(rlocationpath //game:ops_json):ops.json" +
+                (",$(rlocationpath //subprojects/spawn-chunk-fix:%s):mods/spawn-chunk-fix.jar" % v if _uses_fabric else ""),
             ],
             main_class = SERVER_MAIN_CLASS,
             runtime_deps = [
                 "//game:server_" + v.replace(".", "_"),
                 "//rule/tools/dev_launch_wrapper",
                 "@minecraft//:%s_server_libraries" % v,
-            ],
+            ] + ([
+                "@maven_fabric_%s//:net_fabricmc_fabric_loader" % v,
+                "@maven_fabric_%s//:net_fabricmc_sponge_mixin" % v,
+            ] if _uses_fabric else []),
         )
 
         _make_sh_test(v, v, test_ns, rcon_port, ns_args, names, "test_verbose_" + v, {"TEST_VERBOSE": "1"})

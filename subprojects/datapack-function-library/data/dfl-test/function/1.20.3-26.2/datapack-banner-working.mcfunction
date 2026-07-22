@@ -1,4 +1,4 @@
-execute store result score zero.when.not.found testing run function dfl:private/datapack_banner {\
+execute store success score zero.when.not.found testing run function dfl:private/datapack_banner {\
     name:"datapack function library",\
     author:"white_elephant_",\
     author_url:"https://modrinth.com/user/white_elephant",\

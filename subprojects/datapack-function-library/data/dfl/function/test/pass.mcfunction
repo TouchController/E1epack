@@ -1,1 +1,1 @@
-scoreboard players set result testing 1
+scoreboard players set test.pass testing 1

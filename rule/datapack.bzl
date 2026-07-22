@@ -458,8 +458,8 @@ def complete_datapack_config(
             if ns not in _all_ignore:
                 _all_ignore.append(ns)
     setup_tests(
+        name = target_name + "_tests",
         pack_id = pack_id,
-        target_name = target_name,
         game_versions = game_versions,
         segments = segments,
         ignore_error_ns = _all_ignore,
