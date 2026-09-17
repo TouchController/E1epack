@@ -1,17 +1,17 @@
 # 自动翻译系统
 
-基于DeepSeek-V4 API的多语言自动翻译系统，支持18种目标语言的高质量游戏本地化翻译。
+基于 DeepSeek API 的多语言自动翻译系统，支持 19 种目标语言的高质量游戏本地化翻译。
 
 ## 🌟 功能特性
 
 ### 🤖 智能翻译引擎
 
-- **DeepSeek-V4 API** - 最新的AI模型，同时兼具思考与非思考能力
+- **DeepSeek API** - 最新的AI模型，同时兼具思考与非思考能力
 - **双模式支持**：
   - **思考模式**（默认）：深度推理，翻译质量更高
   - **非思考模式**：快速响应，适合测试和快速验证
 - **专业游戏本地化** - 针对Minecraft内容优化的提示词
-- **温度1.3设置** - 平衡准确性与自然度
+- **温度0.1设置** - 低温度以保证翻译的确定性与术语一致性
 
 ### 🌍 多语言支持
 
@@ -136,8 +136,8 @@ python .github/scripts/translate.py
 
 - `DEEPSEEK_API_KEY` - DeepSeek API密钥（在GitHub Secrets中配置）
 - `FORCE_TRANSLATE` - 强制重新翻译所有文件（可选，默认 0）
-- `DEEPSEEK_MODEL` - DeepSeek 模型ID（可选，默认 `deepseek-v4-pro`）
-- `DEEPSEEK_THINKING` - 开启思考模式（可选，默认 0）
+- `DEEPSEEK_MODEL` - DeepSeek 模型ID（可选，默认 `deepseek-flash`）
+- `DEEPSEEK_THINKING` - 开启思考模式（可选，默认 1）
 - `TRANSLATION_DEBUG` - 开启详细请求/响应记录（可选，默认 0）
 - `GITHUB_ACTIONS` - CI环境标识，启用日志分组与提示格式（自动）
 
@@ -150,8 +150,8 @@ python .github/scripts/translate.py
 
 ### API参数
 
-- **模型**: DeepSeek-V4（flash / pro，思考模式可开关）
-- **温度**: 1.3（提高翻译的创造性和自然度）
+- **模型**: `deepseek-flash`（默认，思考模式默认开启）/ `deepseek-v4-pro`
+- **温度**: 0.1（低温度以保证翻译的确定性与术语一致性）
 - **批处理**: 每次最多翻译40个键值对
 
 ## 🛠️ 故障排除

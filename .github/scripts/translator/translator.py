@@ -13,12 +13,12 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 import concurrent.futures
 
-from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_CONTEXT, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, API_TIMEOUT
+from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, API_TIMEOUT
 from translator.logging import log_progress, flush_logs
 
 
 class DeepSeekTranslator:
-    def __init__(self, api_key: str, model: str = "deepseek-v4-pro", thinking: bool = False):
+    def __init__(self, api_key: str, model: str = "deepseek-flash", thinking: bool = True):
         self.api_key = api_key
         self.model = model
         self.thinking = thinking
@@ -151,7 +151,7 @@ class DeepSeekTranslator:
     def log_translation_failure(self, attempt: int, system_prompt: str, user_prompt: str,
                               api_response: str, error: str, texts: Dict[str, str],
                               namespace: str = "unknown", target_lang_name: str = "unknown",
-                              model: str = "unknown", temperature: float = 1.3,
+                              model: str = "unknown", temperature: float = DEFAULT_TEMPERATURE,
                               log_to_main: bool = True) -> None:
         """记录翻译失败的详细信息到日志文件"""
         log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
@@ -204,13 +204,13 @@ class DeepSeekTranslator:
         # 只在需要时记录主日志
         if log_to_main:
             error_summary = error[:50] + ('...' if len(error) > 50 else '')
-            log_progress(f"    [尝试{attempt}/5] [{namespace}] {len(texts)}个文本 -> {target_lang_name} -> 失败: {error_summary}", "warning")
+            log_progress(f"    [尝试{attempt}/{MAX_INDIVIDUAL_RETRIES}] [{namespace}] {len(texts)}个文本 -> {target_lang_name} -> 失败: {error_summary}", "warning")
             flush_logs()  # 确保错误日志被及时写入
 
     def log_translation_debug(self, attempt: int, system_prompt: str, user_prompt: str,
                                texts: Dict[str, str], namespace: str = "unknown",
                                target_lang_name: str = "unknown", model: str = "unknown",
-                               temperature: float = 1.3,
+                               temperature: float = DEFAULT_TEMPERATURE,
                                raw_response: str = "", translated_result: str = "",
                                success: bool = False, api_time: float = 0) -> None:
         """在调试模式下记录每次请求和响应的完整信息"""

@@ -301,7 +301,7 @@ execute if <条件> run function dfl:test/pass
 ### translate.yml
 
 - 触发条件：`Localization-Resource-Pack` 相关文件变更或手动触发
-- 使用 DeepSeek API（`deepseek-v4-pro`）自动翻译资源包语言文件
+- 使用 DeepSeek API（`deepseek-flash`，思考模式默认开启）自动翻译资源包语言文件
 - 支持强制翻译、debug 日志等选项
 
 ## 开发流程

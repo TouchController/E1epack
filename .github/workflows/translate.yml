@@ -17,15 +17,15 @@ on:
       deepseek_model:
         description: 'DeepSeek model'
         required: false
-        default: 'deepseek-v4-pro'
+        default: 'deepseek-flash'
         type: choice
         options:
-        - 'deepseek-v4-flash'
+        - 'deepseek-flash'
         - 'deepseek-v4-pro'
       deepseek_thinking:
         description: 'Enable thinking mode'
         required: false
-        default: false
+        default: true
         type: boolean
       translation_debug:
         description: 'Enable debug logs'
@@ -66,8 +66,9 @@ jobs:
       env:
         DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         FORCE_TRANSLATE: ${{ github.event.inputs.force_translate == 'true' && '1' || '0' }}
-        DEEPSEEK_MODEL: ${{ github.event.inputs.deepseek_model || 'deepseek-v4-pro' }}
-        DEEPSEEK_THINKING: ${{ github.event.inputs.deepseek_thinking == 'true' && '1' || '0' }}
+        DEEPSEEK_MODEL: ${{ github.event.inputs.deepseek_model || 'deepseek-flash' }}
+        # 反向判断：push 触发时 inputs 为空，此处需回退到"开启"，仅手动取消勾选时关闭
+        DEEPSEEK_THINKING: ${{ github.event.inputs.deepseek_thinking == 'false' && '0' || '1' }}
         TRANSLATION_DEBUG: ${{ github.event.inputs.translation_debug == 'true' && '1' || '0' }}
       run: |
         python .github/scripts/translate.py
