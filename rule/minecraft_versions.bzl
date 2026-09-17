@@ -55,6 +55,7 @@ ALL_MINECRAFT_VERSIONS = [
     "26.1.1",
     "26.1.2",
     "26.2",
+    "26.3",
 ]
 
 def _parse_version(version_str):

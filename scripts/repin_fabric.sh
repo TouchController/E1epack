@@ -9,3 +9,4 @@ REPIN=1 bazel run @maven_fabric_26.1//:pin
 REPIN=1 bazel run @maven_fabric_26.1.1//:pin
 REPIN=1 bazel run @maven_fabric_26.1.2//:pin
 REPIN=1 bazel run @maven_fabric_26.2//:pin
+REPIN=1 bazel run @maven_fabric_26.3//:pin

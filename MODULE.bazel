@@ -58,7 +58,7 @@ maven.install(
 )
 use_repo(maven, "maven")
 
-# Fabric dependencies for spawn-chunk-fix mod (1.21.9-26.2)
+# Fabric dependencies for spawn-chunk-fix mod (1.21.9-26.3)
 [
     (
         maven.install(
@@ -84,6 +84,7 @@ use_repo(maven, "maven")
         ("26.1.1", "0.18.4", "0.17.0+mixin.0.8.7"),
         ("26.1.2", "0.18.4", "0.17.0+mixin.0.8.7"),
         ("26.2", "0.19.2", "0.17.2+mixin.0.8.7"),
+        ("26.3", "0.19.5", "0.17.4+mixin.0.8.7"),
     ]
 ]
 
@@ -95,6 +96,7 @@ minecraft = use_extension("//repo:minecraft_jar.bzl", "minecraft")
         version = v,
     )
     for v in [
+        "26.3",
         "26.2",
         "26.1.2",
         "26.1.1",

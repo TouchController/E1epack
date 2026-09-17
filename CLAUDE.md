@@ -13,7 +13,7 @@ E1epack 是一个 Minecraft 数据包集合仓库，使用 Bazel 构建系统管
 - **MODULE.bazel**: 定义 Bazel 依赖（Skylib、rules_pkg、rules_java 等）、Maven 依赖（Jackson、Methanol 等）、以及 Minecraft JAR 下载配置
 - **rule/datapack.bzl**: 核心构建宏 `complete_datapack_config`，生成完整的数据包构建 pipeline
 - **rule/version.bzl**: 版本范围获取 `minecraft_versions_range()` 和版本段拆分 `version_segments()`
-- **rule/minecraft_versions.bzl**: `ALL_MINECRAFT_VERSIONS` 列表（1.13 到 26.2）
+- **rule/minecraft_versions.bzl**: `ALL_MINECRAFT_VERSIONS` 列表（1.13 到 26.3）
 - **rule/test_system.bzl**: 测试系统，生成按版本拆分的测试目标
 
 ### complete_datapack_config 宏
@@ -33,7 +33,7 @@ E1epack 是一个 Minecraft 数据包集合仓库，使用 Bazel 构建系统管
 
 `complete_datapack_config` 会自动生成以下目标：
 
-- **`<range_name>`**: 版本段数据包 zip（如 `1.13-1.21.10`、`1.21.11-26.2`）
+- **`<range_name>`**: 版本段数据包 zip（如 `1.13-1.21.10`、`1.21.11`、`26.1-26.3`）
 - **`release_<range_name>`**: 带版本号的发布 zip（如 `release_1.13-1.21.10`，输出 `target_name_v1.0.0_range.zip`）
 - **`<target_name>`**: filegroup，包含所有 release zip（默认为包目录名，如 `datapack-function-library`）
 - **`<pack_id>`**: pkg_filegroup，供其他子项目通过 `deps` 引用
@@ -54,7 +54,7 @@ COMMAND_BOUNDARIES = [
 
 `version_segments()` 按这些边界拆分版本列表，每段返回 `(range_name, versions, mapping_labels)`：
 
-- `range_name`: 版本范围名称（如 "1.13-1.21.10"、"1.21.11-26.2"）
+- `range_name`: 版本范围名称（如 "1.13-1.21.10"、"1.21.11"、"26.1-26.3"）
 - `versions`: 该段包含的版本列表
 - `mapping_labels`: 需要应用的命令替换映射文件列表（空表示使用最新语法）
 
@@ -377,7 +377,7 @@ execute if <条件> run function dfl:test/pass
 
 ### 支持的版本
 
-`ALL_MINECRAFT_VERSIONS` 包含从 1.13 到 26.2 的所有版本。新版本需要在 `rule/minecraft_versions.bzl` 中添加。
+`ALL_MINECRAFT_VERSIONS` 包含从 1.13 到 26.3 的所有版本。新版本需要在 `rule/minecraft_versions.bzl` 中添加。
 
 ### 命令语法变更
 

@@ -3,7 +3,7 @@
     "pack_format": 88,
     "min_format": 1,
     "max_format": [
-      101,
+      121,
       0
     ],
     "description": [
@@ -22,7 +22,7 @@
     ],
     "supported_formats": [
       1,
-      101
+      121
     ]
   }
 }
