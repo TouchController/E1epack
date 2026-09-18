@@ -1,4 +1,4 @@
-**Click [here](https://github.com/TouchController/E1epack/blob/main/datapack-function-library/README-en_us.md) to view the English version.**
+**Click [here](https://github.com/TouchController/E1epack/blob/main/subprojects/datapack-function-library/README-en_us.md) to view the English version.**
 
 # 前言
 
@@ -12,7 +12,7 @@ _本数据包遵循开源协议 [GNU LESSER GENERAL PUBLIC LICENSE](https://www.
 
 **本数据包的模组版本是通过 Modrinth 打包的，内容与数据包版本完全一致，但不一定是最新版，请尽量使用数据包版本。**
 
-**本数据包提供一个 dfl:dfl_enable 函数，可以将所有实体在此记分项中的分数设为 1，便于依赖于本数据包的数据包或模组检测本数据包是否加载。**
+**本数据包提供一个 dfl:dfl_enable 函数，执行后会将 dfl_enable 在 dfl_scoreboard 记分项中的分数设为 1，便于依赖于本数据包的数据包或模组检测本数据包是否加载。**
 
 **范例：**
 
@@ -226,8 +226,8 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 函数用法：`/function dfl:tick/change_block {new:"glass",old:"stone",num:"30"}`
 
-- 将玩家附近 {num}3 *8 范围内的 {old} 替换为 {new}；
-- 将游戏规则 commandModificationBlockLimit 修改为 2147483647。
+- 将命令执行者周围以自身为中心、边长为 {num}*2+1 的立方体区域内的 {old} 替换为 {new}；
+- 将游戏规则 max_block_modifications 修改为 2147483647。
 
 ### 永昼+永晴
 

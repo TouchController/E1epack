@@ -10,7 +10,7 @@
 
 **The mod version of this datapack is packaged through Modrinth, and the content is exactly the same as the datapack version, but it is not necessarily the latest version. Please try to use the datapack version.**
 
-**This datapack provides a `dfl:dfl_enable` function, which can set the score of all entities in this scoreboard to 1, which is convenient for datapacks or mods that depend on this datapack to detect whether this datapack is loaded.**
+**This datapack provides a `dfl:dfl_enable` function, which sets the score of the player `dfl_enable` in the dfl_scoreboard scoreboard item to 1, which is convenient for datapacks or mods that depend on this datapack to detect whether this datapack is loaded.**
 
 **Example:**
 
@@ -226,8 +226,8 @@ Function usage: `/function dfl:tick/trigger_suicide`
 
 Function usage: `/function dfl:tick/change_block {new:"glass",old:"stone",num:"30"}`
 
-- Replace {old} with {new} in a {num}3 *8 range around the player;
-- Change the game rule commandModificationBlockLimit to 2147483647.
+- Replace {old} with {new} in a cube with a side length of {num}*2+1 centered on the command executor;
+- Change the game rule max_block_modifications to 2147483647.
 
 ### Always day + always sunny
 
@@ -278,7 +278,7 @@ Function usage: `/function dfl:tick/convert_items_to_xp {namespace:"minecraft",n
 
 ### tpa
 
-Function usage: `/function dfl:tick/tpa`
+Function usage: `/function dfl:tick/teleport_request`
 
 Prerequisite function: `/function dfl:lib/generate_player_id`
 
