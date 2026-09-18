@@ -18,3 +18,4 @@ translation.log
 .gitmodules
 .mcp.json
 .claude/scheduled_tasks.lock
+.temp/
