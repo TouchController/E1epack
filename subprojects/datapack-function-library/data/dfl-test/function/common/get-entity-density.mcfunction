@@ -1,19 +1,19 @@
-# 清理旧实体到虚空
-tp @e ~ -1000 ~
+# 测试 get_entity_density 函数
+# 密度统计的是「10 格内的所有实体」，因此本测试独占 y=250 这一层：
+#   1) 与其它测试使用的 y≈200 隔开 50 格，远超 10 格判定范围，不会互相计入
+#   2) 实体只在纵向排列，同一 (x,z) 必然落在同一区块
+# 全部命令在同一游戏刻内执行，世界不推进，实体不会移动
 
-# 在出生点召唤中心实体，带 NoGravity 和 tag
-summon minecraft:armor_stand ~ ~ ~ {NoGravity:1b,Tags:["density_center"]}
+summon minecraft:armor_stand ~ 250 ~ {Tags:["density_center"]}
+summon minecraft:armor_stand ~ 251 ~ {Tags:["density_near"]}
+summon minecraft:armor_stand ~ 252 ~ {Tags:["density_near"]}
+summon minecraft:armor_stand ~ 253 ~ {Tags:["density_near"]}
 
-# 在附近（5格内）召唤3个实体
-summon minecraft:armor_stand ~1 ~ ~ {NoGravity:1b,Tags:["density_near"]}
-summon minecraft:armor_stand ~ ~1 ~ {NoGravity:1b,Tags:["density_near"]}
-summon minecraft:armor_stand ~ ~ ~1 {NoGravity:1b,Tags:["density_near"]}
-
-# 执行密度计算
 function dfl:lib/get_entity_density
 
-# 验证中心实体的密度值（周围10格内应有4个实体：自己 + 3个near）
-execute as @e[tag=density_center,limit=1] if score @s dfl_density matches ..3 run say [DENSITY] <4
-execute as @e[tag=density_center,limit=1] if score @s dfl_density matches 5.. run say [DENSITY] >4
-# 可能因为未知原因死掉，稍微宽松一些
-execute if score @e[limit=1,tag=density_center,type=minecraft:armor_stand] dfl_density matches 2..4 run function dfl:test/pass
+# 中心实体周围 10 格内应恰好是 4 个（自己 + 3 个 near）
+execute if score @e[limit=1,tag=density_center,type=minecraft:armor_stand] dfl_density matches 4 run function dfl:test/pass
+
+# 清理
+kill @e[tag=density_center]
+kill @e[tag=density_near]
