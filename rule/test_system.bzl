@@ -116,8 +116,11 @@ def setup_tests(
 
     for v in game_versions:
         port_idx = ALL_MINECRAFT_VERSIONS.index(v)
-        game_port = 49152 + port_idx * 2
-        rcon_port = 49152 + port_idx * 2 + 1
+        # 基址取 61000 而非 IANA 建议的 49152：内核自动分配源端口的范围为
+        # ip_local_port_range（默认 32768-60999），49152 段会被出站连接抢占导致
+        # 服务器 bind 失败；61000 已在范围之外，不会被自动分配碰到。
+        game_port = 61000 + port_idx * 2
+        rcon_port = 61000 + port_idx * 2 + 1
         # 过滤：只运行版本匹配的目录下的顶层测试（子目录文件仅打包不运行）
         filtered = [(name, f) for version_dir, test_list in entries.items() if _test_dir_matches(version_dir, v) for name, f in test_list if "/" not in name[len(version_dir) + 1:]]
         names = [name for name, _f in filtered]

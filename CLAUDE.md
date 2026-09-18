@@ -216,8 +216,12 @@ execute if <条件> run function dfl:test/pass
 
 每个版本使用独立的端口：
 
-- 游戏端口: `49152 + version_index * 2`
-- RCON 端口: `49152 + version_index * 2 + 1`
+- 游戏端口: `61000 + version_index * 2`
+- RCON 端口: `61000 + version_index * 2 + 1`
+
+基址不采用 IANA 建议的 49152：该区间落在 Linux `ip_local_port_range`
+（默认 32768-60999）内，会被内核分配给出站连接的源端口，导致测试服务器
+bind 失败。61000 已在该范围之外。
 
 ### 辅助测试脚本
 
@@ -397,7 +401,7 @@ execute if <条件> run function dfl:test/pass
 ## 注意事项
 
 - 使用 Java 21 进行构建（`.bazelrc` 配置）
-- 测试服务器使用动态分配端口（从 49152 开始）
+- 测试服务器使用动态分配端口（从 61000 开始，避开内核临时端口段）
 - 测试超时默认 300 秒（`timeout = "moderate"`）
 - 版本号必须符合 SemVer 2.0.0 规范
 - pack_id 必须符合 Minecraft 命名空间 ID 规范（小写字母、数字、下划线、连字符、点）
