@@ -13,7 +13,10 @@
             "label": "Bazel Build",
             "type": "shell",
             "command": "bazel",
-            "args": ["build", "//subprojects/${input:projectName}:${input:projectName}"],
+            "args": [
+                "build",
+                "//subprojects/${input:projectName}:${input:projectName}"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -27,7 +30,10 @@
             "label": "Bazel Run Server",
             "type": "shell",
             "command": "bazel",
-            "args": ["run", "//subprojects/${input:projectName}:server"],
+            "args": [
+                "run",
+                "//subprojects/${input:projectName}:server"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -41,10 +47,14 @@
             "problemMatcher": []
         },
         {
-            "label": "Bazel Upload Modrinth",
+            "label": "Bazel Publish",
             "type": "shell",
             "command": "bazel",
-            "args": ["run", "//subprojects/${input:projectName}:upload_modrinth"],
+            "args": [
+                "run",
+                "//subprojects/${input:projectName}:publish"
+            ],
+            "detail": "仅适用于 BUILD.bazel 中声明了 modrinth_project_id 的子项目",
             "group": "none",
             "presentation": {
                 "echo": true,

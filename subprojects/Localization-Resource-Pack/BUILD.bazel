@@ -1,6 +1,6 @@
-load("@//rule:version.bzl", "minecraft_versions_range")
 load("@//rule:merge_json.bzl", "merge_json")
-load("@//rule:upload_modrinth.bzl", "upload_modrinth")
+load("@//rule:publish.bzl", "publish", "publish_entry")
+load("@//rule:version.bzl", "minecraft_versions_range")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
 
@@ -9,10 +9,6 @@ pack_version = "2.2.0"
 pack_name = "Localization-Resource-Pack"
 
 game_versions = minecraft_versions_range("1.13")
-
-file_name = "%s_v%s.zip" % (pack_name, pack_version)
-
-version_name = "%s_v%s" % (pack_name, pack_version)
 
 git_tag_name = "%s_v%s" % (pack_name, pack_version)
 
@@ -33,6 +29,7 @@ pkg_files(
     strip_prefix = "",
 )
 
+# 直接产出带版本号的文件名：它同时是 Modrinth 文件名/版本名与 GitHub Release 附件名
 pkg_zip(
     name = pack_name,
     srcs = [
@@ -41,19 +38,23 @@ pkg_zip(
         ":pack.mcmeta",
         ":pack.png",
     ],
+    out = "release/%s_v%s.zip" % (pack_name, pack_version),
 )
 
-upload_modrinth(
-    name = "upload_modrinth",
-    changelog = "NEWS.md",
+publish_entry(
+    name = "publish_entry",
     file = ":" + pack_name,
-    file_name = file_name,
     game_versions = game_versions,
+)
+
+publish(
+    name = "publish",
+    changelog = "NEWS.md",
+    entries = [":publish_entry"],
     git_tag_name = git_tag_name,
     loaders = ["minecraft"],
     project_id = "3S0b1XES",
     token_secret_id = "modrinth_token",
     version_id = pack_version,
-    version_name = version_name,
     version_type = "release",
 )

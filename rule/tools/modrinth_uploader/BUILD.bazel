@@ -1,8 +1,8 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 
 alias(
-    name = "modrinth_uploader_wrapper",
-    actual = "modrinth_uploader_wrapper.bash",
+    name = "publish_wrapper",
+    actual = "publish_wrapper.bash",
     visibility = ["//visibility:public"],
 )
 

@@ -33,9 +33,8 @@ E1epack 是一个 Minecraft 数据包集合仓库，使用 Bazel 构建系统管
 
 `complete_datapack_config` 会自动生成以下目标：
 
-- **`<range_name>`**: 版本段数据包 zip（如 `1.13-1.21.10`、`1.21.11`、`26.1-26.3`）
-- **`release_<range_name>`**: 带版本号的发布 zip（如 `release_1.13-1.21.10`，输出 `target_name_v1.0.0_range.zip`）
-- **`<target_name>`**: filegroup，包含所有 release zip（默认为包目录名，如 `datapack-function-library`）
+- **`<range_name>`**: 版本段数据包 zip（如 `1.13-1.21.10`、`1.21.11`、`26.1-26.3`），输出到 `release/<target_name>_v<pack_version>_<range_name>.zip`
+- **`<target_name>`**: filegroup，包含所有版本段的 zip（默认为包目录名，如 `datapack-function-library`）
 - **`<pack_id>`**: pkg_filegroup，供其他子项目通过 `deps` 引用
 - **`<pack_id>_segment_<N>`**: 版本段变体，供其他子项目的对应版本段引用
 - **`server`**: 别名，指向最新版本段的测试服务器
@@ -99,11 +98,8 @@ bazel build //...
 # 构建单个子项目（所有版本段的 release zip）
 bazel build //subprojects/datapack-function-library
 
-# 构建指定版本段的数据包
+# 构建指定版本段的数据包（输出 release/<包目标名>_v<版本>_<版本段>.zip）
 bazel build //subprojects/datapack-function-library:1.13-1.21.10
-
-# 构建带版本号的发布包
-bazel build //subprojects/datapack-function-library:release_1.13-1.21.10
 ```
 
 ### 测试
@@ -280,7 +276,7 @@ bind 失败。61000 已在该范围之外。
 
 ## CI/CD
 
-项目在 `.github/workflows/` 下配置了 4 个 GitHub Actions 工作流：
+项目在 `.github/workflows/` 下配置了 3 个 GitHub Actions 工作流：
 
 ### build.yml
 
@@ -294,13 +290,6 @@ bind 失败。61000 已在该范围之外。
 - 触发条件：PR 和 push
 - 扫描所有 `BUILD.bazel` 文件，检查 `modrinth_project_id` 和 `pack_id` 是否重复
 - **失败时自动创建 issue**：包含重复 ID 和涉及的文件列表
-
-### release.yml
-
-- 触发条件：推送 tag（格式 `<项目名>_v<版本>`，如 `datapack-function-library_v1.0.0`）
-- 从 tag 提取项目名和版本号
-- 从项目的 `NEWS.md` 读取发布说明
-- 构建该项目并创建 GitHub Release（含 Discussion）
 
 ### translate.yml
 

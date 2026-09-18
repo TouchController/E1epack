@@ -13,11 +13,18 @@ load("@//rule:command_replacer.bzl", "command_replacer")
 load("@//rule:merge_tags.bzl", "merge_function_tags")
 load("@//rule:process_json.bzl", "process_json")
 load("@//rule:process_mcfunction.bzl", "process_mcfunction", "validate_dep_compatibility")
-load("@//rule:upload_modrinth.bzl", "modrinth_dependency")
+load(
+    "@//rule:publish.bzl",
+    "DEFAULT_CHANGELOG",
+    "DEFAULT_GITHUB_DISCUSSION_CATEGORY",
+    "DEFAULT_GITHUB_RELEASE",
+    "DEFAULT_VERSION_TYPE",
+    "datapack_publish",
+    "modrinth_dependency",
+)
+load("@//rule:test_system.bzl", "SERVER_JVM_FLAGS", "SERVER_MAIN_CLASS", "setup_tests")
 load("@//rule:validation.bzl", "validate_pack_id", "validate_semver")
 load("@//rule:version.bzl", "minecraft_versions_range", "version_segments")
-load("@//rule:modrinth.bzl", "datapack_modrinth_upload")
-load("@//rule:test_system.bzl", "SERVER_JVM_FLAGS", "SERVER_MAIN_CLASS", "setup_tests")
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
@@ -78,7 +85,8 @@ def _datapack_impl(
         ns_json_target = None,
         ns_tags_target = None,
         mc_json_target = None,
-        mc_tags_target = None):
+        mc_tags_target = None,
+        archive_name = None):
     """为单个版本段创建数据包 pipeline（替换 + 打包）。"""
     if not minecraft_version:
         minecraft_version = ALL_MINECRAFT_VERSIONS[-1]
@@ -103,9 +111,11 @@ def _datapack_impl(
         name = name + "_components",
         srcs = [effective_func, ns_json_target] + ns_tags_target + [mc_json_target] + mc_tags_target,
     )
+    zip_kwargs = {"out": archive_name} if archive_name else {}
     pkg_zip(
         name = name,
         srcs = [":" + name + "_components", "//template:mcmeta"] + effective_deps,
+        **zip_kwargs
     )
 
     if seg_index == seg_count - 1:
@@ -132,15 +142,16 @@ def _datapack_impl(
             ],
         )
 
-
 def complete_datapack_config(
         pack_id,
         pack_version,
         target_name = None,
         game_versions = None,
         modrinth_project_id = None,
-        changelog = "NEWS.md",
-        version_type = "release",
+        changelog = DEFAULT_CHANGELOG,
+        version_type = DEFAULT_VERSION_TYPE,
+        github_release = DEFAULT_GITHUB_RELEASE,
+        github_discussion_category = DEFAULT_GITHUB_DISCUSSION_CATEGORY,
         modrinth_deps = [],
         include_localization_dependency = True,
         test_ignore_errors_from = [],
@@ -160,6 +171,8 @@ def complete_datapack_config(
         modrinth_project_id: Modrinth 项目 ID
         changelog: 更新日志，默认为 "NEWS.md"
         version_type: 版本类型 (release, beta, alpha)
+        github_release: 发布时是否创建 GitHub Release，默认为 True
+        github_discussion_category: GitHub Release 关联的 Discussion 分类名
         modrinth_deps: Modrinth 依赖字典列表
         include_localization_dependency: 是否自动包含本地化资源包作为依赖
         test_ignore_errors_from: 测试时忽略来自指定命名空间的加载错误
@@ -382,7 +395,7 @@ def complete_datapack_config(
         ]
 
     for i, seg in enumerate(segments):
-        range_name, seg_versions, mappings = seg
+        range_name, _, mappings = seg
         seg_name = range_name
 
         _datapack_impl(
@@ -397,38 +410,40 @@ def complete_datapack_config(
             ns_tags_target = ns_tags_target,
             mc_json_target = mc_json_target,
             mc_tags_target = mc_tags_target,
+            archive_name = "release/%s_v%s_%s.zip" % (target_name, pack_version, range_name),
         )
-
-        native.genrule(
-            name = "release_" + range_name,
-            srcs = [":" + seg_name],
-            outs = ["release/%s_v%s_%s.zip" % (target_name, pack_version, range_name)],
-            cmd = "cp $< $@",
-        )
-
-        if modrinth_project_id:
-            datapack_modrinth_upload(
-                name = target_name,
-                datapack_target = ":" + seg_name,
-                pack_version = pack_version,
-                project_id = modrinth_project_id,
-                game_versions = seg_versions,
-                version_type = version_type,
-                changelog = changelog,
-                deps = dep_labels,
-                auto_tag = (i == total_segments - 1),
-            )
 
     # 向后兼容别名
     latest_seg_name = segments[-1][0]
     native.filegroup(
         name = target_name,
-        srcs = [":release_" + seg[0] for seg in segments],
+        srcs = [":" + seg[0] for seg in segments],
     )
     native.alias(
         name = "server",
         actual = ":%s_server" % latest_seg_name,
     )
+
+    # 发布目标：一次运行按版本从旧到新上传所有版本段，随后打标签并创建 GitHub Release
+    if modrinth_project_id:
+        datapack_publish(
+            name = "publish",
+            pack_name = target_name,
+            segments = [
+                {
+                    "range_name": range_name,
+                    "game_versions": seg_versions,
+                }
+                for range_name, seg_versions, _mappings in segments
+            ],
+            pack_version = pack_version,
+            project_id = modrinth_project_id,
+            version_type = version_type,
+            changelog = changelog,
+            deps = dep_labels,
+            github_release = github_release,
+            github_discussion_category = github_discussion_category,
+        )
 
     # 命名空间依赖目标
     _namespace_deps = [d for d in deps if "//subprojects/" in str(d)]

@@ -35,7 +35,7 @@ sealed abstract class TokenBackend {
         public String getToken(String tokenId) throws IOException {
             try (var collection = new SimpleCollection()) {
                 var items = collection.getItems(Map.of("modrinth_token_id", tokenId));
-                if (items.isEmpty()) {
+                if (items == null || items.isEmpty()) {
                     return null;
                 }
                 return new String(collection.getSecret(items.getFirst()));
