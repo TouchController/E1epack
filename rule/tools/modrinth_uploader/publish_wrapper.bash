@@ -139,15 +139,17 @@ echo "HEAD ${head_commit:0:12} 已通过发布前检查"
 # 上传到 Modrinth（不可回滚的一步）
 # ---------------------------------------------------------------------------
 
-# 让 java launcher 自己定位 runfiles，而不是假定调用方的当前目录
+# java launcher 只认 JAVA_RUNFILES，并会在这个目录下找 _main/，自己不会去搜
+# RUNFILES_DIR；这里用本次 bazel run 构造出的 runfiles 根，不依赖当前目录
 if [ -n "${RUNFILES_DIR:-}" ]; then
-    export RUNFILES_DIR
+    JAVA_RUNFILES="$RUNFILES_DIR"
 elif [ -d "$0.runfiles" ]; then
-    export RUNFILES_DIR="$(cd "$0.runfiles" && pwd)"
+    JAVA_RUNFILES="$(cd "$0.runfiles" && pwd)"
+else
+    echo >&2 "ERROR: 无法定位 runfiles 目录（RUNFILES_DIR 未设置且 $0.runfiles 不存在）"
+    exit 1
 fi
-if [ -n "${RUNFILES_MANIFEST_FILE:-}" ]; then
-    export RUNFILES_MANIFEST_FILE
-fi
+export JAVA_RUNFILES
 
 "$exec_path" "${args[@]}"
 
