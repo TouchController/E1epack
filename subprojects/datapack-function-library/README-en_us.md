@@ -38,7 +38,7 @@ If you encounter any problems, please click [here](https://github.com/TouchContr
 
 ## Start
 
-<span style="color:red;"><b>Functions in this category are recommended to be executed when the datapack is loaded (reloaded).</b></span>
+**Functions in this category are recommended to be executed when the datapack is loaded (reloaded).**
 
 ### Disable Special Damage
 
@@ -105,7 +105,7 @@ Function usage: `/function dfl:start/create_teams {team_blue:"blue",team_red:"re
 
 ## Tick
 
-<span style="color:red;"><b>Functions in this category are recommended to be executed every Tick.</b></span>
+**Functions in this category are recommended to be executed every Tick.**
 
 ### Soft ban player
 
@@ -308,7 +308,7 @@ Function usage: `/function dfl:tick/coal_smelt {input_namespace:"minecraft",inpu
 
 ## Timer
 
-<span style="color:red;"><b>Functions in this category are recommended to be executed after a period of time. (You can use the [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "Go to the wiki to see the usage of this command") command)</b></span>
+**Functions in this category are recommended to be executed after a period of time. (You can use the [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "Go to the wiki to see the usage of this command") command)**
 
 ### Clean up dropped items
 
@@ -339,7 +339,7 @@ The effect of this function is as follows:
 
 ## Lib
 
-<span style="color:red;"><b>Functions in this category have no effect when executed alone or do not fit into the above categories.</b></span>
+**Functions in this category have no effect when executed alone or do not fit into the above categories.**
 
 ### Force death drop
 

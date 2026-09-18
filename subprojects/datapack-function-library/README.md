@@ -38,7 +38,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ## Start
 
-<span style="color:red;"><b>此分类中的函数建议在数据包加载（重载）时执行。</b></span>
+**此分类中的函数建议在数据包加载（重载）时执行。**
 
 ### 关闭特殊伤害
 
@@ -105,7 +105,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ## Tick
 
-<span style="color:red;"><b>此分类中的函数建议每 Tick 执行一次。</b></span>
+**此分类中的函数建议每 Tick 执行一次。**
 
 ### 软封禁玩家
 
@@ -308,7 +308,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ## Timer
 
-<span style="color:red;"><b>此分类中的函数建议每间隔一段时间后执行。（可以使用 [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "跳转到wiki查看此命令用法") 命令）</b></span>
+**此分类中的函数建议每间隔一段时间后执行。（可以使用 [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "跳转到wiki查看此命令用法") 命令）**
 
 ### 清理掉落物
 
@@ -339,7 +339,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ## Lib
 
-<span style="color:red;"><b>此分类中的函数单独执行没有任何效果或不符合上述分类。</b></span>
+**此分类中的函数单独执行没有任何效果或不符合上述分类。**
 
 ### 强制死亡掉落
 
