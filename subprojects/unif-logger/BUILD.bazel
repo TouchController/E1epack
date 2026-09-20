@@ -20,7 +20,7 @@ complete_datapack_config(
     pack_id = "unif.logger",
     pack_version = pack_version,
     deps = [
-        "LICENSE.txt",
+        "LICENSE",
         "README.md",
         ":pack_mcmeta_pkg",
     ],
