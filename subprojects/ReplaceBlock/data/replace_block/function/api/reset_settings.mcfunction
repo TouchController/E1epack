@@ -1,9 +1,8 @@
 ## 设置初始化
 
 # 重置设置
-$data modify storage $(storage) replace_block set value \
+$return run data modify storage $(storage) replace_block set value \
     {\
-        selector:"@e[type=player]",\
         replace_pairs:[\
             {\
                 target_block:"stone",\

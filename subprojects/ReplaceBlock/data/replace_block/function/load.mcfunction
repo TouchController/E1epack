@@ -8,10 +8,6 @@ function dfl:private/datapack_banner {\
 
 gamerule minecraft:max_block_modifications 2147483647
 
-scoreboard objectives add rb.debug dummy
-scoreboard objectives add rb.settings dummy
-scoreboard objectives add rb.return dummy
-
 execute as @a run \
     function #unif.logger:logger/v1/tips \
     {"msg":'初始化成功',"namespace":"ReplaceBlock"}
