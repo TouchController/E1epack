@@ -1,7 +1,6 @@
 {
     "replace": false,
     "values": [
-        "replace_block:load",
-        "unif.logger:load"
+        "replace_block:load"
     ]
 }
