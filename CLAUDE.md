@@ -86,6 +86,17 @@ COMMAND_BOUNDARIES = [
 - 传播 `test_ignore_errors_from`（测试时忽略的命名空间加载错误）
 - 合并 `minecraft/tags/function/*.json` 标签文件
 - 验证版本范围兼容性（`validate_dep_compatibility`）
+- 带上依赖包的许可证：依赖方内容会被原样复制进下游 zip，故 `pack_id` 目标会
+  附带 `data/<pack_id>/` 下的许可证（经 `license_files` 显式声明）
+
+### 许可证分发
+
+`complete_datapack_config` 的 `license_files` 声明**本包自身**的许可证文件
+（默认 `[]`，即不导出），它会被放到 `data/<pack_id>/` 并随 `pack_id` /
+`<pack_id>_segment_<N>` 目标提供给下游，因此只要某个包会被别的包依赖，就必须
+声明它，否则下游产物缺少许可证（MIT/LGPL 等均要求副本保留版权声明）。
+
+依赖的依赖由各自的 `pack_id` 导出递归带上，无需在消费方重复声明。
 
 ## 常用命令
 

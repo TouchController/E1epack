@@ -155,6 +155,7 @@ def complete_datapack_config(
         modrinth_deps = [],
         include_localization_dependency = True,
         test_ignore_errors_from = [],
+        license_files = [],
         **kwargs):
     """完整的数据包配置宏，包含所有常用设置。
 
@@ -176,6 +177,8 @@ def complete_datapack_config(
         modrinth_deps: Modrinth 依赖字典列表
         include_localization_dependency: 是否自动包含本地化资源包作为依赖
         test_ignore_errors_from: 测试时忽略来自指定命名空间的加载错误
+        license_files: 本包自身的许可证文件（标签或文件名），会被导出到
+            data/<pack_id>/ 供下游打包；需要显式声明，默认不导出任何许可证
         **kwargs: 传递给 datapack 规则的其他参数
     """
 
@@ -258,6 +261,18 @@ def complete_datapack_config(
         dep_labels.append(":" + dep["name"])
 
     deps = kwargs.pop("deps", [])
+
+    # 依赖包的内容会被原样复制进下游数据包，MIT 等许可证要求该副本保留版权
+    # 声明，故导出到 data/<pack_id>/ 随 pack_id 目标一起提供给下游。
+    # 依赖的依赖会经其自身的 pack_id 导出递归带上，无需额外处理。
+    license_targets = []
+    if license_files:
+        pkg_files(
+            name = pack_id + "_licenses",
+            srcs = license_files,
+            prefix = "data/" + pack_id,
+        )
+        license_targets = [":" + pack_id + "_licenses"]
 
     # 拆分 namespace JSON
     all_ns_json = native.glob(["data/%s/**/*.json" % pack_id], allow_empty = True)
@@ -449,14 +464,14 @@ def complete_datapack_config(
     _namespace_deps = [d for d in deps if "//subprojects/" in str(d)]
     pkg_filegroup(
         name = pack_id,
-        srcs = [func_target, ns_json_target] + ns_tags_target + _namespace_deps,
+        srcs = [func_target, ns_json_target] + ns_tags_target + _namespace_deps + license_targets,
         visibility = ["//visibility:public"],
     )
 
     for i, seg in enumerate(segments):
         range_name, _, mappings = seg
         seg_func_target = func_target if not mappings else ":" + range_name + "_functions"
-        seg_srcs = [seg_func_target, ns_json_target] + ns_tags_target + _segment_deps(_namespace_deps, i)
+        seg_srcs = [seg_func_target, ns_json_target] + ns_tags_target + _segment_deps(_namespace_deps, i) + license_targets
         pkg_filegroup(
             name = pack_id + "_segment_%d" % i,
             srcs = seg_srcs,

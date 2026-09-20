@@ -6,6 +6,7 @@ pack_version = "5.0.0"
 # 主要的数据包配置，目标名称为包名称
 complete_datapack_config(
     game_versions = minecraft_versions_range("1.13"),
+    license_files = ["LICENSE"],
     modrinth_project_id = "xfcXTP3W",
     pack_id = "dfl",
     pack_version = pack_version,
