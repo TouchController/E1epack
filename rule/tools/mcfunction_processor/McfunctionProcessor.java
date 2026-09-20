@@ -11,6 +11,14 @@ public class McfunctionProcessor extends Worker {
     private static final Pattern NAMESPACE_ID_PATTERN = Pattern.compile("^[a-z0-9_.-]+:[a-z0-9_./\\-]+$");
     private static final Pattern FUNCTION_CALL_PATTERN = Pattern.compile("^function\\s+([a-z0-9_.-]+:[a-z0-9_./\\-]+)(?:\\s+(.+))?$");
     private static final Pattern RETURN_PATTERN = Pattern.compile("^(?:return|execute\\s+.*\\s+run\\s+return)\\b");
+    private static final String[] FUNCTION_DIR_NAMES = {
+        "function",
+        "functions",
+    };
+    private static final String[] FUNCTION_FILE_SUFFIXES = {
+        ".mcfunction",
+        ".processed.mcfunction",
+    };
 
     private Map<String, List<String>> functionCache = new HashMap<>();
     private String currentPackId;
@@ -207,10 +215,6 @@ public class McfunctionProcessor extends Worker {
     }
 
     private List<String> loadFunction(String functionName) {
-        if (functionCache.containsKey(functionName)) {
-            return functionCache.get(functionName);
-        }
-
         String[] parts = functionName.split(":", 2);
         if (parts.length != 2) return null;
 
@@ -219,22 +223,49 @@ public class McfunctionProcessor extends Worker {
 
         // 直接通过命名空间查表定位数据包根目录
         Path root = namespaceToRoot.get(namespace);
-        if (root != null) {
-            Path functionFile = root.resolve("data")
-                                  .resolve(namespace)
-                                  .resolve("function")
-                                  .resolve(functionPath + ".mcfunction");
-            if (Files.exists(functionFile)) {
-                try {
-                    List<String> content = Files.readAllLines(functionFile);
-                    List<String> processed = processBasicLines(content);
-                    functionCache.put(functionName, processed);
-                    return processed;
-                } catch (IOException ignored) {}
-            }
+        if (root == null) return null;
+
+        Path functionFile = resolveFunctionFile(root, namespace, functionPath);
+        if (functionFile == null) {
+            // 依赖包尚未注册或文件确实不存在时，不缓存失败结果：
+            // worker 进程会继续处理其他数据包的请求，缓存 null 会污染后续请求
+            return null;
         }
 
-        functionCache.put(functionName, null);
+        String cacheKey = functionFile.toString();
+        List<String> cached = functionCache.get(cacheKey);
+        if (cached != null) {
+            return cached;
+        }
+
+        try {
+            List<String> processed = processBasicLines(Files.readAllLines(functionFile));
+            functionCache.put(cacheKey, processed);
+            return processed;
+        } catch (IOException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * 在数据包根目录中定位被调用函数对应的文件。
+     *
+     * 本包源文件名为 &lt;path&gt;.mcfunction；依赖包提供的则是 process_mcfunction
+     * 的产出，名为 &lt;path&gt;.processed.mcfunction。同时兼容 function/ 与
+     * functions/ 两种目录布局。
+     */
+    private Path resolveFunctionFile(Path root, String namespace, String functionPath) {
+        for (String dirName : FUNCTION_DIR_NAMES) {
+            for (String suffix : FUNCTION_FILE_SUFFIXES) {
+                Path candidate = root.resolve("data")
+                                      .resolve(namespace)
+                                      .resolve(dirName)
+                                      .resolve(functionPath + suffix);
+                if (Files.isRegularFile(candidate)) {
+                    return candidate;
+                }
+            }
+        }
         return null;
     }
 
