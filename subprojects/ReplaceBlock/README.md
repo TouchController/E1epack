@@ -15,7 +15,7 @@
 下文会以 {{storage}} 作为占位符，代指您命令存储的命名空间 ID，例如 `test:test`。
 
 - 准备配置：请在您命令存储的 `{}.replace_block` 中存储 API 配置，可调用 `replace_block:api/reset_settings` 函数并传入 `{storage:"{{storage}}"}` 生成示例配置。完整配置格式见下文。
-- 调用函数：调用 `replace_block:api/execute` 函数并传入 `{storage:"{{storage}}"}`，ReplaceBlock 会检测配置并开始遍历和替换。
+- 调用函数：调用 `replace_block:api/execute` 函数并传入 `{storage:"{{storage}}"}`，ReplaceBlock 会检测配置并从命令上下文中的命令执行位置开始遍历和替换。例如，如果要以一个命令方块为中心进行方块替换，在命令方块中输入 `function replace_block:api/execute {storage:"{{storage}}"}`；如果要以所有玩家为中心进行方块替换，运行 `execute at @a run function replace_block:api/execute {storage:"{{storage}}"}`（注意，使用 `as` 修改命令执行者不会对 api 产生任何影响，api 只会读取由 `at` 更新的位置）；如果要以玩家自己为中心进行方块替换，在聊天栏输入 `/function replace_block:api/execute {storage:"{{storage}}"}`。
 - 函数返回：如果成功替换了一个或多个区块，`replace_block:api/execute` 函数会返回替换成功的方块总数，如果配置解析错误、维度未加载、遍历范围到达上限等原因并没有成功执行过一次方块替换，函数会返回 fail。
 
 ## 配置
@@ -72,7 +72,7 @@ This datapack traverses and replaces blocks chunk by chunk. Each call traverses 
 Below, {{storage}} is used as a placeholder for the namespaced ID of your command storage, for example `test:test`.
 
 - Prepare the configuration: Store the API configuration in `{}.replace_block` of your command storage. You can call the `replace_block:api/reset_settings` function and pass `{storage:"{{storage}}"}` to generate a sample configuration. See below for the full configuration format.
-- Call the function: Call the `replace_block:api/execute` function and pass `{storage:"{{storage}}"}`. ReplaceBlock will check the configuration and start traversing and replacing.
+- Call the function: Call the `replace_block:api/execute` function and pass `{storage:"{{storage}}"}`. ReplaceBlock will check the configuration and start traversing and replacing from the command execution position in the command context. For example, to replace blocks centered on a command block, enter `function replace_block:api/execute {storage:"{{storage}}"}` in the command block; to replace blocks centered on all players, run `execute at @a run function replace_block:api/execute {storage:"{{storage}}"}` (note that changing the executing entity with `as` has no effect on the API, which only reads the position updated by `at`); to replace blocks centered on yourself, enter `/function replace_block:api/execute {storage:"{{storage}}"}` in the chat.
 - Return value: If one or more chunks were successfully replaced, the `replace_block:api/execute` function returns the total number of blocks successfully replaced. If no block replacement was successfully performed due to a configuration parsing error, an unloaded dimension, the traversal range reaching its limit, etc., the function returns fail.
 
 ## Configuration
