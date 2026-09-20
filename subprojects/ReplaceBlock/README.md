@@ -28,7 +28,7 @@
 
 - 替换范围：
   - 路径：`{}.replace_block.search_range`
-  - 内容：遍历距离，为 1 即以玩家为中心的 9 个区块。
+  - 内容：遍历距离，为 1 即以命令执行位置为中心的 9 个区块。
   - 示例：`3`
 - 成功数量：
   - 路径：`{}.replace_block.success_threshold`
@@ -85,7 +85,7 @@ You can also see the example in [reset_settings.mcfunction](https://github.com/T
 
 - Search range:
   - Path: `{}.replace_block.search_range`
-  - Description: Traversal distance; a value of 1 means the 9 chunks centered on the player.
+  - Description: Traversal distance; a value of 1 means the 9 chunks centered on the command execution position.
   - Example: `3`
 - Success threshold:
   - Path: `{}.replace_block.success_threshold`
