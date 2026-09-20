@@ -4,3372 +4,3372 @@
     "body": [
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "GNU GENERAL PUBLIC LICENSE"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Version 3, 29 June 2007"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Everyone is permitted to copy and distribute verbatim copies"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of this license document, but changing it is not allowed."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Preamble"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The GNU General Public License is a free, copyleft license for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "software and other kinds of works."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The licenses for most software and other practical works are designed"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to take away your freedom to share and change the works.  By contrast,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the GNU General Public License is intended to guarantee your freedom to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "share and change all versions of a program--to make sure it remains free"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "software for all its users.  We, the Free Software Foundation, use the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "GNU General Public License for most of our software; it applies also to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "any other work released this way by its authors.  You can apply it to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "your programs, too."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "When we speak of free software, we are referring to freedom, not"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "price.  Our General Public Licenses are designed to make sure that you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "have the freedom to distribute copies of free software (and charge for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "them if you wish), that you receive source code or can get it if you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "want it, that you can change the software or use pieces of it in new"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "free programs, and that you know you can do these things."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "To protect your rights, we need to prevent others from denying you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "these rights or asking you to surrender the rights.  Therefore, you have"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "certain responsibilities if you distribute copies of the software, or if"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "you modify it: responsibilities to respect the freedom of others."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "For example, if you distribute copies of such a program, whether"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "gratis or for a fee, you must pass on to the recipients the same"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "freedoms that you received.  You must make sure that they, too, receive"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "or can get the source code.  And you must show them these terms so they"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "know their rights."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Developers that use the GNU GPL protect your rights with two steps:"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(1) assert copyright on the software, and (2) offer you this License"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "giving you legal permission to copy, distribute and/or modify it."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "For the developers' and authors' protection, the GPL clearly explains"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "that there is no warranty for this free software.  For both users' and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "authors' sake, the GPL requires that modified versions be marked as"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "changed, so that their problems will not be attributed erroneously to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "authors of previous versions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Some devices are designed to deny users access to install or run"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modified versions of the software inside them, although the manufacturer"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "can do so.  This is fundamentally incompatible with the aim of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "protecting users' freedom to change the software.  The systematic"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "pattern of such abuse occurs in the area of products for individuals to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "use, which is precisely where it is most unacceptable.  Therefore, we"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "have designed this version of the GPL to prohibit the practice for those"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "products.  If such problems arise substantially in other domains, we"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "stand ready to extend this provision to those domains in future versions"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of the GPL, as needed to protect the freedom of users."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Finally, every program is threatened constantly by software patents."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "States should not allow patents to restrict development and use of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "software on general-purpose computers, but in those that do, we wish to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "avoid the special danger that patents applied to a free program could"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "make it effectively proprietary.  To prevent this, the GPL assures that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patents cannot be used to render the program non-free."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The precise terms and conditions for copying, distribution and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modification follow."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "TERMS AND CONDITIONS"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "0. Definitions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"This License\" refers to version 3 of the GNU General Public License."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"Copyright\" also means copyright-like laws that apply to other kinds of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "works, such as semiconductor masks."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"The Program\" refers to any copyrightable work licensed under this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License.  Each licensee is addressed as \"you\".  \"Licensees\" and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"recipients\" may be individuals or organizations."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "To \"modify\" a work means to copy from or adapt all or part of the work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in a fashion requiring copyright permission, other than the making of an"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "exact copy.  The resulting work is called a \"modified version\" of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "earlier work or a work \"based on\" the earlier work."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A \"covered work\" means either the unmodified Program or a work based"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "on the Program."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "To \"propagate\" a work means to do anything with it that, without"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "permission, would make you directly or secondarily liable for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "infringement under applicable copyright law, except executing it on a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "computer or modifying a private copy.  Propagation includes copying,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "distribution (with or without modification), making available to the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "public, and in some countries other activities as well."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "To \"convey\" a work means any kind of propagation that enables other"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "parties to make or receive copies.  Mere interaction with a user through"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a computer network, with no transfer of a copy, is not conveying."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "An interactive user interface displays \"Appropriate Legal Notices\""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to the extent that it includes a convenient and prominently visible"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "feature that (1) displays an appropriate copyright notice, and (2)"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "tells the user that there is no warranty for the work (except to the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "extent that warranties are provided), that licensees may convey the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work under this License, and how to view a copy of this License.  If"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the interface presents a list of user commands or options, such as a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "menu, a prominent item in the list meets this criterion."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "1. Source Code."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The \"source code\" for a work means the preferred form of the work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for making modifications to it.  \"Object code\" means any non-source"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "form of a work."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A \"Standard Interface\" means an interface that either is an official"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "standard defined by a recognized standards body, or, in the case of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "interfaces specified for a particular programming language, one that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "is widely used among developers working in that language."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The \"System Libraries\" of an executable work include anything, other"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "than the work as a whole, that (a) is included in the normal form of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "packaging a Major Component, but which is not part of that Major"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Component, and (b) serves only to enable use of the work with that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Major Component, or to implement a Standard Interface for which an"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "implementation is available to the public in source code form.  A"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"Major Component\", in this context, means a major essential component"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(kernel, window system, and so on) of the specific operating system"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(if any) on which the executable work runs, or a compiler used to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "produce the work, or an object code interpreter used to run it."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The \"Corresponding Source\" for a work in object code form means all"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the source code needed to generate, install, and (for an executable"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work) run the object code and to modify the work, including scripts to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "control those activities.  However, it does not include the work's"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "System Libraries, or general-purpose tools or generally available free"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "programs which are used unmodified in performing those activities but"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "which are not part of the work.  For example, Corresponding Source"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "includes interface definition files associated with source files for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the work, and the source code for shared libraries and dynamically"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "linked subprograms that the work is specifically designed to require,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "such as by intimate data communication or control flow between those"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "subprograms and other parts of the work."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The Corresponding Source need not include anything that users"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "can regenerate automatically from other parts of the Corresponding"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Source."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The Corresponding Source for a work in source code form is that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "same work."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "2. Basic Permissions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "All rights granted under this License are granted for the term of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "copyright on the Program, and are irrevocable provided the stated"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "conditions are met.  This License explicitly affirms your unlimited"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "permission to run the unmodified Program.  The output from running a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "covered work is covered by this License only if the output, given its"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "content, constitutes a covered work.  This License acknowledges your"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "rights of fair use or other equivalent, as provided by copyright law."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may make, run and propagate covered works that you do not"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "convey, without conditions so long as your license otherwise remains"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in force.  You may convey covered works to others for the sole purpose"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of having them make modifications exclusively for you, or provide you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "with facilities for running those works, provided that you comply with"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the terms of this License in conveying all material for which you do"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "not control copyright.  Those thus making or running the covered works"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for you must do so exclusively on your behalf, under your direction"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "and control, on terms that prohibit them from making any copies of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "your copyrighted material outside their relationship with you."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Conveying under any other circumstances is permitted solely under"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the conditions stated below.  Sublicensing is not allowed; section 10"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "makes it unnecessary."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "3. Protecting Users' Legal Rights From Anti-Circumvention Law."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "No covered work shall be deemed part of an effective technological"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "measure under any applicable law fulfilling obligations under article"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "11 of the WIPO copyright treaty adopted on 20 December 1996, or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "similar laws prohibiting or restricting circumvention of such"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "measures."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "When you convey a covered work, you waive any legal power to forbid"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "circumvention of technological measures to the extent such circumvention"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "is effected by exercising rights under this License with respect to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the covered work, and you disclaim any intention to limit operation or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modification of the work as a means of enforcing, against the work's"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "users, your or third parties' legal rights to forbid circumvention of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "technological measures."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "4. Conveying Verbatim Copies."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may convey verbatim copies of the Program's source code as you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "receive it, in any medium, provided that you conspicuously and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "appropriately publish on each copy an appropriate copyright notice;"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "keep intact all notices stating that this License and any"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "non-permissive terms added in accord with section 7 apply to the code;"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "keep intact all notices of the absence of any warranty; and give all"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "recipients a copy of this License along with the Program."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may charge any price or no price for each copy that you convey,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "and you may offer support or warranty protection for a fee."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "5. Conveying Modified Source Versions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may convey a work based on the Program, or the modifications to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "produce it from the Program, in the form of source code under the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "terms of section 4, provided that you also meet all of these conditions:"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a) The work must carry prominent notices stating that you modified"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "it, and giving a relevant date."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "b) The work must carry prominent notices stating that it is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "released under this License and any conditions added under section"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "7.  This requirement modifies the requirement in section 4 to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"keep intact all notices\"."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "c) You must license the entire work, as a whole, under this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License to anyone who comes into possession of a copy.  This"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License will therefore apply, along with any applicable section 7"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "additional terms, to the whole of the work, and all its parts,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "regardless of how they are packaged.  This License gives no"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "permission to license the work in any other way, but it does not"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "invalidate such permission if you have separately received it."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "d) If the work has interactive user interfaces, each must display"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Appropriate Legal Notices; however, if the Program has interactive"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "interfaces that do not display Appropriate Legal Notices, your"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work need not make them do so."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A compilation of a covered work with other separate and independent"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "works, which are not by their nature extensions of the covered work,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "and which are not combined with it such as to form a larger program,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in or on a volume of a storage or distribution medium, is called an"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"aggregate\" if the compilation and its resulting copyright are not"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "used to limit the access or legal rights of the compilation's users"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "beyond what the individual works permit.  Inclusion of a covered work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in an aggregate does not cause this License to apply to the other"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "parts of the aggregate."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "6. Conveying Non-Source Forms."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may convey a covered work in object code form under the terms"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of sections 4 and 5, provided that you also convey the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "machine-readable Corresponding Source under the terms of this License,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in one of these ways:"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a) Convey the object code in, or embodied in, a physical product"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(including a physical distribution medium), accompanied by the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source fixed on a durable physical medium"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "customarily used for software interchange."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "b) Convey the object code in, or embodied in, a physical product"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(including a physical distribution medium), accompanied by a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "written offer, valid for at least three years and valid for as"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "long as you offer spare parts or customer support for that product"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "model, to give anyone who possesses the object code either (1) a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "copy of the Corresponding Source for all the software in the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "product that is covered by this License, on a durable physical"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "medium customarily used for software interchange, for a price no"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "more than your reasonable cost of physically performing this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "conveying of source, or (2) access to copy the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source from a network server at no charge."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "c) Convey individual copies of the object code with a copy of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "written offer to provide the Corresponding Source.  This"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "alternative is allowed only occasionally and noncommercially, and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "only if you received the object code with such an offer, in accord"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "with subsection 6b."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "d) Convey the object code by offering access from a designated"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "place (gratis or for a charge), and offer equivalent access to the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source in the same way through the same place at no"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "further charge.  You need not require recipients to copy the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source along with the object code.  If the place to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "copy the object code is a network server, the Corresponding Source"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "may be on a different server (operated by you or a third party)"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "that supports equivalent copying facilities, provided you maintain"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "clear directions next to the object code saying where to find the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source.  Regardless of what server hosts the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source, you remain obligated to ensure that it is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "available for as long as needed to satisfy these requirements."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "e) Convey the object code using peer-to-peer transmission, provided"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "you inform other peers where the object code and Corresponding"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Source of the work are being offered to the general public at no"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "charge under subsection 6d."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A separable portion of the object code, whose source code is excluded"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "from the Corresponding Source as a System Library, need not be"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "included in conveying the object code work."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A \"User Product\" is either (1) a \"consumer product\", which means any"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "tangible personal property which is normally used for personal, family,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "or household purposes, or (2) anything designed or sold for incorporation"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "into a dwelling.  In determining whether a product is a consumer product,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "doubtful cases shall be resolved in favor of coverage.  For a particular"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "product received by a particular user, \"normally used\" refers to a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "typical or common use of that class of product, regardless of the status"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of the particular user or of the way in which the particular user"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "actually uses, or expects or is expected to use, the product.  A product"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "is a consumer product regardless of whether the product has substantial"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "commercial, industrial or non-consumer uses, unless such uses represent"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the only significant mode of use of the product."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"Installation Information\" for a User Product means any methods,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "procedures, authorization keys, or other information required to install"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "and execute modified versions of a covered work in that User Product from"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a modified version of its Corresponding Source.  The information must"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "suffice to ensure that the continued functioning of the modified object"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "code is in no case prevented or interfered with solely because"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modification has been made."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If you convey an object code work under this section in, or with, or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "specifically for use in, a User Product, and the conveying occurs as"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "part of a transaction in which the right of possession and use of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "User Product is transferred to the recipient in perpetuity or for a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "fixed term (regardless of how the transaction is characterized), the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source conveyed under this section must be accompanied"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "by the Installation Information.  But this requirement does not apply"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "if neither you nor any third party retains the ability to install"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modified object code on the User Product (for example, the work has"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "been installed in ROM)."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The requirement to provide Installation Information does not include a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "requirement to continue to provide support service, warranty, or updates"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for a work that has been modified or installed by the recipient, or for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the User Product in which it has been modified or installed.  Access to a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "network may be denied when the modification itself materially and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "adversely affects the operation of the network or violates the rules and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "protocols for communication across the network."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source conveyed, and Installation Information provided,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in accord with this section must be in a format that is publicly"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "documented (and with an implementation available to the public in"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "source code form), and must require no special password or key for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "unpacking, reading or copying."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "7. Additional Terms."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "\"Additional permissions\" are terms that supplement the terms of this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License by making exceptions from one or more of its conditions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Additional permissions that are applicable to the entire Program shall"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "be treated as though they were included in this License, to the extent"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "that they are valid under applicable law.  If additional permissions"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "apply only to part of the Program, that part may be used separately"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "under those permissions, but the entire Program remains governed by"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "this License without regard to the additional permissions."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "When you convey a copy of a covered work, you may at your option"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "remove any additional permissions from that copy, or from any part of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "it.  (Additional permissions may be written to require their own"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "removal in certain cases when you modify the work.)  You may place"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "additional permissions on material, added by you to a covered work,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for which you have or can give appropriate copyright permission."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Notwithstanding any other provision of this License, for material you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "add to a covered work, you may (if authorized by the copyright holders of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "that material) supplement the terms of this License with terms:"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a) Disclaiming warranty or limiting liability differently from the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "terms of sections 15 and 16 of this License; or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "b) Requiring preservation of specified reasonable legal notices or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "author attributions in that material or in the Appropriate Legal"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Notices displayed by works containing it; or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "c) Prohibiting misrepresentation of the origin of that material, or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "requiring that modified versions of such material be marked in"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "reasonable ways as different from the original version; or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "d) Limiting the use for publicity purposes of names of licensors or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "authors of the material; or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "e) Declining to grant rights under trademark law for use of some"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "trade names, trademarks, or service marks; or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "f) Requiring indemnification of licensors and authors of that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "material by anyone who conveys the material (or modified versions of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "it) with contractual assumptions of liability to the recipient, for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "any liability that these contractual assumptions directly impose on"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "those licensors and authors."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "All other non-permissive additional terms are considered \"further"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "restrictions\" within the meaning of section 10.  If the Program as you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "received it, or any part of it, contains a notice stating that it is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "governed by this License along with a term that is a further"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "restriction, you may remove that term.  If a license document contains"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "a further restriction but permits relicensing or conveying under this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License, you may add to a covered work material governed by the terms"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "of that license document, provided that the further restriction does"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "not survive such relicensing or conveying."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If you add terms to a covered work in accord with this section, you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "must place, in the relevant source files, a statement of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "additional terms that apply to those files, or a notice indicating"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "where to find the applicable terms."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Additional terms, permissive or non-permissive, may be stated in the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "form of a separately written license, or stated as exceptions;"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the above requirements apply either way."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "8. Termination."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may not propagate or modify a covered work except as expressly"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "provided under this License.  Any attempt otherwise to propagate or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modify it is void, and will automatically terminate your rights under"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "this License (including any patent licenses granted under the third"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "paragraph of section 11)."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "However, if you cease all violation of this License, then your"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "license from a particular copyright holder is reinstated (a)"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "provisionally, unless and until the copyright holder explicitly and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "finally terminates your license, and (b) permanently, if the copyright"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "holder fails to notify you of the violation by some reasonable means"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "prior to 60 days after the cessation."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Moreover, your license from a particular copyright holder is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "reinstated permanently if the copyright holder notifies you of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "violation by some reasonable means, this is the first time you have"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "received notice of violation of this License (for any work) from that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "copyright holder, and you cure the violation prior to 30 days after"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "your receipt of the notice."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Termination of your rights under this section does not terminate the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "licenses of parties who have received copies or rights from you under"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "this License.  If your rights have been terminated and not permanently"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "reinstated, you do not qualify to receive new licenses for the same"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "material under section 10."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "9. Acceptance Not Required for Having Copies."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You are not required to accept this License in order to receive or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "run a copy of the Program.  Ancillary propagation of a covered work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "occurring solely as a consequence of using peer-to-peer transmission"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to receive a copy likewise does not require acceptance.  However,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "nothing other than this License grants you permission to propagate or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "modify any covered work.  These actions infringe copyright if you do"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "not accept this License.  Therefore, by modifying or propagating a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "covered work, you indicate your acceptance of this License to do so."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "10. Automatic Licensing of Downstream Recipients."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Each time you convey a covered work, the recipient automatically"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "receives a license from the original licensors, to run, modify and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "propagate that work, subject to this License.  You are not responsible"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for enforcing compliance by third parties with this License."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "An \"entity transaction\" is a transaction transferring control of an"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "organization, or substantially all assets of one, or subdividing an"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "organization, or merging organizations.  If propagation of a covered"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work results from an entity transaction, each party to that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "transaction who receives a copy of the work also receives whatever"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "licenses to the work the party's predecessor in interest had or could"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "give under the previous paragraph, plus a right to possession of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Corresponding Source of the work from the predecessor in interest, if"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the predecessor has it or can get it with reasonable efforts."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You may not impose any further restrictions on the exercise of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "rights granted or affirmed under this License.  For example, you may"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "not impose a license fee, royalty, or other charge for exercise of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "rights granted under this License, and you may not initiate litigation"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(including a cross-claim or counterclaim in a lawsuit) alleging that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "any patent claim is infringed by making, using, selling, offering for"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "sale, or importing the Program or any portion of it."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "11. Patents."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A \"contributor\" is a copyright holder who authorizes use under this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License of the Program or a work on which the Program is based.  The"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work thus licensed is called the contributor's \"contributor version\"."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A contributor's \"essential patent claims\" are all patent claims"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "owned or controlled by the contributor, whether already acquired or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "hereafter acquired, that would be infringed by some manner, permitted"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "by this License, of making, using, or selling its contributor version,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "but do not include claims that would be infringed only as a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "consequence of further modification of the contributor version.  For"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "purposes of this definition, \"control\" includes the right to grant"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patent sublicenses in a manner consistent with the requirements of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "this License."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Each contributor grants you a non-exclusive, worldwide, royalty-free"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patent license under the contributor's essential patent claims, to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "make, use, sell, offer for sale, import and otherwise run, modify and"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "propagate the contents of its contributor version."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "In the following three paragraphs, a \"patent license\" is any express"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "agreement or commitment, however denominated, not to enforce a patent"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(such as an express permission to practice a patent or covenant not to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "sue for patent infringement).  To \"grant\" such a patent license to a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "party means to make such an agreement or commitment not to enforce a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patent against the party."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If you convey a covered work, knowingly relying on a patent license,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "and the Corresponding Source of the work is not available for anyone"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to copy, free of charge and under the terms of this License, through a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "publicly available network server or other readily accessible means,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "then you must either (1) cause the Corresponding Source to be so"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "available, or (2) arrange to deprive yourself of the benefit of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patent license for this particular work, or (3) arrange, in a manner"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "consistent with the requirements of this License, to extend the patent"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "license to downstream recipients.  \"Knowingly relying\" means you have"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "actual knowledge that, but for the patent license, your conveying the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "covered work in a country, or your recipient's use of the covered work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in a country, would infringe one or more identifiable patents in that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "country that you have reason to believe are valid."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If, pursuant to or in connection with a single transaction or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "arrangement, you convey, or propagate by procuring conveyance of, a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "covered work, and grant a patent license to some of the parties"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "receiving the covered work authorizing them to use, propagate, modify"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "or convey a specific copy of the covered work, then the patent license"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "you grant is automatically extended to all recipients of the covered"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work and works based on it."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "A patent license is \"discriminatory\" if it does not include within"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the scope of its coverage, prohibits the exercise of, or is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "conditioned on the non-exercise of one or more of the rights that are"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "specifically granted under this License.  You may not convey a covered"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "work if you are a party to an arrangement with a third party that is"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "in the business of distributing software, under which you make payment"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to the third party based on the extent of your activity of conveying"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the work, and under which the third party grants, to any of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "parties who would receive the covered work from you, a discriminatory"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "patent license (a) in connection with copies of the covered work"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "conveyed by you (or copies made from those copies), or (b) primarily"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "for and in connection with specific products or compilations that"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "contain the covered work, unless you entered into that arrangement,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "or that patent license was granted, prior to 28 March 2007."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Nothing in this License shall be construed as excluding or limiting"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "any implied license or other defenses to infringement that may"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "otherwise be available to you under applicable patent law."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "12. No Surrender of Others' Freedom."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If conditions are imposed on you (whether by court order, agreement or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "otherwise) that contradict the conditions of this License, they do not"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "excuse you from the conditions of this License.  If you cannot convey a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "covered work so as to satisfy simultaneously your obligations under this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License and any other pertinent obligations, then as a consequence you may"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "not convey it at all.  For example, if you agree to terms that obligate you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to collect a royalty for further conveying from those to whom you convey"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the Program, the only way you could satisfy both those terms and this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License would be to refrain entirely from conveying the Program."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "13. Use with the GNU Affero General Public License."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Notwithstanding any other provision of this License, you have"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "permission to link or combine any covered work with a work licensed"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "under version 3 of the GNU Affero General Public License into a single"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "combined work, and to convey the resulting work.  The terms of this"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "License will continue to apply to the part which is the covered work,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "but the special requirements of the GNU Affero General Public License,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "section 13, concerning interaction through a network will apply to the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "combination as such."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "14. Revised Versions of this License."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The Free Software Foundation may publish revised and/or new versions of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the GNU General Public License from time to time.  Such new versions will"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "be similar in spirit to the present version, but may differ in detail to"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "address new problems or concerns."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Each version is given a distinguishing version number.  If the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Program specifies that a certain numbered version of the GNU General"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Public License \"or any later version\" applies to it, you have the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "option of following the terms and conditions either of that numbered"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "version or of any later version published by the Free Software"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Foundation.  If the Program does not specify a version number of the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "GNU General Public License, you may choose any version ever published"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "by the Free Software Foundation."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If the Program specifies that a proxy can decide which future"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "versions of the GNU General Public License can be used, that proxy's"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "public statement of acceptance of a version permanently authorizes you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to choose that version for the Program."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Later license versions may give you additional or different"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "permissions.  However, no additional obligations are imposed on any"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "author or copyright holder as a result of your choosing to follow a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "later version."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "15. Disclaimer of Warranty."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "ALL NECESSARY SERVICING, REPAIR OR CORRECTION."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "16. Limitation of Liability."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "SUCH DAMAGES."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "17. Interpretation of Sections 15 and 16."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If the disclaimer of warranty and limitation of liability provided"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "above cannot be given local legal effect according to their terms,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "reviewing courts shall apply local law that most closely approximates"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "an absolute waiver of all civil liability in connection with the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Program, unless a warranty or assumption of liability accompanies a"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "copy of the Program in return for a fee."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "END OF TERMS AND CONDITIONS"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "How to Apply These Terms to Your New Programs"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If you develop a new program, and you want it to be of the greatest"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "possible use to the public, the best way to achieve this is to make it"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "free software which everyone can redistribute and change under these terms."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "To do so, attach the following notices to the program.  It is safest"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "to attach them to the start of each source file to most effectively"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "state the exclusion of warranty; and each file should have at least"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the \"copyright\" line and a pointer to where the full notice is found."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "<one line to give the program's name and a brief idea of what it does.>"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Copyright (C) <year>  <name of author>"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "This program is free software: you can redistribute it and/or modify"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "it under the terms of the GNU General Public License as published by"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the Free Software Foundation, either version 3 of the License, or"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "(at your option) any later version."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "This program is distributed in the hope that it will be useful,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "but WITHOUT ANY WARRANTY; without even the implied warranty of"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "GNU General Public License for more details."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You should have received a copy of the GNU General Public License"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "along with this program.  If not, see <https://www.gnu.org/licenses/>."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Also add information on how to contact you by electronic and paper mail."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "If the program does terminal interaction, make it output a short"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "notice like this when it starts in an interactive mode:"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "<program>  Copyright (C) <year>  <name of author>"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "This is free software, and you are welcome to redistribute it"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "under certain conditions; type `show c' for details."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The hypothetical commands `show w' and `show c' should show the appropriate"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "parts of the General Public License.  Of course, your program's commands"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "might be different; for a GUI interface, you would use an \"about box\"."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "You should also get your employer (if you work as a programmer) or school,"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "if any, to sign a \"copyright disclaimer\" for the program, if necessary."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "For more information on this, and how to apply and follow the GNU GPL, see"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "<https://www.gnu.org/licenses/>."
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": ""
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "The GNU General Public License does not permit incorporating your program"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "into proprietary programs.  If your program is a subroutine library, you"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "may consider it more useful to permit linking proprietary applications with"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "the library.  If this is what you want to do, use the GNU Lesser General"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "Public License instead of this License.  But first, please read"
         },
         {
             "type": "plain_message",
-            "width": 1000,
+            "width": 400,
             "contents": "<https://www.gnu.org/licenses/why-not-lgpl.html>."
         }
     ]
