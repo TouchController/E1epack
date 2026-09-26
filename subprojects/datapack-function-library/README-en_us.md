@@ -441,8 +441,8 @@ Function usage: `/function dfl:lib/count_items {namespace:"minecraft",name:"ston
 
 Function usage: `/function dfl:lib/get_pos`
 
-- Create scoreboard items named dfl_entity_pos_x, dfl_entity_pos_y and dfl_entity_pos_z respectively.
-- Read the Pos NBT list of the command executor and update the command executor's scores in these scoreboard items.
+- Create scoreboard items named `dfl_entity_pos_x`, `dfl_entity_pos_y` and `dfl_entity_pos_z` respectively.
+- Read the `Pos` NBT list of the command executor and update the command executor's scores in these scoreboard items.
 - Use `/execute as @a run function dfl:lib/get_pos` to write all players' positions into these scoreboard items.
 
 # Dialog Description

@@ -1,23 +1,9 @@
-- 兼容：支持范围由 1.13–1.21.10 扩展至 1.13–26.3；
-- 兼容：适配 Minecraft 26.x 的命令语法变更（`gamerule` 与 `time query`），旧版本由构建系统自动转换；
-- 破坏性：`dfl:lib/count_items` 新增 `{namespace}` 参数，记分项由 `dfl_{name}_num` 改为 `dfl_{namespace}.{name}_count`；
-- 破坏性：基于 `count_items` 的函数（`clear_and_execute_single`、`clear_and_execute_multiple`、`maintain_item_count`、`convert_items_to_xp`）同步新增 `{namespace}` 参数；
-- 破坏性：`dfl:child/smelt` 重命名为 `dfl:tick/smelt_item`，`dfl:tick/smelt` 重命名为 `dfl:tick/coal_smelt`，两者参数均有调整；
-- 破坏性：移除 `dfl:lib/spawn_dummies` 批量生成假人函数；
-- 破坏性：移除 tick 入口函数与 `minecraft:tick` 标签；
-- 修复：`kill_by_density` 的村民豁免在部分版本下失效；
-- 修复：`teleport_request` 的传送目标判定错误；
-- 修复：冶炼函数中 `count_items` 调用缺少宏前缀导致无法执行。
+- 新增：`dfl:lib/get_pos` 函数，读取命令执行者的位置并写入 `dfl_entity_pos_x`、`dfl_entity_pos_y`、`dfl_entity_pos_z` 记分项；
+- 修复：许可协议对话框文本宽度过宽，调整为 400；
+- 文档：README 中的红色高亮改用 Markdown 加粗。
 
 ---
 
-- Compatibility: supported version range extended from 1.13–1.21.10 to 1.13–26.3;
-- Compatibility: adapted to the command syntax changes of Minecraft 26.x (`gamerule` and `time query`), with older versions converted automatically at build time;
-- Breaking: `dfl:lib/count_items` now takes a `{namespace}` parameter, and its scoreboard objective changed from `dfl_{name}_num` to `dfl_{namespace}.{name}_count`;
-- Breaking: functions built on `count_items` (`clear_and_execute_single`, `clear_and_execute_multiple`, `maintain_item_count`, `convert_items_to_xp`) now take a `{namespace}` parameter as well;
-- Breaking: `dfl:child/smelt` renamed to `dfl:tick/smelt_item` and `dfl:tick/smelt` renamed to `dfl:tick/coal_smelt`, both with adjusted parameters;
-- Breaking: removed the `dfl:lib/spawn_dummies` function;
-- Breaking: removed the tick entry point function and the `minecraft:tick` tag;
-- Fix: villager exemption of `kill_by_density` did not work on some versions;
-- Fix: wrong teleport target check in `teleport_request`;
-- Fix: missing macro prefix on `count_items` calls in the smelting functions.
+- Added: `dfl:lib/get_pos` function, which reads the command executor's position into the `dfl_entity_pos_x`, `dfl_entity_pos_y` and `dfl_entity_pos_z` scoreboard objectives;
+- Fix: license dialog text width was too wide, now set to 400;
+- Docs: red highlights in the README are now Markdown bold.
