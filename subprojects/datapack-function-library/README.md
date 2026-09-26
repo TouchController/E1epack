@@ -437,6 +437,14 @@ execute if score dfl_enable dfl_scoreboard matches 1
 - 创建名为 dfl\_{namespace}.{name}\_count 的记分项；
 - 将所有玩家的 {namespace}:{name} 数量写入各自的此记分项。
 
+### 获取实体位置
+
+函数用法：`/function dfl:lib/get_pos`
+
+- 分别创建名为 `dfl_entity_pos_x`、`dfl_entity_pos_y`、`dfl_entity_pos_z` 的记分项。
+- 读取命令执行者的 `Pos` NBT 列表并更新命令执行者在这些记分项中的分数。
+- 使用 `/execute as @a run function dfl:lib/get_pos` 将所有玩家的位置写入该记分项。
+
 # 对话框说明
 
 ## GNU GPL 协议原文
