@@ -5,7 +5,7 @@
 
 import os
 import json
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
 
@@ -15,26 +15,23 @@ IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
 
 @dataclass
 class KeyChange:
-    """键值对变更信息"""
+    """待处理的键"""
     key: str
-    old_value: Optional[str]
-    new_value: Optional[str]
-    operation: str  # 'added', 'deleted', 'modified'
+    operation: str  # 'added'（缺失补全）、'modified'（源文本变更）、'renamed'（键重命名）
+    renamed_from: Optional[str] = None  # 仅重命名：旧键名
 
 @dataclass
 class FileChanges:
-    """文件变更信息"""
+    """一批待处理的键；lang_code 为 None 表示适用于所有目标语言"""
     namespace: str
-    file_path: str
-    added_keys: list[KeyChange]
-    deleted_keys: list[KeyChange]
-    modified_keys: list[KeyChange]
+    keys: List[KeyChange]
+    lang_code: Optional[str] = None
 
 class ChangeType(Enum):
     """变更类型枚举"""
     ADDED = "added"
-    DELETED = "deleted"
     MODIFIED = "modified"
+    RENAMED = "renamed"
 
 # 配置
 DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
