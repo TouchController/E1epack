@@ -79,7 +79,7 @@ $tellraw @a [\
             }\
         }\
     }]
-tellraw @a {"type":"translatable","translate":"no.resource.pack.white.elephant.a","fallback":"| "}
+tellraw @a {"type":"translatable","translate":"no.resource.pack.white.elephant.line","fallback":"| "}
 tellraw @a [{"type":"translatable","translate":"no.resource.pack.white.elephant.nothing","fallback":"| "},\
     {"type":"translatable","translate":"no.resource.pack.white.elephant.nothing",\
     "fallback":"WARNING: No localization","color":"red","bold":true}]

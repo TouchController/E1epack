@@ -3,7 +3,7 @@
     "banner.white.elephant.author": "作者：%s",
     "banner.white.elephant.license": "本数据包使用 %s 协议开源",
     "banner.white.elephant.official": "数据包官网",
-    "no.resource.pack.white.elephant.a": "--------------------",
+    "no.resource.pack.white.elephant.line": "--------------------",
     "no.resource.pack.white.elephant.nothing": "",
     "need.dfl.white.elephant.no": "缺少前置",
     "need.dfl.white.elephant.please.install": "请安装数据包: ",
