@@ -1,7 +1,7 @@
 ## 实体过多时清除非玩家实体
 
 # 创建计分板目标，用于统计实体数量
-scoreboard objectives add dfl_scoreboard dummy "DFL"
+function dfl:private/init_scoreboard
 # 统计非玩家且无need标签的实体数量
 execute store result score entitynum dfl_scoreboard \
     if entity @e[type=!minecraft:player,tag=!need]

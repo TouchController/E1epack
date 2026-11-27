@@ -2,7 +2,7 @@
 # 为带有 dfl_slime 标签的玩家生成临时史莱姆平台，持续10秒后自动清除
 
 # 初始化记分板 - 如果不存在则创建主记分板
-scoreboard objectives add dfl_scoreboard dummy "DFL"
+function dfl:private/init_scoreboard
 
 # 初始化史莱姆平台持续时间（200游戏刻 = 10秒）
     # 如果 slime_time 记分板值未设置（不在整数范围内），则设置为200

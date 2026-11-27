@@ -1,7 +1,7 @@
 ## 玩家唯一ID分配系统
 
 # 初始化记分板目标
-scoreboard objectives add dfl_scoreboard dummy "DFL"
+function dfl:private/init_scoreboard
 scoreboard objectives add dfl_playerid dummy
 
 # 为未分配ID的玩家设置初始值
