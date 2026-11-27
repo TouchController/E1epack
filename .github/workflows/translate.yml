@@ -27,11 +27,6 @@ on:
         required: false
         default: true
         type: boolean
-      translation_debug:
-        description: 'Enable debug logs'
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
@@ -69,7 +64,6 @@ jobs:
         DEEPSEEK_MODEL: ${{ github.event.inputs.deepseek_model || 'deepseek-flash' }}
         # 反向判断：push 触发时 inputs 为空，此处需回退到"开启"，仅手动取消勾选时关闭
         DEEPSEEK_THINKING: ${{ github.event.inputs.deepseek_thinking == 'false' && '0' || '1' }}
-        TRANSLATION_DEBUG: ${{ github.event.inputs.translation_debug == 'true' && '1' || '0' }}
       run: |
         python .github/scripts/translate.py
 

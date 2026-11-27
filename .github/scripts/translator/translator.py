@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 import concurrent.futures
 
 from translator.config import DEEPSEEK_API_URL, SYSTEM_PROMPT_FILE, USER_PROMPT_FILE, BATCH_SIZE, MAX_INDIVIDUAL_RETRIES, CONTEXT_SIZE, DEFAULT_TEMPERATURE, API_TIMEOUT
-from translator.logging import log_progress, flush_logs
+from translator.logging import log_progress
 
 
 class DeepSeekTranslator:
@@ -22,8 +22,6 @@ class DeepSeekTranslator:
         self.api_key = api_key
         self.model = model
         self.thinking = thinking
-        # 调试模式：在每次请求前记录详细日志（与错误日志格式一致）
-        self.debug_mode = os.getenv('TRANSLATION_DEBUG', '0') == '1'
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}"
@@ -49,25 +47,18 @@ class DeepSeekTranslator:
 
     def _load_prompt_template(self, file_path: str) -> str:
         """加载提示词模板文件，跳过标题行"""
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
 
-            # 跳过以 # 开头的标题行和空行
-            content_lines = []
-            for line in lines:
-                stripped_line = line.strip()
-                # 跳过标题行（以#开头）和空行，但保留内容开始后的空行
-                if content_lines or (stripped_line and not stripped_line.startswith('#')):
-                    content_lines.append(line)
+        # 跳过以 # 开头的标题行和空行
+        content_lines = []
+        for line in lines:
+            stripped_line = line.strip()
+            # 跳过标题行（以#开头）和空行，但保留内容开始后的空行
+            if content_lines or (stripped_line and not stripped_line.startswith('#')):
+                content_lines.append(line)
 
-            return ''.join(content_lines).strip()
-        except FileNotFoundError:
-            log_progress(f"警告：提示词模板文件 {file_path} 不存在，使用默认提示词", "warning")
-            return ""
-        except Exception as e:
-            log_progress(f"警告：加载提示词模板 {file_path} 时出错: {e}", "warning")
-            return ""
+        return ''.join(content_lines).strip()
 
     def _format_prompt(self, template: str, **kwargs) -> str:
         """格式化提示词模板，替换变量"""
@@ -148,90 +139,52 @@ class DeepSeekTranslator:
 
         return errors
 
-    def log_translation_failure(self, attempt: int, system_prompt: str, user_prompt: str,
-                              api_response: str, error: str, texts: Dict[str, str],
-                              namespace: str = "unknown", target_lang_name: str = "unknown",
-                              model: str = "unknown", temperature: float = DEFAULT_TEMPERATURE,
-                              log_to_main: bool = True) -> None:
-        """记录翻译失败的详细信息到日志文件"""
-        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
+    def log_llm_exchange(self, attempt: int, system_prompt: str, user_prompt: str,
+                          texts: Dict[str, str], response, namespace: str = "unknown",
+                          target_lang_name: str = "unknown", temperature: float = DEFAULT_TEMPERATURE,
+                          translated_result: str = "", api_time: float = 0,
+                          error: Optional[BaseException] = None) -> None:
+        """始终记录一次 LLM 调用的完整请求与响应，写入 logs/llm/（随工作流上传为 Artifact）"""
+        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs", "llm")
         os.makedirs(log_dir, exist_ok=True)
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 包含毫秒
-        log_file = os.path.join(log_dir, f"translation_failure_{timestamp}_attempt_{attempt}.log")
+        raw_response = ""
+        http_status = None
+        if response is not None:
+            http_status = getattr(response, "status_code", None)
+            try:
+                raw_response = response.text
+            except Exception:
+                pass
 
-        # 详细错误日志
-        with open(log_file, 'w', encoding='utf-8') as f:
-            f.write(f"翻译失败日志 - 尝试次数: {attempt}\n")
-            f.write(f"时间: {datetime.now().isoformat()}\n")
-            f.write(f"命名空间: {namespace}\n")
-            f.write(f"目标语言: {target_lang_name}\n")
-            f.write(f"模型: {model}\n")
-            f.write(f"温度: {temperature}\n")
-            f.write(f"文本数量: {len(texts)}\n")
-            f.write("=" * 80 + "\n\n")
-
-            f.write(f"错误信息:\n{error}\n")
-            f.write("\n" + "=" * 80 + "\n\n")
-
-            f.write("原始文本:\n")
-            f.write(json.dumps(texts, ensure_ascii=False, indent=2))
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("系统提示词:\n")
-            f.write(system_prompt)
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("用户提示词:\n")
-            f.write(user_prompt)
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("API响应:\n")
-            f.write(api_response)
-            f.write("\n\n" + "=" * 80 + "\n")
-
-        # 错误汇总日志
-        summary_file = os.path.join(log_dir, "error_summary.log")
-        with open(summary_file, 'a', encoding='utf-8') as f:
-            f.write(f"[{datetime.now().isoformat()}] 尝试 {attempt} 失败: {error[:100]}{'...' if len(error) > 100 else ''}\n")
-            f.write(f"  命名空间: {namespace}\n")
-            f.write(f"  目标语言: {target_lang_name}\n")
-            f.write(f"  文件: {os.path.basename(log_file)}\n")
-            f.write(f"  文本数量: {len(texts)}\n")
-            f.write(f"  模型: {model}\n")
-            f.write(f"  温度: {temperature}\n\n")
-
-        # 只在需要时记录主日志
-        if log_to_main:
-            error_summary = error[:50] + ('...' if len(error) > 50 else '')
-            log_progress(f"    [尝试{attempt}/{MAX_INDIVIDUAL_RETRIES}] [{namespace}] {len(texts)}个文本 -> {target_lang_name} -> 失败: {error_summary}", "warning")
-            flush_logs()  # 确保错误日志被及时写入
-
-    def log_translation_debug(self, attempt: int, system_prompt: str, user_prompt: str,
-                               texts: Dict[str, str], namespace: str = "unknown",
-                               target_lang_name: str = "unknown", model: str = "unknown",
-                               temperature: float = DEFAULT_TEMPERATURE,
-                               raw_response: str = "", translated_result: str = "",
-                               success: bool = False, api_time: float = 0) -> None:
-        """在调试模式下记录每次请求和响应的完整信息"""
-        log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
-        os.makedirs(log_dir, exist_ok=True)
-
-        status_text = "成功" if success else "失败"
+        status_text = "成功" if error is None else "失败"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
-        log_file = os.path.join(log_dir, f"translation_debug_{timestamp}_{namespace}_{target_lang_name}_attempt_{attempt}_{status_text}.log")
+        log_file = os.path.join(log_dir, f"{timestamp}_{namespace}_{target_lang_name}_attempt_{attempt}_{status_text}.log")
 
         with open(log_file, 'w', encoding='utf-8') as f:
-            f.write(f"翻译调试日志\n")
+            f.write(f"LLM 请求/响应记录 - 尝试次数: {attempt}\n")
             f.write(f"时间: {datetime.now().isoformat()}\n")
             f.write(f"状态: {status_text}\n")
             f.write(f"命名空间: {namespace}\n")
             f.write(f"目标语言: {target_lang_name}\n")
-            f.write(f"模型: {model}\n")
+            f.write(f"模型: {self.model}\n")
             f.write(f"温度: {temperature}\n")
+            f.write(f"思考模式: {'开启' if self.thinking else '关闭'}\n")
+            f.write(f"端点: {DEEPSEEK_API_URL}\n")
+            f.write(f"HTTP状态: {http_status}\n")
             f.write(f"文本数量: {len(texts)}\n")
             f.write(f"API耗时: {api_time:.2f}s\n")
+            if error is not None:
+                f.write(f"错误: {type(error).__name__}: {error}\n")
             f.write("=" * 80 + "\n\n")
+
+            f.write("=== 请求: 系统提示词 ===\n")
+            f.write(system_prompt)
+            f.write("\n\n" + "=" * 80 + "\n\n")
+
+            f.write("=== 请求: 用户提示词 ===\n")
+            f.write(user_prompt)
+            f.write("\n\n" + "=" * 80 + "\n\n")
 
             f.write("=== 原始文本 ===\n")
             f.write(json.dumps(texts, ensure_ascii=False, indent=2))
@@ -243,15 +196,14 @@ class DeepSeekTranslator:
 
             f.write("=== 翻译结果 ===\n")
             f.write(translated_result if translated_result else "(空)")
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("=== 系统提示词 ===\n")
-            f.write(system_prompt)
-            f.write("\n\n" + "=" * 80 + "\n\n")
-
-            f.write("=== 用户提示词 ===\n")
-            f.write(user_prompt)
             f.write("\n")
+
+        if error is not None:
+            summary_file = os.path.join(os.path.dirname(log_dir), "error_summary.log")
+            with open(summary_file, 'a', encoding='utf-8') as f:
+                f.write(f"[{datetime.now().isoformat()}] 尝试 {attempt} 失败: {str(error)[:100]}\n")
+                f.write(f"  命名空间: {namespace} | 目标语言: {target_lang_name} | 模型: {self.model}\n")
+                f.write(f"  文件: {os.path.basename(log_file)}\n\n")
 
     def prepare_texts_for_translation(self, texts: Dict[str, any]) -> Dict[str, str]:
         """准备合并后的文本进行翻译，处理列表值
@@ -290,36 +242,16 @@ class DeepSeekTranslator:
         source_text = json.dumps(texts_to_translate, ensure_ascii=False, indent=2)
 
         try:
-            # 使用提示词模板或回退到默认提示词
-            if self.system_prompt:
-                system_prompt = self._format_prompt(
-                    self.system_prompt,
-                    target_language=target_lang_name
-                )
-            else:
-                system_prompt = "你是一个专业的游戏本地化翻译专家，擅长Minecraft相关内容的翻译。"
-
-            if self.user_prompt:
-                user_prompt = self._format_prompt(
-                    self.user_prompt,
-                    target_language=target_lang_name,
-                    content_to_translate=source_text
-                )
-            else:
-                user_prompt = f"""请将以下JSON格式的游戏本地化文本翻译为{target_lang_name}。
-
-要求：
-1. 保持JSON格式不变，只翻译值部分
-2. 保持游戏术语的一致性和准确性
-3. 考虑游戏上下文，使翻译自然流畅
-4. 保持原有的格式标记（如方括号、冒号等）
-5. 对于专有名词（如"数据包"、"实体"等），使用游戏中的标准翻译
-6. 如果遇到列表格式，则应当参考列表中的所有条目进行翻译。但确保仅输出包含{target_lang_name}语言的字符串而不是列表
-
-源文本：
-{source_text}
-
-请直接返回翻译后的JSON，不要添加任何解释文字。"""
+            # 提示词完全来自模板文件（缺失时直接失败，不使用内置回退）
+            system_prompt = self._format_prompt(
+                self.system_prompt,
+                target_language=target_lang_name
+            )
+            user_prompt = self._format_prompt(
+                self.user_prompt,
+                target_language=target_lang_name,
+                content_to_translate=source_text
+            )
 
             payload = {
                 "model": self.model,
@@ -394,50 +326,36 @@ class DeepSeekTranslator:
             if validation_errors:
                 raise ValueError(f"翻译验证失败: {'; '.join(validation_errors)}")
 
-            # 验证成功，返回结果
-            if self.debug_mode:
-                self.log_translation_debug(
-                    attempt=attempt,
-                    system_prompt=system_prompt,
-                    user_prompt=user_prompt,
-                    texts=texts_to_translate,
-                    namespace=namespace,
-                    target_lang_name=target_lang_name,
-                    model=self.model,
-                    temperature=temperature,
-                    raw_response=response_text,
-                    translated_result=json.dumps(translated_dict, ensure_ascii=False, indent=2),
-                    success=True,
-                    api_time=api_time
-                )
+            # 记录完整的请求与响应
+            self.log_llm_exchange(
+                attempt=attempt,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                texts=texts_to_translate,
+                response=response,
+                namespace=namespace,
+                target_lang_name=target_lang_name,
+                temperature=temperature,
+                translated_result=json.dumps(translated_dict, ensure_ascii=False, indent=2),
+                api_time=api_time
+            )
             return translated_dict
 
         except Exception as e:
-            # 记录失败详情到文件（不记录主日志，由上层函数统一管理主日志）
-            self.log_translation_failure(
+            # 失败同样记录完整请求与响应（不记录主日志，由上层函数统一管理）
+            self.log_llm_exchange(
                 attempt=attempt,  # 使用传入的实际尝试次数
                 system_prompt=system_prompt if 'system_prompt' in locals() else "未生成",
                 user_prompt=user_prompt if 'user_prompt' in locals() else "未生成",
-                api_response=translated_content if 'translated_content' in locals() else "无响应",
-                error=str(e),
-                texts=texts,
+                texts=texts_to_translate if 'texts_to_translate' in locals() else texts,
+                response=response if 'response' in locals() else None,
                 namespace=namespace,
                 target_lang_name=target_lang_name,
-                model=self.model,
                 temperature=temperature,
-                log_to_main=False  # 不记录主日志，由execute_translation_request统一管理
+                translated_result=json.dumps(translated_dict, ensure_ascii=False, indent=2) if 'translated_dict' in locals() else "",
+                api_time=api_time if 'api_time' in locals() else 0,
+                error=e
             )
-            if self.debug_mode:
-                raw = response_text if 'response_text' in locals() else "无响应"
-                translated = translated_content if 'translated_content' in locals() else ""
-                self.log_translation_debug(
-                    attempt=attempt, system_prompt=system_prompt if 'system_prompt' in locals() else "未生成",
-                    user_prompt=user_prompt if 'user_prompt' in locals() else "未生成",
-                    texts=texts, namespace=namespace, target_lang_name=target_lang_name,
-                    model=self.model, temperature=temperature,
-                    raw_response=raw, translated_result=translated,
-                    success=False
-                )
             # 抛出异常让上层处理重试
             raise e
 

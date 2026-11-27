@@ -45,7 +45,7 @@
 - **占位符验证** - 自动检查格式化占位符（%s、%n$s等）一致性
 - **JSON完整性检查** - 验证翻译结果的键完整性和值类型
 - **智能重试机制** - 区分API失败和验证失败，各自独立重试（最多10次），并结合温度调整和思考模式切换策略，确保翻译成功率。
-- **详细日志记录** - 记录翻译失败的详细信息、错误原因、模型、温度、命名空间和目标语言。
+- **详细日志记录** - 每次 LLM 调用的完整请求与响应始终记录到 `.github/scripts/logs/llm/`（无开关），失败原因另汇总于 `error_summary.log`。
 
 ### ⚙️ 并发与重试优化
 
@@ -138,7 +138,6 @@ python .github/scripts/translate.py
 - `FORCE_TRANSLATE` - 强制重新翻译所有文件（可选，默认 0）
 - `DEEPSEEK_MODEL` - DeepSeek 模型ID（可选，默认 `deepseek-flash`）
 - `DEEPSEEK_THINKING` - 开启思考模式（可选，默认 1）
-- `TRANSLATION_DEBUG` - 开启详细请求/响应记录（可选，默认 0）
 - `GITHUB_ACTIONS` - CI环境标识，启用日志分组与提示格式（自动）
 
 ### 提示词模板变量
@@ -175,7 +174,9 @@ python .github/scripts/translate.py
 
 - **GitHub Actions日志** - 查看工作流运行的详细过程
 - **本地主日志** - 在仓库根目录生成 `translation.log`
-- **详细失败日志** - 在 `.github/scripts/logs/` 目录生成失败明细于 `error_summary.log`
+- **LLM 请求/响应记录** - 始终在 `.github/scripts/logs/llm/` 下为每次调用生成一个文件（含模型、温度、思考模式、HTTP 状态、完整系统/用户提示词、原始响应与翻译结果）
+- **失败汇总** - 失败记录另追加到 `.github/scripts/logs/error_summary.log`
+- **Artifacts** - 工作流的 `translation-logs` Artifact 始终上传上述日志（保留 30 天）
 
 ## 🤝 贡献指南
 
