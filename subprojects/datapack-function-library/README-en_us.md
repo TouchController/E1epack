@@ -1,34 +1,30 @@
 # Preface
 
-*This datapack is licensed under the [GNU LESSER GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/lgpl-3.0.txt "Go to this open source license page").*
+*This datapack is licensed under the [GNU LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0).*
 
-**This datapack provides developers with some practical functions (and some dialogs), compatible with all versions of Minecraft (except for versions that cannot install datapacks).**
+This datapack provides developers with some practical functions (and some dialogs), compatible with all versions of Minecraft (except for versions that cannot install datapacks).
 
-**However, due to the large number of commands involved in the datapack, lower versions may not be able to use all functions. The applicable versions of all functions will not be specified below.**
+However, due to the large number of commands involved in the datapack, lower versions may not be able to use all functions. The applicable versions of all functions will not be specified below.
 
-**Please install the resource pack at the same time to use localized content (v3.2+). Otherwise, the datapack language will default to zh_cn.**
+Please install the resource pack at the same time to enable localized content. Otherwise, the datapack language will be Simplified Chinese.
 
-**The mod version of this datapack is packaged through Modrinth, and the content is exactly the same as the datapack version, but it is not necessarily the latest version. Please try to use the datapack version.**
-
-**This datapack provides a `dfl:dfl_enable` function, which sets the score of the player `dfl_enable` in the dfl_scoreboard scoreboard item to 1, which is convenient for datapacks or mods that depend on this datapack to detect whether this datapack is loaded.**
+This datapack provides a `dfl:installed` function containing `return 1`. It is convenient for datapacks or mods that depend on this datapack to detect whether this datapack is loaded.
 
 **Example:**
 
 ```mcfunction
-#Execute when the datapack is loaded:
-scoreboard objectives add dfl_scoreboard dummy
-scoreboard players set dfl_enable dfl_scoreboard 0
-#If not loaded:
-function dfl:dfl_enable
-execute unless score dfl_enable dfl_scoreboard matches 1
-#If loaded:
-function dfl:dfl_enable
-execute if score dfl_enable dfl_scoreboard matches 1
+# Detect
+scoreboard objectives add tmp dummy
+execute store success score loaded tmp run function dfl:installed
+# If not loaded
+execute unless score loaded tmp matches 1 run say DFL is not loaded
+# If loaded
+execute if score loaded tmp matches 1 run say DFL is loaded
 ```
 
 **Note: Some functions have "prerequisite functions" attached to their usage. These functions must be executed once before executing them.**
 
-**Some function usages are followed by `{xx:"xx"}`. These functions are [macro functions](https://zh.minecraft.wiki/w/Java%E7%89%88%E5%87%BD%E6%95%B0#%E5%AE%8F). When using them, you need to pass parameters through `{<parameter name>:"<content>"}` (the parameters in the usage are the recommended parameters tested by the author during development, or the parameters used by the author for testing). The parameter name (such as num) is expressed as: {num} in the text. The parameter format can refer to the function usage, and special formats will be explained.**
+**Some function usages are followed by `{xx:"xx"}`. These functions are [macro functions](https://minecraft.wiki/w/Function_(Java_Edition)#Macros). When using them, you need to pass parameters through `{<parameter name>:"<content>"}`. The parameter name (such as num) is expressed as: {num} in the text. The parameter format can refer to the function usage, and special formats will be explained.**
 
 If you encounter any problems, please click [here](https://github.com/TouchController/E1epack/issues/new/choose) to give feedback.
 
@@ -308,7 +304,7 @@ Function usage: `/function dfl:tick/coal_smelt {input_namespace:"minecraft",inpu
 
 ## Timer
 
-**Functions in this category are recommended to be executed after a period of time. (You can use the [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "Go to the wiki to see the usage of this command") command)**
+**Functions in this category are recommended to be executed after a period of time. (You can use the [/schedule](https://minecraft.wiki/w/Commands/schedule) command)**
 
 ### Clean up dropped items
 

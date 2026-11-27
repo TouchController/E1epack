@@ -2,35 +2,31 @@
 
 # 前言
 
-_本数据包遵循开源协议 [GNU LESSER GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/lgpl-3.0.txt "跳转到此开源协议页面")。_
+_本数据包使用 [GNU LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0) 协议开源。_
 
-**本数据包为开发者提供了一些实用的函数（还有一些对话框），兼容 Minecraft 所有版本（除了无法安装数据包的版本）。**
+本数据包为开发者提供了一些实用的函数（还有一些对话框），兼容 Minecraft 所有版本（除了无法安装数据包的版本）。
 
-**但由于数据包涉及命令较多，所以较低版本可能无法使用所有函数，下文将不会分别注明所有函数的适用版本。**
+由于数据包涉及命令较多，较低版本可能无法使用所有函数，下文将不会分别注明所有函数的适用版本。
 
-**请同时安装资源包以使用本地化内容（v3.2+版本）。否则，数据包语言将默认为 zh_cn。**
+请同时安装资源包以启用国际化内容。否则数据包语言将为简体中文。
 
-**本数据包的模组版本是通过 Modrinth 打包的，内容与数据包版本完全一致，但不一定是最新版，请尽量使用数据包版本。**
+本数据包提供一个 dfl:installed 函数，内容为 `return 1`。便于依赖于本数据包的数据包或模组检测本数据包是否加载。
 
-**本数据包提供一个 dfl:dfl_enable 函数，执行后会将 dfl_enable 在 dfl_scoreboard 记分项中的分数设为 1，便于依赖于本数据包的数据包或模组检测本数据包是否加载。**
-
-**范例：**
+**示例：**
 
 ```mcfunction
-#在数据包加载时执行：
-scoreboard objectives add dfl_scoreboard dummy
-scoreboard players set dfl_enable dfl_scoreboard 0
-#如果未加载：
-function dfl:dfl_enable
-execute unless score dfl_enable dfl_scoreboard matches 1
-#如果加载：
-function dfl:dfl_enable
-execute if score dfl_enable dfl_scoreboard matches 1
+# 检测
+scoreboard objectives add tmp dummy
+execute store success score loaded tmp run function dfl:installed
+# 如果未加载
+execute unless score loaded tmp matches 1 run say DFL未加载
+# 如果已加载
+execute if score loaded tmp matches 1 run say DFL已加载
 ```
 
 **注意：有些函数的用法下附有“前置函数”，这些函数执行前必须执行一次前置函数。**
 
-**有些函数用法后带有 {xx:"xx"} 这些函数为[宏函数](https://zh.minecraft.wiki/w/Java%E7%89%88%E5%87%BD%E6%95%B0#%E5%AE%8F)，在使用时需通过 {<参数名>:"<内容>"} 传入参数（用法中的参数为作者开发时测试过的推荐参数，或作者测试使用的参数），参数名（如 num）在正文中表现为：{num}。参数格式可参考函数用法，特殊格式会说明。**
+**有些函数用法后带有 {xx:"xx"}，这些函数为[宏函数](https://zh.minecraft.wiki/w/Java%E7%89%88%E5%87%BD%E6%95%B0#%E5%AE%8F)，在使用时需通过 {<参数名>:"<内容>"} 传入参数，参数名（如 num）在正文中表现为：{num}。参数格式可参考函数用法，特殊格式会说明。**
 
 如果遇到任何问题，请点击 [这里](https://github.com/TouchController/E1epack/issues/new/choose) 反馈。
 
@@ -308,7 +304,7 @@ execute if score dfl_enable dfl_scoreboard matches 1
 
 ## Timer
 
-**此分类中的函数建议每间隔一段时间后执行。（可以使用 [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule "跳转到wiki查看此命令用法") 命令）**
+**此分类中的函数建议每间隔一段时间后执行。（可以使用 [/schedule](https://zh.minecraft.wiki/w/%E5%91%BD%E4%BB%A4/schedule) 命令）**
 
 ### 清理掉落物
 
