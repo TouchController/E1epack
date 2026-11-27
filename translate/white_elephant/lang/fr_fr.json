@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Auteur : %s",
   "banner.white.elephant.license": "Ce pack de données est sous licence %s",
   "banner.white.elephant.official": "Site officiel du pack de données",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Prérequis manquant",
   "need.dfl.white.elephant.please.install": "Veuillez installer le pack de données : ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Sauvegarder et quitter",
   "dialog.white.elephant.common.cancel_tooltip": "Abandonner les modifications",
   "dialog.white.elephant.common.save_tooltip": "Sauvegarder les paramètres",
-  "dialog.white.elephant.common.technical_limitation": "En raison de limitations techniques, les paramètres affichés ici sont les valeurs par défaut"
+  "dialog.white.elephant.common.technical_limitation": "En raison de limitations techniques, les paramètres affichés ici sont les valeurs par défaut",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

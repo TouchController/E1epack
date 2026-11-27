@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Yazar: %s",
   "banner.white.elephant.license": "Bu veri paketi %s lisansı altında açık kaynaklıdır",
   "banner.white.elephant.official": "Veri paketi web sitesi",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Ön gereksinim eksik",
   "need.dfl.white.elephant.please.install": "Lütfen veri paketini yükleyin: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Kaydet ve çık",
   "dialog.white.elephant.common.cancel_tooltip": "Mevcut değişiklikleri iptal et",
   "dialog.white.elephant.common.save_tooltip": "Mevcut ayarları kaydet",
-  "dialog.white.elephant.common.technical_limitation": "Teknik sınırlamalar nedeniyle, burada gösterilen ayarlar varsayılan değerlerdir"
+  "dialog.white.elephant.common.technical_limitation": "Teknik sınırlamalar nedeniyle, burada gösterilen ayarlar varsayılan değerlerdir",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

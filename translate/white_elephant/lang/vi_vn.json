@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Tác giả: %s",
   "banner.white.elephant.license": "Gói dữ liệu này sử dụng giấy phép mã nguồn mở %s",
   "banner.white.elephant.official": "Trang web chính thức",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Thiếu tiền tố",
   "need.dfl.white.elephant.please.install": "Vui lòng cài đặt gói dữ liệu: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Lưu và thoát",
   "dialog.white.elephant.common.cancel_tooltip": "Hủy các thay đổi hiện tại",
   "dialog.white.elephant.common.save_tooltip": "Lưu cài đặt hiện tại",
-  "dialog.white.elephant.common.technical_limitation": "Do giới hạn kỹ thuật, các cài đặt hiển thị ở đây đều là giá trị mặc định"
+  "dialog.white.elephant.common.technical_limitation": "Do giới hạn kỹ thuật, các cài đặt hiển thị ở đây đều là giá trị mặc định",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

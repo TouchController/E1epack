@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "제작자: %s",
   "banner.white.elephant.license": "이 데이터팩은 %s 라이선스로 제공됩니다",
   "banner.white.elephant.official": "데이터팩 공식 웹사이트",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "필수 모드 누락",
   "need.dfl.white.elephant.please.install": "데이터팩을 설치해주세요: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "저장 후 종료",
   "dialog.white.elephant.common.cancel_tooltip": "변경 사항을 취소합니다",
   "dialog.white.elephant.common.save_tooltip": "현재 설정을 저장합니다",
-  "dialog.white.elephant.common.technical_limitation": "기술적 제한으로 인해 여기에 표시된 설정은 기본값입니다"
+  "dialog.white.elephant.common.technical_limitation": "기술적 제한으로 인해 여기에 표시된 설정은 기본값입니다",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

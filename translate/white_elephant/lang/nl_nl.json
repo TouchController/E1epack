@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Auteur: %s",
   "banner.white.elephant.license": "Dit datapack is open source onder de %s licentie",
   "banner.white.elephant.official": "Officiële datapack website",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Ontbrekende vereiste",
   "need.dfl.white.elephant.please.install": "Installeer het datapack: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Opslaan en afsluiten",
   "dialog.white.elephant.common.cancel_tooltip": "Wijzigingen annuleren",
   "dialog.white.elephant.common.save_tooltip": "Huidige instellingen opslaan",
-  "dialog.white.elephant.common.technical_limitation": "Vanwege technische beperkingen worden hier standaardwaarden weergegeven"
+  "dialog.white.elephant.common.technical_limitation": "Vanwege technische beperkingen worden hier standaardwaarden weergegeven",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

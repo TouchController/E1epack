@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Penulis: %s",
   "banner.white.elephant.license": "Paket data ini bersumber terbuka di bawah lisensi %s",
   "banner.white.elephant.official": "Situs web resmi paket data",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Prasyarat tidak ada",
   "need.dfl.white.elephant.please.install": "Silakan instal paket data: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Simpan dan keluar",
   "dialog.white.elephant.common.cancel_tooltip": "Batalkan perubahan saat ini",
   "dialog.white.elephant.common.save_tooltip": "Simpan pengaturan saat ini",
-  "dialog.white.elephant.common.technical_limitation": "Karena keterbatasan teknis, pengaturan yang ditampilkan di sini adalah nilai default"
+  "dialog.white.elephant.common.technical_limitation": "Karena keterbatasan teknis, pengaturan yang ditampilkan di sini adalah nilai default",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }

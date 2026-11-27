@@ -3,7 +3,6 @@
   "banner.white.elephant.author": "Autor: %s",
   "banner.white.elephant.license": "Ta paczka danych jest open source na licencji %s",
   "banner.white.elephant.official": "Oficjalna strona paczki danych",
-  "no.resource.pack.white.elephant.a": "--------------------",
   "no.resource.pack.white.elephant.nothing": "",
   "need.dfl.white.elephant.no": "Brak wymaganej paczki",
   "need.dfl.white.elephant.please.install": "Zainstaluj paczkę danych: ",
@@ -17,5 +16,6 @@
   "dialog.white.elephant.common.save_and_exit": "Zapisz i wyjdź",
   "dialog.white.elephant.common.cancel_tooltip": "Odrzuć bieżące zmiany",
   "dialog.white.elephant.common.save_tooltip": "Zapisz bieżące ustawienia",
-  "dialog.white.elephant.common.technical_limitation": "Ze względu na ograniczenia techniczne, wyświetlane ustawienia są wartościami domyślnymi"
+  "dialog.white.elephant.common.technical_limitation": "Ze względu na ograniczenia techniczne, wyświetlane ustawienia są wartościami domyślnymi",
+  "no.resource.pack.white.elephant.line": "--------------------"
 }
