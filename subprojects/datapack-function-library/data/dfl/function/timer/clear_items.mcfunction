@@ -1,7 +1,7 @@
 ## 清理掉落物
 
 # 初始化计分板
-scoreboard objectives add dfl_scoreboard dummy "DFL"
+function dfl:private/init_scoreboard
 
 # 清理非必要掉落物并记录数量
 execute store result score item_number dfl_scoreboard \
