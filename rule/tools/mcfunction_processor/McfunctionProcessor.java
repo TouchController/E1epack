@@ -40,6 +40,11 @@ public class McfunctionProcessor extends Worker {
         var inputFile = args.get(0);
         var outputFile = args.get(1);
 
+        // Worker 是常驻进程，同一路径的文件内容可能在上次请求后被修改，
+        // 因此每个请求都必须丢弃上一次的文件内容与命名空间映射缓存
+        functionCache.clear();
+        namespaceToRoot.clear();
+
         // 从依赖文件路径中提取 namespace -> 数据包根目录映射
         for (int i = 2; i < args.size(); i++) {
             registerDepFile(Paths.get(args.get(i)));

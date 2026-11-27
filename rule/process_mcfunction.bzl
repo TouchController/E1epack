@@ -80,8 +80,11 @@ def _process_mcfunction_impl(ctx):
 
         args.use_param_file("@%s", use_always = True)
 
+        # 处理器会内联被调用的函数，同包函数文件也可能被读取（宏函数调用会在
+        # 构建期展开），因此必须把整个包的源码声明为输入，否则改动私有函数后
+        # 调用方的动作命中缓存，产物仍是旧的展开结果。
         ctx.actions.run(
-            inputs = [src] + ctx.files.deps,
+            inputs = ctx.files.srcs + ctx.files.deps,
             outputs = [output_file],
             executable = ctx.executable._mcfunction_processor,
             arguments = [args],
